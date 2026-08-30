@@ -1,0 +1,24 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: sararose-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: sararose
+      MYSQL_USER: sararose
+      MYSQL_PASSWORD: SaraRose_Dev_2024
+      MYSQL_ROOT_PASSWORD: SaraRose_Root_2024
+    ports:
+      - "${MYSQL_PORT:-3306}:3306"
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    volumes:
+      - sararose_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-pSaraRose_Root_2024"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+      start_period: 20s
+
+volumes:
+  sararose_mysql:

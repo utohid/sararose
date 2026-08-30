@@ -1,6 +1,8 @@
 # Root
 .DS_Store
 *.log
+.vs/
+*.user
 
 # .NET
 backend/bin/
