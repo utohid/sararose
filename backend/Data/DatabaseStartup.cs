@@ -31,6 +31,6 @@ public static class DatabaseStartup
         }
 
         throw new InvalidOperationException(
-            "Cannot reach MySQL at 127.0.0.1:3306. On Windows, start Docker Desktop, then from the repo root run: docker compose up -d");
+            "Cannot reach MySQL at 127.0.0.1:3306. Start the MySQL service and create the sararose database (see README.md).");
     }
 }

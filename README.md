@@ -8,7 +8,7 @@ Company application for **SARA ROSE NIGERIA LIMITED** — a heavy-equipment trad
 | --- | --- |
 | Website | Angular 19 |
 | API | ASP.NET Core 8 Web API |
-| Database | MySQL 8 (Docker Compose on local machines) |
+| Database | MySQL 8 |
 
 ## What you can do
 
@@ -47,34 +47,64 @@ Origin CLI docs: https://cursor.com/docs/origin/cli
 
 After clone, the project folder is typically something like `\\wsl$\Ubuntu\home\<you>\genesis`. You can run the app from **PowerShell** against that folder, or stay in WSL.
 
+If you already have a clone:
+
+```bash
+git pull origin main
+```
+
 ## Local setup on Windows
 
-Install these on Windows (not only inside WSL):
+Install these on Windows:
 
-1. [Docker Desktop](https://www.docker.com/products/docker-desktop/) — start it and wait until it is running
+1. [MySQL 8](https://dev.mysql.com/downloads/installer/) — during setup, note the root password and keep port **3306**
 2. [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
 3. [Node.js 20 LTS](https://nodejs.org/)
 
 Confirm in **PowerShell**:
 
 ```powershell
-docker version
 dotnet --version
 node -v
 npm -v
+mysql --version
 ```
 
-### Fastest start (PowerShell)
+### Create the database
 
-From the repo root:
+In MySQL Workbench or a MySQL command prompt (as root):
+
+```sql
+CREATE DATABASE IF NOT EXISTS sararose CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+CREATE USER IF NOT EXISTS 'sararose'@'localhost' IDENTIFIED BY 'SaraRose_Dev_2024';
+CREATE USER IF NOT EXISTS 'sararose'@'127.0.0.1' IDENTIFIED BY 'SaraRose_Dev_2024';
+GRANT ALL PRIVILEGES ON sararose.* TO 'sararose'@'localhost';
+GRANT ALL PRIVILEGES ON sararose.* TO 'sararose'@'127.0.0.1';
+FLUSH PRIVILEGES;
+```
+
+Default connection string (already in `backend/appsettings.json` and `backend/appsettings.Development.json`):
+
+`Server=127.0.0.1;Port=3306;Database=sararose;User=sararose;Password=SaraRose_Dev_2024;`
+
+If your MySQL uses another port or password, edit those files or set this in PowerShell before `dotnet run`:
 
 ```powershell
-docker compose up -d
+$env:ConnectionStrings__Default="Server=127.0.0.1;Port=3306;Database=sararose;User=sararose;Password=YOUR_PASSWORD;"
+```
+
+### Run the API and website
+
+Start the **MySQL** Windows service if it is not running (Services app, or `net start MySQL80`).
+
+Window 1 — API:
+
+```powershell
 cd backend
 dotnet run --urls "http://127.0.0.1:43124"
 ```
 
-Second PowerShell window:
+Window 2 — Angular:
 
 ```powershell
 cd frontend
@@ -82,7 +112,7 @@ npm install
 npm start
 ```
 
-Or one command that opens both windows after MySQL is up:
+Or from the repo root:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\dev.ps1
@@ -96,27 +126,11 @@ Then open:
 
 The API creates tables and seeds the equipment catalogue on first successful MySQL connection.
 
-### If port 3306 is already in use
-
-Stop the other MySQL service, or run Compose on another host port:
-
-```powershell
-$env:MYSQL_PORT=3307
-docker compose up -d
-```
-
-Then set the API connection string (PowerShell, same window as `dotnet run`):
-
-```powershell
-$env:ConnectionStrings__Default="Server=127.0.0.1;Port=3307;Database=sararose;User=sararose;Password=SaraRose_Dev_2024;"
-```
-
-Or edit `backend/appsettings.Development.json`.
-
 ## WSL / macOS / Linux
 
+Create the same database and user, then:
+
 ```bash
-docker compose up -d
 cd backend && dotnet run --urls "http://127.0.0.1:43124"
 ```
 
@@ -125,19 +139,6 @@ cd frontend && npm install && npm start
 ```
 
 Or: `bash scripts/dev.sh`
-
-## Database (without Docker)
-
-```sql
-CREATE DATABASE sararose CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-CREATE USER 'sararose'@'%' IDENTIFIED BY 'SaraRose_Dev_2024';
-GRANT ALL PRIVILEGES ON sararose.* TO 'sararose'@'%';
-FLUSH PRIVILEGES;
-```
-
-Default connection string:
-
-`Server=127.0.0.1;Port=3306;Database=sararose;User=sararose;Password=SaraRose_Dev_2024;`
 
 ## API
 
