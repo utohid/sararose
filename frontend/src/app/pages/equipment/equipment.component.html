@@ -14,8 +14,8 @@
 
   @if (loading()) {
     <p class="status">Loading equipment…</p>
-  } @else if (error(); as message) {
-    <p class="status error">{{ message }}</p>
+  } @else if (error()) {
+    <p class="status error">{{ error() }}</p>
   } @else if (!items().length) {
     <p class="status">No machines in this category yet. Raise the requirement directly — we also deal outside the listed groups.</p>
   } @else {

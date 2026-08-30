@@ -40,7 +40,7 @@
       <h2>Named contact</h2>
       <p>Mr. Akram Haider</p>
       <p><a href="tel:+2348066651111">+234 80 6665 1111</a></p>
-      <p><a href="mailto:contact@sararose.com">contact@sararose.com</a></p>
+      <p><a [href]="'mailto:' + contactEmail">{{ contactEmail }}</a></p>
     </div>
   </div>
   <p class="legal">© {{ year }} SARA ROSE Nigeria Limited. Brands, models and availability confirmed at enquiry.</p>

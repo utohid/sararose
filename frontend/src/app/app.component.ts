@@ -9,6 +9,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 })
 export class AppComponent {
   readonly year = new Date().getFullYear();
+  readonly contactEmail = 'contact@sararose.com';
   menuOpen = false;
 
   toggleMenu(): void {
