@@ -1,0 +1,33 @@
+<section class="page">
+  <p class="kicker">03 — Equipment portfolio</p>
+  <h1 class="page-title">The machines we deal in</h1>
+  <p class="lede">Our portfolio is grouped into five working categories, covering earthmoving through to lifting and heavy transport. Brands, models, specifications and availability are confirmed at enquiry stage.</p>
+
+  <div class="filters">
+    <a routerLink="/equipment" [class.on]="!selected()">All</a>
+    @for (cat of categories(); track cat.slug) {
+      <a [routerLink]="['/equipment']" [queryParams]="{ category: cat.slug }" [class.on]="selected() === cat.slug">
+        {{ cat.code }} {{ cat.shortName }}
+      </a>
+    }
+  </div>
+
+  @if (loading()) {
+    <p class="status">Loading equipment…</p>
+  } @else if (error(); as message) {
+    <p class="status error">{{ message }}</p>
+  } @else if (!items().length) {
+    <p class="status">No machines in this category yet. Raise the requirement directly — we also deal outside the listed groups.</p>
+  } @else {
+    <div class="grid-2">
+      @for (item of items(); track item.slug) {
+        <a class="card machine" [routerLink]="['/equipment', item.slug]">
+          <span>{{ item.categoryName }}</span>
+          <h2>{{ item.name }}</h2>
+          <p>{{ item.summary }}</p>
+          <em>View specification notes</em>
+        </a>
+      }
+    </div>
+  }
+</section>

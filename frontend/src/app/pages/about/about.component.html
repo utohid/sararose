@@ -1,0 +1,36 @@
+<section class="page">
+  <p class="kicker">01 — About SARA ROSE Nigeria Limited</p>
+  <h1 class="page-title">Trading since 2012, focused on heavy equipment.</h1>
+
+  @if (error(); as message) {
+    <p class="status error">{{ message }}</p>
+  } @else if (!company()) {
+    <p class="status">Loading company record…</p>
+  } @else {
+    <p class="lede">{{ company()!.about }}</p>
+
+    <div class="meta grid-2">
+      <article class="card">
+        <h2>How we work</h2>
+        <p>{{ company()!.howWeWork }}</p>
+      </article>
+      <article class="card">
+        <h2>Sectors we serve</h2>
+        <ul>
+          @for (sector of company()!.sectors; track sector) {
+            <li>{{ sector }}</li>
+          }
+        </ul>
+      </article>
+    </div>
+
+    <div class="record">
+      <p><strong>Company</strong> {{ company()!.name }}</p>
+      <p><strong>Business type</strong> {{ company()!.businessType }}</p>
+      <p><strong>Industry</strong> {{ company()!.industry }}</p>
+      <p><strong>Operating location</strong> {{ company()!.operatingLocation }}</p>
+    </div>
+
+    <a class="btn" routerLink="/equipment">View equipment categories</a>
+  }
+</section>

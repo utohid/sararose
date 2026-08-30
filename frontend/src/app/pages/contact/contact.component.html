@@ -1,0 +1,70 @@
+<section class="page">
+  <p class="kicker">09 — Contact us</p>
+  <h1 class="page-title">Start the conversation</h1>
+  <p class="lede">Customer enquiries are received by telephone and email, and handled directly by the company's contact person. Visits to the head office are by prior appointment.</p>
+
+  <div class="grid-2 wrap">
+    <aside class="card details">
+      @if (company(); as c) {
+        <h2>{{ c.name }}</h2>
+        <p>{{ c.headOffice }}</p>
+        <p><strong>Contact</strong> {{ c.contactPerson }}</p>
+        <p><strong>Telephone</strong> <a href="tel:+2348066651111">{{ c.telephone }}</a></p>
+        <p><strong>Email</strong> <a [href]="'mailto:' + c.email">{{ c.email }}</a></p>
+        <p class="hint">Website: {{ c.websiteNote }}</p>
+      } @else {
+        <p class="status">Loading contact record…</p>
+      }
+    </aside>
+
+    @if (submitted()) {
+      <div class="card success">
+        <h2>Enquiry received</h2>
+        <p>Thank you. The requirement has been stored for Mr. Akram Haider. You can also call +234 80 6665 1111 if the site cannot wait.</p>
+        <button class="btn ghost" type="button" (click)="submitted.set(false)">Send another enquiry</button>
+      </div>
+    } @else {
+      <form class="card form" [formGroup]="form" (ngSubmit)="submit()">
+        <label>Full name
+          <input formControlName="fullName" autocomplete="name">
+        </label>
+        <label>Company
+          <input formControlName="company" autocomplete="organization">
+        </label>
+        <div class="row">
+          <label>Telephone
+            <input formControlName="phone" autocomplete="tel">
+          </label>
+          <label>Email
+            <input formControlName="email" type="email" autocomplete="email">
+          </label>
+        </div>
+        <div class="row">
+          <label>Equipment category
+            <select formControlName="categoryId">
+              <option value="">Select a category</option>
+              @for (cat of categories(); track cat.id) {
+                <option [value]="cat.id">{{ cat.code }} — {{ cat.name }}</option>
+              }
+            </select>
+          </label>
+          <label>Machine type
+            <input formControlName="machineType" placeholder="e.g. Excavator">
+          </label>
+        </div>
+        <label>Site / location
+          <input formControlName="siteLocation" placeholder="Where the machine will work">
+        </label>
+        <label>Requirement
+          <textarea formControlName="requirement" rows="5" placeholder="The work, the ground, the timeline."></textarea>
+        </label>
+        @if (error(); as message) {
+          <p class="status error">{{ message }}</p>
+        }
+        <button class="btn" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Sending…' : 'Send enquiry' }}
+        </button>
+      </form>
+    }
+  </div>
+</section>

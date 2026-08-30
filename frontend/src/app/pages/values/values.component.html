@@ -1,0 +1,32 @@
+<section class="page">
+  <p class="kicker">06 — Vision & mission</p>
+  <h1 class="page-title">What we are working towards</h1>
+
+  @if (error(); as message) {
+    <p class="status error">{{ message }}</p>
+  } @else if (!company()) {
+    <p class="status">Loading…</p>
+  } @else {
+    <div class="grid-2 block">
+      <article class="card">
+        <h2>Our vision</h2>
+        <p>{{ company()!.vision }}</p>
+      </article>
+      <article class="card">
+        <h2>Our mission</h2>
+        <p>{{ company()!.mission }}</p>
+      </article>
+    </div>
+
+    <p class="kicker">07 — Core values</p>
+    <h2 class="sub">The standards we hold to</h2>
+    <div class="grid-3">
+      @for (value of company()!.values; track value.title) {
+        <article class="card">
+          <h3>{{ value.title }}</h3>
+          <p>{{ value.body }}</p>
+        </article>
+      }
+    </div>
+  }
+</section>

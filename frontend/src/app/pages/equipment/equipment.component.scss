@@ -1,0 +1,56 @@
+.page-title {
+  font-size: clamp(2.4rem, 6vw, 4.2rem);
+  text-transform: uppercase;
+  line-height: 0.95;
+  margin: 0 0 1rem;
+}
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin: 1.75rem 0 1.5rem;
+}
+
+.filters a {
+  border: 1px solid var(--line);
+  padding: 0.45rem 0.7rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.filters a.on {
+  background: var(--amber);
+  color: var(--ink);
+  border-color: var(--amber);
+}
+
+.machine span {
+  color: var(--amber);
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.machine h2 {
+  margin: 0.4rem 0 0.7rem;
+  font-size: 1.8rem;
+  text-transform: uppercase;
+}
+
+.machine p {
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+.machine em {
+  display: inline-block;
+  margin-top: 0.8rem;
+  font-style: normal;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  color: var(--paper);
+}

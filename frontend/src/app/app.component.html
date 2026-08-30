@@ -1,0 +1,47 @@
+<header class="site-header">
+  <div class="bar">
+    <a class="brand" routerLink="/" (click)="closeMenu()">
+      <span class="mark">SR</span>
+      <span class="brand-text">
+        <strong>SARA ROSE</strong>
+        <small>Nigeria Limited · Est. 2012</small>
+      </span>
+    </a>
+    <button class="menu-btn" type="button" (click)="toggleMenu()" [attr.aria-expanded]="menuOpen">
+      {{ menuOpen ? 'Close' : 'Menu' }}
+    </button>
+    <nav class="nav" [class.open]="menuOpen">
+      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Home</a>
+      <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
+      <a routerLink="/equipment" routerLinkActive="active" (click)="closeMenu()">Equipment</a>
+      <a routerLink="/why-sara-rose" routerLinkActive="active" (click)="closeMenu()">Why us</a>
+      <a routerLink="/vision-values" routerLinkActive="active" (click)="closeMenu()">Vision</a>
+      <a class="cta" routerLink="/contact" (click)="closeMenu()">Enquire</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <router-outlet />
+</main>
+
+<footer class="site-footer">
+  <div class="footer-grid">
+    <div>
+      <p class="footer-mark">SR</p>
+      <p class="footer-name">SARA ROSE NIGERIA LIMITED</p>
+      <p>Trader in heavy equipment and machinery. Sagamu, Ogun State. Trading since 2012.</p>
+    </div>
+    <div>
+      <h2>Head office</h2>
+      <p>Km 12, Sagamu–Benin Express Way,<br>Opposite Navy Merchant,<br>Ogun State, Nigeria.</p>
+    </div>
+    <div>
+      <h2>Named contact</h2>
+      <p>Mr. Akram Haider</p>
+      <p><a href="tel:+2348066651111">+234 80 6665 1111</a></p>
+      <p><a href="mailto:contact@sararose.com">contact@sararose.com</a></p>
+    </div>
+  </div>
+  <p class="legal">© {{ year }} SARA ROSE Nigeria Limited. Brands, models and availability confirmed at enquiry.</p>
+</footer>

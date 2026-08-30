@@ -1,0 +1,20 @@
+#!/usr/bin/env bash
+set -euo pipefail
+ROOT="$(cd "$(dirname "$0")/.." && pwd)"
+export DOTNET_ROOT="${DOTNET_ROOT:-$HOME/.dotnet}"
+export PATH="$DOTNET_ROOT:$DOTNET_ROOT/tools:$PATH"
+
+if ! mysql -h 127.0.0.1 -u sararose -pSaraRose_Dev_2024 -e "SELECT 1" sararose >/dev/null 2>&1; then
+  echo "Starting MySQL..."
+  sudo service mysql start
+fi
+
+echo "API: http://127.0.0.1:43124  |  Site: http://127.0.0.1:43123"
+cd "$ROOT/backend"
+dotnet run --urls "http://127.0.0.1:43124" &
+API_PID=$!
+cd "$ROOT/frontend"
+npm start &
+UI_PID=$!
+trap 'kill $API_PID $UI_PID 2>/dev/null || true' EXIT
+wait

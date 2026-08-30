@@ -1,0 +1,54 @@
+<section class="hero">
+  <div class="hero-copy">
+    <p class="kicker">Sagamu · Ogun State · Nigeria</p>
+    <h1>Heavy equipment<br>for the work ahead.</h1>
+    <p class="lede">Trading in construction and industrial machinery from Sagamu since 2012. One industry. One focus. Direct dealing with a named contact.</p>
+    <div class="hero-actions">
+      <a class="btn" routerLink="/equipment">See the portfolio</a>
+      <a class="btn ghost" routerLink="/contact">Start an enquiry</a>
+    </div>
+  </div>
+  <aside class="facts">
+    <div><span>2012</span><small>Year established</small></div>
+    <div><span>Trader</span><small>Business type</small></div>
+    <div><span>05</span><small>Equipment categories</small></div>
+    <div><span>Ogun</span><small>Head office</small></div>
+  </aside>
+</section>
+
+@if (error(); as message) {
+  <p class="page status error">{{ message }}</p>
+}
+
+<section class="page">
+  <p class="kicker">01 — About</p>
+  <h2 class="section-title">An established name in heavy equipment trading</h2>
+  <p class="lede">{{ company()?.about?.slice(0, 420) }}{{ company() ? '…' : '' }}</p>
+  <a class="btn ghost" routerLink="/about">Read the company story</a>
+</section>
+
+<section class="page categories-block">
+  <p class="kicker">03 — Portfolio</p>
+  <h2 class="section-title">Five working categories</h2>
+  <p class="lede">Brands, models, specifications and availability are confirmed at enquiry stage — against the work, the ground and the timeline.</p>
+  @if (!categories().length && !error()) {
+    <p class="status">Loading categories…</p>
+  }
+  <div class="grid-5">
+    @for (cat of categories(); track cat.slug) {
+      <a class="card cat-card" [routerLink]="['/equipment']" [queryParams]="{ category: cat.slug }">
+        <span class="code">{{ cat.code }}</span>
+        <h3>{{ cat.shortName }}</h3>
+        <p>{{ cat.summary }}</p>
+      </a>
+    }
+  </div>
+</section>
+
+<section class="page corridor">
+  <p class="kicker">04 — Location</p>
+  <h2 class="section-title">On the Sagamu–Benin Expressway</h2>
+  <p class="lede">{{ company()?.headOffice }}</p>
+  <p class="corridor-line"><span>Sagamu interchange</span><span>Km 12 · Head office</span><span>Benin direction</span></p>
+  <a class="btn ghost" routerLink="/contact">Arrange a visit</a>
+</section>

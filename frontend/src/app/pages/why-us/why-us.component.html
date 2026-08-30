@@ -1,0 +1,24 @@
+<section class="page">
+  <p class="kicker">05 — Why choose SARA ROSE</p>
+  <h1 class="page-title">Reasons to work with us</h1>
+  <p class="lede">Everything on this page is a matter of record: the year we began, the sector we work in, the equipment we deal in, where we are, and who to call.</p>
+
+  @if (error(); as message) {
+    <p class="status error">{{ message }}</p>
+  } @else if (!company()) {
+    <p class="status">Loading…</p>
+  } @else {
+    <ol class="reasons">
+      @for (reason of company()!.reasons; track reason.title; let i = $index) {
+        <li>
+          <span>{{ (i + 1).toString().padStart(2, '0') }}</span>
+          <div>
+            <h2>{{ reason.title }}</h2>
+            <p>{{ reason.body }}</p>
+          </div>
+        </li>
+      }
+    </ol>
+    <a class="btn" routerLink="/contact">Call Mr. Akram Haider</a>
+  }
+</section>

@@ -1,0 +1,29 @@
+<section class="page">
+  @if (loading()) {
+    <p class="status">Loading machine notes…</p>
+  } @else if (error(); as message) {
+    <p class="status error">{{ message }}</p>
+    <a class="btn ghost" routerLink="/equipment">Back to portfolio</a>
+  } @else if (item(); as machine) {
+    <p class="kicker">{{ machine.category.code }} — {{ machine.category.name }}</p>
+    <h1 class="page-title">{{ machine.name }}</h1>
+    <p class="lede">{{ machine.summary }}</p>
+
+    <div class="grid-2 block">
+      <article class="card">
+        <h2>What this category covers</h2>
+        <p>{{ machine.description }}</p>
+      </article>
+      <article class="card">
+        <h2>Typical use</h2>
+        <p>{{ machine.typicalUse }}</p>
+        <p class="note">{{ machine.availabilityNote }}</p>
+      </article>
+    </div>
+
+    <div class="actions">
+      <a class="btn" [routerLink]="['/contact']" [queryParams]="{ machine: machine.machineType, category: machine.category.id }">Enquire on this category</a>
+      <a class="btn ghost" [routerLink]="['/equipment']" [queryParams]="{ category: machine.category.slug }">More in {{ machine.category.shortName }}</a>
+    </div>
+  }
+</section>
