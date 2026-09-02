@@ -1,0 +1,94 @@
+<section class="dash">
+  <aside class="rail">
+    <p class="kicker">Admin panel</p>
+    <p class="rail-mark">SR</p>
+    <h1>{{ company()?.name || appName }}</h1>
+    <p class="signed">Signed in as {{ email() }}</p>
+    <nav>
+      <a class="active" routerLink="/dashboard">Overview</a>
+      <a routerLink="/equipment">Equipment</a>
+      <a routerLink="/contact">Enquiries</a>
+      <a routerLink="/">Public site</a>
+    </nav>
+    <button class="btn ghost" type="button" (click)="signOut()">Sign out</button>
+  </aside>
+
+  <div class="board">
+    <header class="board-head">
+      <p class="kicker">Dashboard</p>
+      <h2>Application overview</h2>
+      <p class="lede">{{ company()?.about?.slice(0, 280) }}{{ company() ? '…' : '' }}</p>
+    </header>
+
+    @if (error(); as message) {
+      <p class="status error">{{ message }}</p>
+    }
+
+    <div class="stats">
+      <article>
+        <small>Established</small>
+        <strong>{{ company()?.yearEstablished || '2012' }}</strong>
+      </article>
+      <article>
+        <small>Categories</small>
+        <strong>{{ categories().length }}</strong>
+      </article>
+      <article>
+        <small>Machine types</small>
+        <strong>{{ equipment().length }}</strong>
+      </article>
+      <article>
+        <small>Enquiries</small>
+        <strong>{{ enquiries().length }}</strong>
+      </article>
+    </div>
+
+    <div class="detail-grid">
+      <article class="card">
+        <p class="kicker">Application name</p>
+        <h3>{{ company()?.name || appName }}</h3>
+        <dl>
+          <div><dt>Business type</dt><dd>{{ company()?.businessType || 'Trader' }}</dd></div>
+          <div><dt>Industry</dt><dd>{{ company()?.industry || 'Heavy equipment' }}</dd></div>
+          <div><dt>Operating location</dt><dd>{{ company()?.operatingLocation || 'Sagamu, Ogun State' }}</dd></div>
+        </dl>
+      </article>
+
+      <article class="card">
+        <p class="kicker">Named contact</p>
+        <h3>{{ company()?.contactPerson || 'Mr. Akram Haider' }}</h3>
+        <dl>
+          <div><dt>Telephone</dt><dd>{{ company()?.telephone || '+234 80 6665 1111' }}</dd></div>
+          <div><dt>Email</dt><dd>{{ company()?.email || 'contact@sararose.com' }}</dd></div>
+          <div><dt>Head office</dt><dd>{{ company()?.headOffice || 'Km 12, Sagamu–Benin Express Way' }}</dd></div>
+        </dl>
+      </article>
+    </div>
+
+    <article class="card">
+      <p class="kicker">How the application works</p>
+      <h3>Company details</h3>
+      <p class="body">{{ company()?.howWeWork }}</p>
+      <div class="chips">
+        @for (sector of company()?.sectors ?? []; track sector) {
+          <span>{{ sector }}</span>
+        }
+      </div>
+    </article>
+
+    @if (enquiries().length) {
+      <article class="card">
+        <p class="kicker">Recent enquiries</p>
+        <h3>Stored in MySQL</h3>
+        <ul class="enquiry-list">
+          @for (row of enquiries().slice(0, 6); track row.id) {
+            <li>
+              <strong>{{ row.fullName }}</strong>
+              <span>{{ row.machineType || row.categoryName || 'General' }} · {{ row.status }}</span>
+            </li>
+          }
+        </ul>
+      </article>
+    }
+  </div>
+</section>

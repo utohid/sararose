@@ -7,6 +7,8 @@ import { WhyUsComponent } from './pages/why-us/why-us.component';
 import { ValuesComponent } from './pages/values/values.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { LoginComponent } from './pages/login/login.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, title: 'SARA ROSE Nigeria Limited' },
@@ -17,5 +19,6 @@ export const routes: Routes = [
   { path: 'vision-values', component: ValuesComponent, title: 'Vision & values — SARA ROSE' },
   { path: 'contact', component: ContactComponent, title: 'Enquire — SARA ROSE' },
   { path: 'login', component: LoginComponent, title: 'Login — SARA ROSE' },
+  { path: 'dashboard', component: DashboardComponent, title: 'Dashboard — SARA ROSE', canActivate: [authGuard] },
   { path: '**', redirectTo: '' }
 ];

@@ -75,6 +75,21 @@ export interface EnquiryPayload {
   requirement: string;
 }
 
+export interface Enquiry {
+  id: number;
+  fullName: string;
+  company?: string | null;
+  phone: string;
+  email: string;
+  categoryId?: number | null;
+  categoryName?: string | null;
+  machineType?: string | null;
+  siteLocation?: string | null;
+  requirement: string;
+  status: string;
+  createdAtUtc: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly http = inject(HttpClient);
@@ -99,5 +114,9 @@ export class ApiService {
 
   createEnquiry(payload: EnquiryPayload) {
     return this.http.post(`${this.base}/enquiries`, payload);
+  }
+
+  getEnquiries(): Observable<Enquiry[]> {
+    return this.http.get<Enquiry[]>(`${this.base}/enquiries`);
   }
 }

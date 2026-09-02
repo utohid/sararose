@@ -4,7 +4,7 @@
 
   <div class="login-shell">
     <aside class="showcase">
-      <p class="kicker">Customer portal</p>
+      <p class="kicker">Admin portal</p>
       <h1>Sign in<br>to SARA ROSE.</h1>
       <p class="lede">A quieter way back to your enquiries, machine notes and named-contact follow-up — from Sagamu, since 2012.</p>
       <ul class="points">
@@ -16,54 +16,52 @@
     </aside>
 
     <div class="panel">
-      @if (signedIn()) {
-        <div class="welcome">
-          <p class="kicker">Access granted</p>
-          <h2>Welcome back.</h2>
-          <p>You are signed in on this device. Continue to the portfolio, or send a new enquiry for the next machine on site.</p>
-          <div class="welcome-actions">
-            <a class="btn" routerLink="/equipment">See the portfolio</a>
-            <a class="btn ghost" routerLink="/contact">Start an enquiry</a>
-            <button class="btn ghost" type="button" (click)="signOut()">Sign out</button>
+      <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
+        <p class="kicker">Login</p>
+        <h2>Enter your details</h2>
+        <p class="form-lede">Use the email attached to your last enquiry. Complete the number captcha to continue.</p>
+
+        <label>Email
+          <input formControlName="email" type="email" autocomplete="username" placeholder="name@company.com">
+        </label>
+        <label>Password
+          <span class="password-field">
+            <input
+              formControlName="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              autocomplete="current-password"
+              placeholder="At least 8 characters">
+            <button class="reveal" type="button" (click)="showPassword.set(!showPassword())">
+              {{ showPassword() ? 'Hide' : 'Show' }}
+            </button>
+          </span>
+        </label>
+
+        <div class="captcha">
+          <div class="captcha-sum" aria-live="polite">
+            <span class="captcha-label">Captcha</span>
+            <strong>{{ captchaPrompt() }} = ?</strong>
+            <button class="refresh" type="button" (click)="refreshCaptcha()">New sum</button>
           </div>
+          <label>Your answer
+            <input formControlName="captcha" inputmode="numeric" autocomplete="off" placeholder="e.g. 5">
+          </label>
         </div>
-      } @else {
-        <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
-          <p class="kicker">Login</p>
-          <h2>Enter your details</h2>
-          <p class="form-lede">Use the email attached to your last enquiry.</p>
 
-          <label>Email
-            <input formControlName="email" type="email" autocomplete="username" placeholder="name@company.com">
-          </label>
-          <label>Password
-            <span class="password-field">
-              <input
-                formControlName="password"
-                [type]="showPassword() ? 'text' : 'password'"
-                autocomplete="current-password"
-                placeholder="At least 8 characters">
-              <button class="reveal" type="button" (click)="showPassword.set(!showPassword())">
-                {{ showPassword() ? 'Hide' : 'Show' }}
-              </button>
-            </span>
-          </label>
+        <label class="remember">
+          <input formControlName="remember" type="checkbox">
+          Keep me signed in on this machine
+        </label>
 
-          <label class="remember">
-            <input formControlName="remember" type="checkbox">
-            Keep me signed in on this machine
-          </label>
+        @if (error(); as message) {
+          <p class="status error">{{ message }}</p>
+        }
 
-          @if (error(); as message) {
-            <p class="status error">{{ message }}</p>
-          }
-
-          <button class="btn submit" type="submit" [disabled]="submitting()">
-            {{ submitting() ? 'Signing in…' : 'Login' }}
-          </button>
-          <p class="alt">Need a machine instead? <a routerLink="/contact">Start an enquiry</a></p>
-        </form>
-      }
+        <button class="btn submit" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Signing in…' : 'Login' }}
+        </button>
+        <p class="alt">Need a machine instead? <a routerLink="/contact">Start an enquiry</a></p>
+      </form>
     </div>
   </div>
 </section>
