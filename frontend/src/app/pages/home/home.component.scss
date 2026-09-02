@@ -1,29 +1,76 @@
-.hero {
-  min-height: calc(100vh - 4.5rem);
-  display: grid;
-  grid-template-columns: 1.4fr 0.8fr;
-  gap: 2rem;
-  align-items: end;
-  padding: 4rem 1.25rem 3rem;
-  max-width: 1180px;
-  margin: 0 auto;
-  background:
-    radial-gradient(circle at 18% 20%, rgba(224, 161, 6, 0.16), transparent 36%),
-    linear-gradient(120deg, transparent 40%, rgba(224, 161, 6, 0.06));
+.stage {
+  position: relative;
+  min-height: 78vh;
+  overflow: hidden;
+  margin: 0;
+  padding: 0;
 }
 
-.hero h1 {
-  font-size: clamp(3rem, 8vw, 6.2rem);
+.slides,
+.slides img,
+.veil {
+  position: absolute;
+  inset: 0;
+}
+
+.slides img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  opacity: 0;
+  transform: scale(1.08);
+  transition: opacity 0.7s ease, transform 2s ease;
+}
+
+.slides img.on {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.veil {
+  background:
+    linear-gradient(90deg, rgba(10, 11, 8, 0.88) 0%, rgba(10, 11, 8, 0.45) 48%, rgba(10, 11, 8, 0.2) 100%),
+    linear-gradient(180deg, rgba(10, 11, 8, 0.15), rgba(10, 11, 8, 0.55));
+  pointer-events: none;
+}
+
+.stage-inner {
+  position: relative;
+  z-index: 2;
+  min-height: 78vh;
+  display: grid;
+  grid-template-columns: minmax(220px, 32vw) 1fr;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.1rem 1.1rem 3.2rem;
+}
+
+.hero-logo {
+  width: min(100%, 420px);
+  max-height: 70vh;
+  object-fit: contain;
+  filter: drop-shadow(0 18px 40px rgba(0, 0, 0, 0.55));
+  justify-self: start;
+}
+
+.hero-copy h1 {
+  font-size: clamp(2.4rem, 6vw, 5.4rem);
   line-height: 0.9;
-  margin: 0 0 1.25rem;
+  margin: 0 0 1rem;
   text-transform: uppercase;
+  text-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+}
+
+.hero-copy .lede {
+  color: #eee9dd;
 }
 
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
   gap: 0.75rem;
-  margin-top: 1.75rem;
+  margin-top: 1.4rem;
 }
 
 .btn.login {
@@ -32,23 +79,49 @@
   border: 1px solid var(--amber);
 }
 
+.btn.ghost {
+  background: rgba(18, 20, 16, 0.45);
+}
+
+.dots {
+  position: absolute;
+  z-index: 3;
+  left: 1.1rem;
+  bottom: 1rem;
+  display: flex;
+  gap: 0.45rem;
+}
+
+.dots button {
+  width: 2.1rem;
+  height: 0.28rem;
+  padding: 0;
+  border: 0;
+  background: rgba(243, 239, 228, 0.35);
+  cursor: pointer;
+}
+
+.dots button.on {
+  background: var(--amber);
+}
+
 .facts {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(4, 1fr);
   gap: 1px;
   background: var(--line);
-  border: 1px solid var(--line);
+  margin: 0;
 }
 
 .facts div {
   background: var(--panel);
-  padding: 1.2rem;
+  padding: 0.95rem 1rem;
 }
 
 .facts span {
   display: block;
   font-family: var(--display);
-  font-size: 2rem;
+  font-size: 1.7rem;
   letter-spacing: 0.06em;
 }
 
@@ -90,10 +163,19 @@
 }
 
 @media (max-width: 900px) {
-  .hero {
+  .stage-inner {
     grid-template-columns: 1fr;
-    min-height: auto;
-    padding-top: 2.5rem;
+    min-height: 70vh;
+    padding: 0.85rem 0.85rem 2.8rem;
+  }
+
+  .hero-logo {
+    width: min(72vw, 280px);
+    max-height: 38vh;
+  }
+
+  .facts {
+    grid-template-columns: 1fr 1fr;
   }
 
   .corridor-line {
