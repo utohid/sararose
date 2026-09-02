@@ -6,6 +6,7 @@ import { EquipmentDetailComponent } from './pages/equipment-detail/equipment-det
 import { WhyUsComponent } from './pages/why-us/why-us.component';
 import { ValuesComponent } from './pages/values/values.component';
 import { ContactComponent } from './pages/contact/contact.component';
+import { LoginComponent } from './pages/login/login.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, title: 'SARA ROSE Nigeria Limited' },
@@ -15,5 +16,6 @@ export const routes: Routes = [
   { path: 'why-sara-rose', component: WhyUsComponent, title: 'Why SARA ROSE' },
   { path: 'vision-values', component: ValuesComponent, title: 'Vision & values — SARA ROSE' },
   { path: 'contact', component: ContactComponent, title: 'Enquire — SARA ROSE' },
+  { path: 'login', component: LoginComponent, title: 'Login — SARA ROSE' },
   { path: '**', redirectTo: '' }
 ];

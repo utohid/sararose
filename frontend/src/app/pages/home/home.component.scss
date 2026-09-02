@@ -26,6 +26,12 @@
   margin-top: 1.75rem;
 }
 
+.btn.login {
+  background: transparent;
+  color: var(--amber);
+  border: 1px solid var(--amber);
+}
+
 .facts {
   display: grid;
   grid-template-columns: 1fr 1fr;
