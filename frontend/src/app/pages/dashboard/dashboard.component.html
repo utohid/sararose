@@ -25,6 +25,10 @@
     <small>Enquiries</small>
     <strong>{{ enquiries().length }}</strong>
   </article>
+  <article>
+    <small>Registrations</small>
+    <strong>{{ registrations().length }}</strong>
+  </article>
 </div>
 
 <div class="detail-grid">
@@ -50,6 +54,19 @@
     <p class="kicker">Header links</p>
     <h3>View links</h3>
     <p class="body">See the live header items, edit a path, or hide one from the site.</p>
+  </a>
+</div>
+
+<div class="detail-grid">
+  <a class="card choice" routerLink="/register">
+    <p class="kicker">Registration</p>
+    <h3>Public form</h3>
+    <p class="body">Open the Registration page users fill from the site header.</p>
+  </a>
+  <a class="card choice" routerLink="/dashboard/registrations">
+    <p class="kicker">Registration</p>
+    <h3>View records</h3>
+    <p class="body">See every name, email, telephone and city saved from that form.</p>
   </a>
 </div>
 
@@ -85,6 +102,21 @@
     }
   </div>
 </article>
+
+@if (registrations().length) {
+  <article class="card">
+    <p class="kicker">Recent registrations</p>
+    <h3>Stored in MySQL</h3>
+    <ul class="enquiry-list">
+      @for (row of registrations().slice(0, 6); track row.id) {
+        <li>
+          <strong>{{ row.fullName }}</strong>
+          <span>{{ row.email }} · {{ row.phone }}</span>
+        </li>
+      }
+    </ul>
+  </article>
+}
 
 @if (enquiries().length) {
   <article class="card">

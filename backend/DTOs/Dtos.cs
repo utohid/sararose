@@ -123,3 +123,33 @@ public class HeaderLinkRequest
 
     public bool? IsCta { get; set; }
 }
+
+public class CreateRegistrationRequest
+{
+    [Required, StringLength(120)]
+    public string FullName { get; set; } = string.Empty;
+
+    [Required, EmailAddress, StringLength(160)]
+    public string Email { get; set; } = string.Empty;
+
+    [Required, StringLength(40)]
+    public string Phone { get; set; } = string.Empty;
+
+    [StringLength(160)]
+    public string? Company { get; set; }
+
+    [StringLength(120)]
+    public string? City { get; set; }
+
+    [Required, StringLength(120, MinimumLength = 8)]
+    public string Password { get; set; } = string.Empty;
+}
+
+public record RegistrationDto(
+    int Id,
+    string FullName,
+    string Email,
+    string Phone,
+    string? Company,
+    string? City,
+    DateTime CreatedAtUtc);

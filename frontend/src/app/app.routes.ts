@@ -15,6 +15,8 @@ import { SliderViewComponent } from './pages/slider-view/slider-view.component';
 import { HeaderManagerComponent } from './pages/header-manager/header-manager.component';
 import { HeaderAddComponent } from './pages/header-add/header-add.component';
 import { HeaderViewComponent } from './pages/header-view/header-view.component';
+import { RegisterComponent } from './pages/register/register.component';
+import { RegistrationsAdminComponent } from './pages/registrations-admin/registrations-admin.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -26,6 +28,7 @@ export const routes: Routes = [
   { path: 'vision-values', component: ValuesComponent, title: 'Vision & values — SARA ROSE' },
   { path: 'contact', component: ContactComponent, title: 'Enquire — SARA ROSE' },
   { path: 'login', component: LoginComponent, title: 'Login — SARA ROSE' },
+  { path: 'register', component: RegisterComponent, title: 'Registration — SARA ROSE' },
   {
     path: 'dashboard',
     component: AdminShellComponent,
@@ -38,7 +41,8 @@ export const routes: Routes = [
       { path: 'slider', component: SliderManagerComponent, title: 'Home slider — SARA ROSE' },
       { path: 'header/add', component: HeaderAddComponent, title: 'Add header link — SARA ROSE' },
       { path: 'header/view', component: HeaderViewComponent, title: 'View header links — SARA ROSE' },
-      { path: 'header', component: HeaderManagerComponent, title: 'Header links — SARA ROSE' }
+      { path: 'header', component: HeaderManagerComponent, title: 'Header links — SARA ROSE' },
+      { path: 'registrations', component: RegistrationsAdminComponent, title: 'Registrations — SARA ROSE' }
     ]
   },
   { path: '**', redirectTo: '' }

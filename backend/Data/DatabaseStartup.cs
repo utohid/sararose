@@ -15,6 +15,7 @@ public static class DatabaseStartup
                 {
                     await db.Database.EnsureCreatedAsync();
                     await EnsureHeaderLinksTableAsync(db);
+                    await EnsureRegistrationsTableAsync(db);
                     await DbSeeder.SeedAsync(db);
                     return;
                 }
@@ -48,6 +49,25 @@ public static class DatabaseStartup
               `IsCta` tinyint(1) NOT NULL,
               `CreatedAtUtc` datetime(6) NOT NULL,
               PRIMARY KEY (`Id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            """);
+    }
+
+    private static async Task EnsureRegistrationsTableAsync(AppDbContext db)
+    {
+        await db.Database.ExecuteSqlRawAsync(
+            """
+            CREATE TABLE IF NOT EXISTS `registrations` (
+              `Id` int NOT NULL AUTO_INCREMENT,
+              `FullName` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `Email` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `Phone` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `Company` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+              `City` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+              `PasswordHash` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `CreatedAtUtc` datetime(6) NOT NULL,
+              PRIMARY KEY (`Id`),
+              UNIQUE KEY `IX_registrations_Email` (`Email`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             """);
     }

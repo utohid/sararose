@@ -116,6 +116,25 @@ export interface HeaderLinkPayload {
   isCta?: boolean;
 }
 
+export interface RegistrationPayload {
+  fullName: string;
+  email: string;
+  phone: string;
+  company?: string;
+  city?: string;
+  password: string;
+}
+
+export interface Registration {
+  id: number;
+  fullName: string;
+  email: string;
+  phone: string;
+  company?: string | null;
+  city?: string | null;
+  createdAtUtc: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly http = inject(HttpClient);
@@ -183,5 +202,17 @@ export class ApiService {
 
   deleteHeaderLink(id: number) {
     return this.http.delete(`${this.base}/header-links/${id}`);
+  }
+
+  createRegistration(payload: RegistrationPayload) {
+    return this.http.post<Registration>(`${this.base}/registrations`, payload);
+  }
+
+  getRegistrations() {
+    return this.http.get<Registration[]>(`${this.base}/registrations`);
+  }
+
+  getRegistration(id: number) {
+    return this.http.get<Registration>(`${this.base}/registrations/${id}`);
   }
 }

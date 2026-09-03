@@ -8,6 +8,7 @@ public static class DbSeeder
     public static async Task SeedAsync(AppDbContext db, CancellationToken cancellationToken = default)
     {
         await SeedHeaderLinksAsync(db, cancellationToken);
+        await EnsureRegistrationHeaderLinkAsync(db, cancellationToken);
 
         if (await db.Categories.AnyAsync(cancellationToken))
         {
@@ -128,9 +129,10 @@ public static class DbSeeder
             Link(3, "Equipment", "/equipment", false, now),
             Link(4, "Why us", "/why-sara-rose", false, now),
             Link(5, "Vision", "/vision-values", false, now),
-            Link(6, "Login", "/login", false, now),
-            Link(7, "Dashboard", "/dashboard", false, now),
-            Link(8, "Enquire", "/contact", true, now)
+            Link(6, "Registration", "/register", false, now),
+            Link(7, "Login", "/login", false, now),
+            Link(8, "Dashboard", "/dashboard", false, now),
+            Link(9, "Enquire", "/contact", true, now)
         );
         await db.SaveChangesAsync(cancellationToken);
     }
@@ -145,4 +147,23 @@ public static class DbSeeder
             IsCta = cta,
             CreatedAtUtc = now
         };
+
+    private static async Task EnsureRegistrationHeaderLinkAsync(AppDbContext db, CancellationToken cancellationToken)
+    {
+        if (await db.HeaderLinks.AnyAsync(x => x.Path == "/register", cancellationToken))
+        {
+            return;
+        }
+
+        var login = await db.HeaderLinks.FirstOrDefaultAsync(x => x.Path == "/login", cancellationToken);
+        var order = login?.SortOrder ?? 6;
+        var later = await db.HeaderLinks.Where(x => x.SortOrder >= order).ToListAsync(cancellationToken);
+        foreach (var link in later)
+        {
+            link.SortOrder += 1;
+        }
+
+        db.HeaderLinks.Add(Link(order, "Registration", "/register", false, DateTime.UtcNow));
+        await db.SaveChangesAsync(cancellationToken);
+    }
 }

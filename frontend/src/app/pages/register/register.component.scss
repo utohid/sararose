@@ -1,0 +1,209 @@
+.login-stage {
+  position: relative;
+  isolation: isolate;
+  min-height: calc(100vh - 4.5rem);
+  overflow: hidden;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.glow {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(10px);
+  z-index: 0;
+}
+
+.glow-a {
+  width: 28rem;
+  height: 28rem;
+  left: -6rem;
+  top: -4rem;
+  background: radial-gradient(circle, rgba(224, 161, 6, 0.28), transparent 68%);
+}
+
+.glow-b {
+  width: 22rem;
+  height: 22rem;
+  right: -4rem;
+  bottom: 10%;
+  background: radial-gradient(circle, rgba(243, 239, 228, 0.08), transparent 70%);
+}
+
+.login-shell {
+  position: relative;
+  z-index: 1;
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  min-height: 36rem;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(180deg, rgba(26, 28, 22, 0.55), rgba(12, 13, 10, 0.88));
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.35);
+}
+
+.showcase {
+  padding: 3rem 2.5rem;
+  background:
+    linear-gradient(160deg, rgba(224, 161, 6, 0.12), transparent 42%),
+    repeating-linear-gradient(135deg, transparent 0 16px, rgba(224, 161, 6, 0.04) 16px 17px);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+}
+
+.showcase h1 {
+  font-size: clamp(2.8rem, 6vw, 5rem);
+  line-height: 0.9;
+  text-transform: uppercase;
+  margin: 0 0 1.25rem;
+}
+
+.points {
+  list-style: none;
+  margin: 2rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.points li {
+  display: flex;
+  gap: 0.85rem;
+  align-items: baseline;
+  color: #ddd8cc;
+  letter-spacing: 0.02em;
+}
+
+.points span {
+  color: var(--amber);
+  font-family: var(--display);
+  letter-spacing: 0.16em;
+  font-size: 0.95rem;
+}
+
+.foot-note {
+  margin-top: auto;
+  padding-top: 2.5rem;
+  color: var(--muted);
+  font-size: 0.78rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.panel {
+  padding: 2.4rem 2.2rem;
+  display: grid;
+  align-items: center;
+}
+
+.login-form {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.login-form h2 {
+  margin: 0;
+  font-size: 2.1rem;
+  text-transform: uppercase;
+}
+
+.form-lede {
+  color: var(--muted);
+  line-height: 1.65;
+  margin: 0 0 0.4rem;
+}
+
+.login-form label {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.login-form input {
+  background: #10120e;
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 0.75rem 0.85rem;
+  width: 100%;
+}
+
+.login-form input:focus {
+  outline: 1px solid var(--amber);
+  border-color: var(--amber);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.password-field {
+  position: relative;
+  display: block;
+}
+
+.password-field input {
+  padding-right: 4.4rem;
+}
+
+.reveal {
+  position: absolute;
+  right: 0.55rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: 0;
+  color: var(--amber);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.68rem;
+  cursor: pointer;
+}
+
+.submit {
+  justify-content: center;
+  margin-top: 0.35rem;
+  padding: 0.95rem 1.1rem;
+}
+
+.submit:disabled {
+  opacity: 0.65;
+  cursor: wait;
+}
+
+.alt {
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.alt a {
+  color: var(--amber);
+  border-bottom: 1px solid color-mix(in srgb, var(--amber) 50%, transparent);
+}
+
+@media (max-width: 860px) {
+  .login-shell {
+    grid-template-columns: 1fr;
+  }
+
+  .showcase {
+    border-right: 0;
+    border-bottom: 1px solid var(--line);
+    padding: 2rem 1.4rem;
+  }
+
+  .panel {
+    padding: 2rem 1.4rem 2.4rem;
+  }
+
+  .row {
+    grid-template-columns: 1fr;
+  }
+}

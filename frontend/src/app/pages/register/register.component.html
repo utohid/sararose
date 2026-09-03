@@ -1,0 +1,70 @@
+<section class="login-stage">
+  <div class="glow glow-a"></div>
+  <div class="glow glow-b"></div>
+
+  <div class="login-shell">
+    <aside class="showcase">
+      <p class="kicker">New account</p>
+      <h1>Register<br>with SARA ROSE.</h1>
+      <p class="lede">Leave your details so the named contact can reach you about equipment, site work and follow-up from Sagamu.</p>
+      <ul class="points">
+        <li><span>01</span> Your record is stored in MySQL</li>
+        <li><span>02</span> Admins see it after login</li>
+        <li><span>03</span> Open this page from the header Registration link</li>
+      </ul>
+      <p class="foot-note">Heavy equipment trading · Ogun State · Nigeria</p>
+    </aside>
+
+    <div class="panel">
+      <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
+        <p class="kicker">Registration</p>
+        <h2>Fill your details</h2>
+        <p class="form-lede">Required fields are name, email, telephone and a password of at least 8 characters.</p>
+
+        <label>Full name
+          <input formControlName="fullName" autocomplete="name" placeholder="Your name">
+        </label>
+        <div class="row">
+          <label>Email
+            <input formControlName="email" type="email" autocomplete="email" placeholder="name@company.com">
+          </label>
+          <label>Telephone
+            <input formControlName="phone" autocomplete="tel" placeholder="+234 …">
+          </label>
+        </div>
+        <div class="row">
+          <label>Company
+            <input formControlName="company" autocomplete="organization" placeholder="Optional">
+          </label>
+          <label>City
+            <input formControlName="city" autocomplete="address-level2" placeholder="e.g. Sagamu">
+          </label>
+        </div>
+        <label>Password
+          <span class="password-field">
+            <input
+              formControlName="password"
+              [type]="showPassword() ? 'text' : 'password'"
+              autocomplete="new-password"
+              placeholder="At least 8 characters">
+            <button class="reveal" type="button" (click)="showPassword.set(!showPassword())">
+              {{ showPassword() ? 'Hide' : 'Show' }}
+            </button>
+          </span>
+        </label>
+        <label>Confirm password
+          <input formControlName="confirm" type="password" autocomplete="new-password" placeholder="Repeat password">
+        </label>
+
+        @if (error(); as message) {
+          <p class="status error">{{ message }}</p>
+        }
+
+        <button class="btn submit" type="submit" [disabled]="submitting()">
+          {{ submitting() ? 'Saving…' : 'Register' }}
+        </button>
+        <p class="alt">Already registered? <a routerLink="/login">Login</a></p>
+      </form>
+    </div>
+  </div>
+</section>

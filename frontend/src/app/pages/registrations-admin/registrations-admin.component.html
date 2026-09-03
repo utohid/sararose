@@ -1,0 +1,40 @@
+<header class="board-head">
+  <p class="kicker">Admin panel</p>
+  <h2>Registrations</h2>
+  <p class="lede">People who filled the public Registration page. Passwords are stored hashed and are not shown here.</p>
+</header>
+
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+@if (selected(); as row) {
+  <article class="card viewer">
+    <p class="kicker">Selected record</p>
+    <h3>{{ row.fullName }}</h3>
+    <dl>
+      <div><dt>Email</dt><dd>{{ row.email }}</dd></div>
+      <div><dt>Telephone</dt><dd>{{ row.phone }}</dd></div>
+      <div><dt>Company</dt><dd>{{ row.company || '—' }}</dd></div>
+      <div><dt>City</dt><dd>{{ row.city || '—' }}</dd></div>
+      <div><dt>Registered</dt><dd>{{ row.createdAtUtc | date:'medium' }}</dd></div>
+    </dl>
+  </article>
+}
+
+<div class="grid">
+  @for (row of rows(); track row.id) {
+    <button
+      class="card slide"
+      type="button"
+      [class.on]="selected()?.id === row.id"
+      (click)="select(row)">
+      <p class="kicker">Registration</p>
+      <p>{{ row.fullName }}</p>
+      <p class="meta">{{ row.email }}</p>
+      <p class="meta">{{ row.phone }} · {{ row.city || 'No city' }}</p>
+    </button>
+  } @empty {
+    <p class="status">No registrations yet. Public users add them from the header Registration link.</p>
+  }
+</div>

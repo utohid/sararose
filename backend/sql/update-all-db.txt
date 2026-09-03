@@ -38,6 +38,7 @@ DROP TABLE IF EXISTS `enquiries`;
 DROP TABLE IF EXISTS `equipment`;
 DROP TABLE IF EXISTS `slider_slides`;
 DROP TABLE IF EXISTS `header_links`;
+DROP TABLE IF EXISTS `registrations`;
 DROP TABLE IF EXISTS `categories`;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -111,6 +112,19 @@ CREATE TABLE `header_links` (
   `IsCta` tinyint(1) NOT NULL,
   `CreatedAtUtc` datetime(6) NOT NULL,
   PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `registrations` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `FullName` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Email` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Phone` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Company` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `City` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `PasswordHash` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CreatedAtUtc` datetime(6) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_registrations_Email` (`Email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------------------------------
@@ -211,16 +225,19 @@ INSERT INTO `header_links` (`Id`, `Label`, `Path`, `SortOrder`, `Visible`, `IsCt
 (3, 'Equipment', '/equipment', 3, 1, 0, UTC_TIMESTAMP(6)),
 (4, 'Why us', '/why-sara-rose', 4, 1, 0, UTC_TIMESTAMP(6)),
 (5, 'Vision', '/vision-values', 5, 1, 0, UTC_TIMESTAMP(6)),
-(6, 'Login', '/login', 6, 1, 0, UTC_TIMESTAMP(6)),
-(7, 'Dashboard', '/dashboard', 7, 1, 0, UTC_TIMESTAMP(6)),
-(8, 'Enquire', '/contact', 8, 1, 1, UTC_TIMESTAMP(6));
+(6, 'Registration', '/register', 6, 1, 0, UTC_TIMESTAMP(6)),
+(7, 'Login', '/login', 7, 1, 0, UTC_TIMESTAMP(6)),
+(8, 'Dashboard', '/dashboard', 8, 1, 0, UTC_TIMESTAMP(6)),
+(9, 'Enquire', '/contact', 9, 1, 1, UTC_TIMESTAMP(6));
 
-ALTER TABLE `header_links` AUTO_INCREMENT = 9;
+ALTER TABLE `header_links` AUTO_INCREMENT = 10;
 
 -- slider_slides: no seed rows. Upload files from Dashboard → Slider images
 -- (files live under backend/wwwroot/uploads/slides/).
 --
 -- enquiries: no seed rows. Rows are created by POST /api/enquiries.
+--
+-- registrations: no seed rows. Rows are created by POST /api/registrations.
 
 -- -----------------------------------------------------------------------------
 -- 6) Useful queries (same data the API reads/writes)
@@ -265,3 +282,6 @@ ALTER TABLE `header_links` AUTO_INCREMENT = 9;
 
 -- Header hyperlinks (GET /api/header-links)
 -- SELECT * FROM header_links ORDER BY SortOrder, Id;
+
+-- Registrations (GET /api/registrations)
+-- SELECT Id, FullName, Email, Phone, Company, City, CreatedAtUtc FROM registrations ORDER BY CreatedAtUtc DESC;

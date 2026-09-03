@@ -10,6 +10,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Enquiry> Enquiries => Set<Enquiry>();
     public DbSet<SliderSlide> SliderSlides => Set<SliderSlide>();
     public DbSet<HeaderLink> HeaderLinks => Set<HeaderLink>();
+    public DbSet<UserRegistration> Registrations => Set<UserRegistration>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -71,6 +72,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.ToTable("header_links");
             entity.Property(x => x.Label).HasMaxLength(80);
             entity.Property(x => x.Path).HasMaxLength(240);
+        });
+
+        modelBuilder.Entity<UserRegistration>(entity =>
+        {
+            entity.ToTable("registrations");
+            entity.HasIndex(x => x.Email).IsUnique();
+            entity.Property(x => x.FullName).HasMaxLength(120);
+            entity.Property(x => x.Email).HasMaxLength(160);
+            entity.Property(x => x.Phone).HasMaxLength(40);
+            entity.Property(x => x.Company).HasMaxLength(160);
+            entity.Property(x => x.City).HasMaxLength(120);
+            entity.Property(x => x.PasswordHash).HasMaxLength(64);
         });
     }
 }
