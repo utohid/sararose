@@ -92,3 +92,10 @@ public record EnquiryDto(
     string Requirement,
     string Status,
     DateTime CreatedAtUtc);
+
+public record SliderSlideDto(
+    int Id,
+    int SortOrder,
+    string Alt,
+    string Url,
+    DateTime CreatedAtUtc);

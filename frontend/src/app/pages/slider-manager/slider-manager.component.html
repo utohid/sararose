@@ -1,0 +1,47 @@
+<header class="board-head">
+  <p class="kicker">Admin panel</p>
+  <h2>Home slider</h2>
+  <p class="lede">
+    @if (setdynamic) {
+      environment.setdynamic is true, so the home page fetches these images from the API.
+    } @else {
+      environment.setdynamic is false, so the home page keeps the built-in slides until you set it to true.
+    }
+  </p>
+</header>
+
+@if (message(); as note) {
+  <p class="status">{{ note }}</p>
+}
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+<form class="card upload">
+  <p class="kicker">Add a slide</p>
+  <label>Alt text
+    <input [(ngModel)]="altText" name="alt" placeholder="Excavator at sunset">
+  </label>
+  <label class="file">
+    Choose image
+    <input type="file" accept="image/jpeg,image/png,image/webp,image/gif" [disabled]="busy()" (change)="onFile($event)">
+  </label>
+  <p class="hint">JPG, PNG, WEBP or GIF, max 8 MB. Order on the home page follows sort order.</p>
+</form>
+
+<div class="grid">
+  @for (slide of slides(); track slide.id) {
+    <article class="card slide">
+      <img [src]="slide.url" [alt]="slide.alt">
+      <p>{{ slide.alt }}</p>
+      <p class="meta">Order {{ slide.sortOrder }}</p>
+      <div class="row">
+        <button class="btn ghost" type="button" (click)="move(slide, -1)">Up</button>
+        <button class="btn ghost" type="button" (click)="move(slide, 1)">Down</button>
+        <button class="btn ghost" type="button" (click)="remove(slide)">Delete</button>
+      </div>
+    </article>
+  } @empty {
+    <p class="status">No dynamic slides yet. Upload images here, then keep setdynamic true so home uses them.</p>
+  }
+</div>

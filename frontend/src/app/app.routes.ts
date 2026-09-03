@@ -8,6 +8,8 @@ import { ValuesComponent } from './pages/values/values.component';
 import { ContactComponent } from './pages/contact/contact.component';
 import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { AdminShellComponent } from './pages/admin-shell/admin-shell.component';
+import { SliderManagerComponent } from './pages/slider-manager/slider-manager.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -19,6 +21,15 @@ export const routes: Routes = [
   { path: 'vision-values', component: ValuesComponent, title: 'Vision & values — SARA ROSE' },
   { path: 'contact', component: ContactComponent, title: 'Enquire — SARA ROSE' },
   { path: 'login', component: LoginComponent, title: 'Login — SARA ROSE' },
-  { path: 'dashboard', component: DashboardComponent, title: 'Dashboard — SARA ROSE', canActivate: [authGuard] },
+  {
+    path: 'dashboard',
+    component: AdminShellComponent,
+    title: 'Dashboard — SARA ROSE',
+    canActivate: [authGuard],
+    children: [
+      { path: '', component: DashboardComponent },
+      { path: 'slider', component: SliderManagerComponent, title: 'Slider — SARA ROSE' }
+    ]
+  },
   { path: '**', redirectTo: '' }
 ];

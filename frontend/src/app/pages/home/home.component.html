@@ -3,7 +3,7 @@
   (mouseenter)="paused.set(true)"
   (mouseleave)="paused.set(false)">
   <div class="slides" aria-hidden="true">
-    @for (slide of slides; track slide.src; let i = $index) {
+    @for (slide of slides(); track slide.src; let i = $index) {
       <img
         [src]="slide.src"
         [alt]="slide.alt"
@@ -27,7 +27,7 @@
   </div>
 
   <div class="dots">
-    @for (slide of slides; track slide.src; let i = $index) {
+    @for (slide of slides(); track slide.src; let i = $index) {
       <button
         type="button"
         [class.on]="active() === i"

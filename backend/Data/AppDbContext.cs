@@ -8,6 +8,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<EquipmentCategory> Categories => Set<EquipmentCategory>();
     public DbSet<EquipmentItem> Equipment => Set<EquipmentItem>();
     public DbSet<Enquiry> Enquiries => Set<Enquiry>();
+    public DbSet<SliderSlide> SliderSlides => Set<SliderSlide>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -54,6 +55,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 .WithMany()
                 .HasForeignKey(x => x.CategoryId)
                 .OnDelete(DeleteBehavior.SetNull);
+        });
+
+        modelBuilder.Entity<SliderSlide>(entity =>
+        {
+            entity.ToTable("slider_slides");
+            entity.Property(x => x.Alt).HasMaxLength(200);
+            entity.Property(x => x.FileName).HasMaxLength(180);
+            entity.Property(x => x.ContentType).HasMaxLength(80);
         });
     }
 }

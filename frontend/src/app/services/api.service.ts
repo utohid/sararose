@@ -90,6 +90,14 @@ export interface Enquiry {
   createdAtUtc: string;
 }
 
+export interface SliderSlide {
+  id: number;
+  sortOrder: number;
+  alt: string;
+  url: string;
+  createdAtUtc: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly http = inject(HttpClient);
@@ -118,5 +126,24 @@ export class ApiService {
 
   getEnquiries(): Observable<Enquiry[]> {
     return this.http.get<Enquiry[]>(`${this.base}/enquiries`);
+  }
+
+  getSlides(): Observable<SliderSlide[]> {
+    return this.http.get<SliderSlide[]>(`${this.base}/slides`);
+  }
+
+  uploadSlide(file: File, alt: string) {
+    const body = new FormData();
+    body.append('file', file);
+    body.append('alt', alt);
+    return this.http.post<SliderSlide>(`${this.base}/slides`, body);
+  }
+
+  updateSlide(id: number, payload: { alt?: string; sortOrder?: number }) {
+    return this.http.put<SliderSlide>(`${this.base}/slides/${id}`, payload);
+  }
+
+  deleteSlide(id: number) {
+    return this.http.delete(`${this.base}/slides/${id}`);
   }
 }

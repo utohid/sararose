@@ -1,23 +1,18 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { ApiService, Category, Company, Enquiry, EquipmentSummary } from '../../services/api.service';
-import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
-  imports: [RouterLink],
+  imports: [],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.scss'
 })
 export class DashboardComponent implements OnInit {
   private readonly api = inject(ApiService);
-  private readonly auth = inject(AuthService);
-  private readonly router = inject(Router);
 
   readonly appName = 'SARA ROSE NIGERIA LIMITED';
-  email = this.auth.email;
   company = signal<Company | null>(null);
   categories = signal<Category[]>([]);
   equipment = signal<EquipmentSummary[]>([]);
@@ -41,10 +36,5 @@ export class DashboardComponent implements OnInit {
         }
       }
     });
-  }
-
-  signOut(): void {
-    this.auth.signOut();
-    void this.router.navigateByUrl('/login');
   }
 }

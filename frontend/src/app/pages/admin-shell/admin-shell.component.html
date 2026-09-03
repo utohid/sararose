@@ -1,0 +1,19 @@
+<section class="dash">
+  <aside class="rail">
+    <p class="kicker">Admin panel</p>
+    <p class="rail-mark">SR</p>
+    <h1>{{ appName }}</h1>
+    <p class="signed">Signed in as {{ email() }}</p>
+    <nav>
+      <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Overview</a>
+      <a routerLink="/dashboard/slider" routerLinkActive="active">Slider images</a>
+      <a routerLink="/equipment">Equipment</a>
+      <a routerLink="/contact">Enquiries</a>
+      <a routerLink="/">Public site</a>
+    </nav>
+    <button class="btn ghost" type="button" (click)="signOut()">Sign out</button>
+  </aside>
+  <div class="board">
+    <router-outlet />
+  </div>
+</section>
