@@ -3,6 +3,7 @@ import { Component, OnDestroy, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { environment } from '../../../environments/environment';
+import { notifyError, notifySaved } from '../../notify';
 import { ApiService } from '../../services/api.service';
 
 @Component({
@@ -46,12 +47,15 @@ export class SliderAddComponent implements OnDestroy {
     this.busy.set(true);
     this.error.set(null);
     this.api.uploadSlide(this.file, this.altText).subscribe({
-      next: () => {
-        void this.router.navigate(['/dashboard/slider/view'], { queryParams: { added: '1' } });
+      next: async () => {
+        this.busy.set(false);
+        await notifySaved('Slide saved', 'The image is on the view page and on home while setdynamic is true.');
+        void this.router.navigate(['/dashboard/slider/view']);
       },
       error: () => {
         this.busy.set(false);
         this.error.set('Upload failed. Use a JPG, PNG, WEBP or GIF under 8 MB.');
+        void notifyError('Could not save that slide.');
       }
     });
   }

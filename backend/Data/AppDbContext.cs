@@ -9,6 +9,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<EquipmentItem> Equipment => Set<EquipmentItem>();
     public DbSet<Enquiry> Enquiries => Set<Enquiry>();
     public DbSet<SliderSlide> SliderSlides => Set<SliderSlide>();
+    public DbSet<HeaderLink> HeaderLinks => Set<HeaderLink>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -63,6 +64,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property(x => x.Alt).HasMaxLength(200);
             entity.Property(x => x.FileName).HasMaxLength(180);
             entity.Property(x => x.ContentType).HasMaxLength(80);
+        });
+
+        modelBuilder.Entity<HeaderLink>(entity =>
+        {
+            entity.ToTable("header_links");
+            entity.Property(x => x.Label).HasMaxLength(80);
+            entity.Property(x => x.Path).HasMaxLength(240);
         });
     }
 }

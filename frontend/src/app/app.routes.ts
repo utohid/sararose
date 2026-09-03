@@ -12,6 +12,9 @@ import { AdminShellComponent } from './pages/admin-shell/admin-shell.component';
 import { SliderManagerComponent } from './pages/slider-manager/slider-manager.component';
 import { SliderAddComponent } from './pages/slider-add/slider-add.component';
 import { SliderViewComponent } from './pages/slider-view/slider-view.component';
+import { HeaderManagerComponent } from './pages/header-manager/header-manager.component';
+import { HeaderAddComponent } from './pages/header-add/header-add.component';
+import { HeaderViewComponent } from './pages/header-view/header-view.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -32,7 +35,10 @@ export const routes: Routes = [
       { path: '', component: DashboardComponent },
       { path: 'slider/add', component: SliderAddComponent, title: 'Add slide — SARA ROSE' },
       { path: 'slider/view', component: SliderViewComponent, title: 'View slides — SARA ROSE' },
-      { path: 'slider', component: SliderManagerComponent, title: 'Home slider — SARA ROSE' }
+      { path: 'slider', component: SliderManagerComponent, title: 'Home slider — SARA ROSE' },
+      { path: 'header/add', component: HeaderAddComponent, title: 'Add header link — SARA ROSE' },
+      { path: 'header/view', component: HeaderViewComponent, title: 'View header links — SARA ROSE' },
+      { path: 'header', component: HeaderManagerComponent, title: 'Header links — SARA ROSE' }
     ]
   },
   { path: '**', redirectTo: '' }

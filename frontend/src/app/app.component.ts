@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { HeaderNavService, isExternalPath } from './services/header-nav.service';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +9,12 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
+  private readonly headerNav = inject(HeaderNavService);
+
   readonly year = new Date().getFullYear();
   readonly contactEmail = 'contact@sararose.com';
+  readonly links = this.headerNav.visible;
+  readonly isExternal = isExternalPath;
   menuOpen = false;
 
   toggleMenu(): void {

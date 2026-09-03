@@ -99,3 +99,27 @@ public record SliderSlideDto(
     string Alt,
     string Url,
     DateTime CreatedAtUtc);
+
+public record HeaderLinkDto(
+    int Id,
+    string Label,
+    string Path,
+    int SortOrder,
+    bool Visible,
+    bool IsCta,
+    DateTime CreatedAtUtc);
+
+public class HeaderLinkRequest
+{
+    [StringLength(80)]
+    public string? Label { get; set; }
+
+    [StringLength(240)]
+    public string? Path { get; set; }
+
+    public int? SortOrder { get; set; }
+
+    public bool? Visible { get; set; }
+
+    public bool? IsCta { get; set; }
+}

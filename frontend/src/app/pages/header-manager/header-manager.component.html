@@ -1,0 +1,27 @@
+<header class="board-head">
+  <p class="kicker">Admin panel</p>
+  <h2>Header links</h2>
+  <p class="lede">
+    Manage the site header hyperlinks: Home, About, Equipment, Why us, Vision, Login and Dashboard.
+    @if (setdynamic) {
+      The public header currently loads these labels and paths from the API.
+    } @else {
+      The public header still uses the built-in links until environment.setdynamic is true.
+    }
+  </p>
+</header>
+
+<div class="choice-grid">
+  <a class="card choice" routerLink="/dashboard/header/add">
+    <p class="kicker">Add</p>
+    <h3>Add a link</h3>
+    <p>Create a new header item with a label and path, then save. A confirmation alert appears after submit.</p>
+    <span class="choice-link">Open add page</span>
+  </a>
+  <a class="card choice" routerLink="/dashboard/header/view">
+    <p class="kicker">View</p>
+    <h3>View links</h3>
+    <p>See every header hyperlink, change order or visibility, edit the path, or delete it.</p>
+    <span class="choice-link">Open view page</span>
+  </a>
+</div>

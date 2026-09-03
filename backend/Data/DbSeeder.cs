@@ -7,6 +7,8 @@ public static class DbSeeder
 {
     public static async Task SeedAsync(AppDbContext db, CancellationToken cancellationToken = default)
     {
+        await SeedHeaderLinksAsync(db, cancellationToken);
+
         if (await db.Categories.AnyAsync(cancellationToken))
         {
             return;
@@ -110,5 +112,37 @@ public static class DbSeeder
             TypicalUse = typicalUse,
             AvailabilityNote = "Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.",
             SortOrder = order
+        };
+
+    private static async Task SeedHeaderLinksAsync(AppDbContext db, CancellationToken cancellationToken)
+    {
+        if (await db.HeaderLinks.AnyAsync(cancellationToken))
+        {
+            return;
+        }
+
+        var now = DateTime.UtcNow;
+        db.HeaderLinks.AddRange(
+            Link(1, "Home", "/", false, now),
+            Link(2, "About", "/about", false, now),
+            Link(3, "Equipment", "/equipment", false, now),
+            Link(4, "Why us", "/why-sara-rose", false, now),
+            Link(5, "Vision", "/vision-values", false, now),
+            Link(6, "Login", "/login", false, now),
+            Link(7, "Dashboard", "/dashboard", false, now),
+            Link(8, "Enquire", "/contact", true, now)
+        );
+        await db.SaveChangesAsync(cancellationToken);
+    }
+
+    private static HeaderLink Link(int order, string label, string path, bool cta, DateTime now) =>
+        new()
+        {
+            Label = label,
+            Path = path,
+            SortOrder = order,
+            Visible = true,
+            IsCta = cta,
+            CreatedAtUtc = now
         };
 }

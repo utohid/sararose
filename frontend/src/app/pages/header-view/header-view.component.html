@@ -1,0 +1,67 @@
+<header class="board-head">
+  <p class="kicker">Header links</p>
+  <h2>View links</h2>
+  <p class="lede">
+    @if (setdynamic) {
+      These hyperlinks are what the public header shows, in this order, when visible.
+    } @else {
+      These links are stored for the header. The public nav still uses built-in items until setdynamic is true.
+    }
+  </p>
+</header>
+
+<p class="page-nav">
+  <a routerLink="/dashboard/header">Header home</a>
+  <a routerLink="/dashboard/header/add">Add a link</a>
+</p>
+
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+@if (selected(); as link) {
+  <article class="card viewer">
+    <form class="editor" (ngSubmit)="saveEdits()">
+      <p class="kicker">Selected link</p>
+      <h3>{{ link.label }}</h3>
+      <p class="meta">Order {{ link.sortOrder }} · Saved {{ link.createdAtUtc | date:'medium' }}</p>
+      <label>Label
+        <input [(ngModel)]="label" name="label">
+      </label>
+      <label>Path
+        <input [(ngModel)]="path" name="path">
+      </label>
+      <label class="check">
+        <input [(ngModel)]="visible" name="visible" type="checkbox">
+        Show in the public header
+      </label>
+      <label class="check">
+        <input [(ngModel)]="isCta" name="isCta" type="checkbox">
+        Highlight as a button
+      </label>
+      <div class="row">
+        <button class="btn" type="submit">Save changes</button>
+        <button class="btn ghost" type="button" (click)="move(link, -1)">Move up</button>
+        <button class="btn ghost" type="button" (click)="move(link, 1)">Move down</button>
+        <button class="btn ghost" type="button" (click)="remove(link)">Delete</button>
+      </div>
+    </form>
+  </article>
+}
+
+<div class="grid">
+  @for (link of links(); track link.id) {
+    <button
+      class="card slide"
+      type="button"
+      [class.on]="selected()?.id === link.id"
+      (click)="select(link)">
+      <p class="kicker">{{ link.isCta ? 'Button' : 'Link' }}</p>
+      <p>{{ link.label }}</p>
+      <p class="meta">{{ link.path }}</p>
+      <p class="meta">Order {{ link.sortOrder }} · {{ link.visible ? 'Visible' : 'Hidden' }}</p>
+    </button>
+  } @empty {
+    <p class="status">No header links yet. <a routerLink="/dashboard/header/add">Add a link</a> to show it here.</p>
+  }
+</div>

@@ -37,6 +37,7 @@ SET FOREIGN_KEY_CHECKS = 0;
 DROP TABLE IF EXISTS `enquiries`;
 DROP TABLE IF EXISTS `equipment`;
 DROP TABLE IF EXISTS `slider_slides`;
+DROP TABLE IF EXISTS `header_links`;
 DROP TABLE IF EXISTS `categories`;
 SET FOREIGN_KEY_CHECKS = 1;
 
@@ -97,6 +98,17 @@ CREATE TABLE `slider_slides` (
   `Alt` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `FileName` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `ContentType` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CreatedAtUtc` datetime(6) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `header_links` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `Label` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Path` varchar(240) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `SortOrder` int NOT NULL,
+  `Visible` tinyint(1) NOT NULL,
+  `IsCta` tinyint(1) NOT NULL,
   `CreatedAtUtc` datetime(6) NOT NULL,
   PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -193,6 +205,18 @@ INSERT INTO `equipment` (
 ALTER TABLE `categories` AUTO_INCREMENT = 6;
 ALTER TABLE `equipment` AUTO_INCREMENT = 12;
 
+INSERT INTO `header_links` (`Id`, `Label`, `Path`, `SortOrder`, `Visible`, `IsCta`, `CreatedAtUtc`) VALUES
+(1, 'Home', '/', 1, 1, 0, UTC_TIMESTAMP(6)),
+(2, 'About', '/about', 2, 1, 0, UTC_TIMESTAMP(6)),
+(3, 'Equipment', '/equipment', 3, 1, 0, UTC_TIMESTAMP(6)),
+(4, 'Why us', '/why-sara-rose', 4, 1, 0, UTC_TIMESTAMP(6)),
+(5, 'Vision', '/vision-values', 5, 1, 0, UTC_TIMESTAMP(6)),
+(6, 'Login', '/login', 6, 1, 0, UTC_TIMESTAMP(6)),
+(7, 'Dashboard', '/dashboard', 7, 1, 0, UTC_TIMESTAMP(6)),
+(8, 'Enquire', '/contact', 8, 1, 1, UTC_TIMESTAMP(6));
+
+ALTER TABLE `header_links` AUTO_INCREMENT = 9;
+
 -- slider_slides: no seed rows. Upload files from Dashboard → Slider images
 -- (files live under backend/wwwroot/uploads/slides/).
 --
@@ -238,3 +262,6 @@ ALTER TABLE `equipment` AUTO_INCREMENT = 12;
 
 -- List enquiries (GET /api/enquiries)
 -- SELECT * FROM enquiries ORDER BY CreatedAtUtc DESC;
+
+-- Header hyperlinks (GET /api/header-links)
+-- SELECT * FROM header_links ORDER BY SortOrder, Id;

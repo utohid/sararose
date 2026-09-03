@@ -14,6 +14,7 @@ public static class DatabaseStartup
                 if (await db.Database.CanConnectAsync())
                 {
                     await db.Database.EnsureCreatedAsync();
+                    await EnsureHeaderLinksTableAsync(db);
                     await DbSeeder.SeedAsync(db);
                     return;
                 }
@@ -32,5 +33,22 @@ public static class DatabaseStartup
 
         throw new InvalidOperationException(
             "Cannot reach MySQL at 127.0.0.1:3306. Start the MySQL service and create the sararose database (see README.md).");
+    }
+
+    private static async Task EnsureHeaderLinksTableAsync(AppDbContext db)
+    {
+        await db.Database.ExecuteSqlRawAsync(
+            """
+            CREATE TABLE IF NOT EXISTS `header_links` (
+              `Id` int NOT NULL AUTO_INCREMENT,
+              `Label` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `Path` varchar(240) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `SortOrder` int NOT NULL,
+              `Visible` tinyint(1) NOT NULL,
+              `IsCta` tinyint(1) NOT NULL,
+              `CreatedAtUtc` datetime(6) NOT NULL,
+              PRIMARY KEY (`Id`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            """);
     }
 }

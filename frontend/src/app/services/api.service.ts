@@ -98,6 +98,24 @@ export interface SliderSlide {
   createdAtUtc: string;
 }
 
+export interface HeaderLink {
+  id: number;
+  label: string;
+  path: string;
+  sortOrder: number;
+  visible: boolean;
+  isCta: boolean;
+  createdAtUtc: string;
+}
+
+export interface HeaderLinkPayload {
+  label?: string;
+  path?: string;
+  sortOrder?: number;
+  visible?: boolean;
+  isCta?: boolean;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly http = inject(HttpClient);
@@ -149,5 +167,21 @@ export class ApiService {
 
   deleteSlide(id: number) {
     return this.http.delete(`${this.base}/slides/${id}`);
+  }
+
+  getHeaderLinks() {
+    return this.http.get<HeaderLink[]>(`${this.base}/header-links`);
+  }
+
+  createHeaderLink(payload: HeaderLinkPayload) {
+    return this.http.post<HeaderLink>(`${this.base}/header-links`, payload);
+  }
+
+  updateHeaderLink(id: number, payload: HeaderLinkPayload) {
+    return this.http.put<HeaderLink>(`${this.base}/header-links/${id}`, payload);
+  }
+
+  deleteHeaderLink(id: number) {
+    return this.http.delete(`${this.base}/header-links/${id}`);
   }
 }

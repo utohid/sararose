@@ -1,5 +1,5 @@
 export const environment = {
   production: false,
-  /** When true, the home slider loads images from the admin panel API. */
+  /** When true, home slider images and header links load from the admin panel API. */
   setdynamic: true
 };

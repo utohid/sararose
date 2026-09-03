@@ -1,0 +1,43 @@
+<header class="board-head">
+  <p class="kicker">Header links</p>
+  <h2>Add a link</h2>
+  <p class="lede">
+    Add a hyperlink for the site header — the same set as Home, About, Equipment, Why us, Vision, Login and Dashboard.
+    @if (setdynamic) {
+      After you save, the live header uses this list from the API.
+    } @else {
+      Turn on environment.setdynamic to show saved links in the live header.
+    }
+  </p>
+</header>
+
+<p class="page-nav">
+  <a routerLink="/dashboard/header">Header home</a>
+  <a routerLink="/dashboard/header/view">View links</a>
+</p>
+
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+<form class="card upload" (ngSubmit)="save()">
+  <label>Label
+    <input [(ngModel)]="label" name="label" placeholder="About" required>
+  </label>
+  <label>Path
+    <input [(ngModel)]="path" name="path" placeholder="/about" required>
+  </label>
+  <label class="check">
+    <input [(ngModel)]="visible" name="visible" type="checkbox">
+    Show in the public header
+  </label>
+  <label class="check">
+    <input [(ngModel)]="isCta" name="isCta" type="checkbox">
+    Highlight as a button (Enquire style)
+  </label>
+  <p class="hint">Internal pages start with / (for example /equipment). External sites start with https://</p>
+  <div class="row">
+    <button class="btn" type="submit" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save link' }}</button>
+    <a class="btn ghost" routerLink="/dashboard/header/view">Cancel</a>
+  </div>
+</form>

@@ -41,6 +41,19 @@
 </div>
 
 <div class="detail-grid">
+  <a class="card choice" routerLink="/dashboard/header/add">
+    <p class="kicker">Header links</p>
+    <h3>Add a link</h3>
+    <p class="body">Add Home, About, Equipment and the other header hyperlinks.</p>
+  </a>
+  <a class="card choice" routerLink="/dashboard/header/view">
+    <p class="kicker">Header links</p>
+    <h3>View links</h3>
+    <p class="body">See the live header items, edit a path, or hide one from the site.</p>
+  </a>
+</div>
+
+<div class="detail-grid">
   <article class="card">
     <p class="kicker">Application name</p>
     <h3>{{ company()?.name || appName }}</h3>

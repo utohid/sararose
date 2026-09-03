@@ -11,14 +11,23 @@
       {{ menuOpen ? 'Close' : 'Menu' }}
     </button>
     <nav class="nav" [class.open]="menuOpen">
-      <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMenu()">Home</a>
-      <a routerLink="/about" routerLinkActive="active" (click)="closeMenu()">About</a>
-      <a routerLink="/equipment" routerLinkActive="active" (click)="closeMenu()">Equipment</a>
-      <a routerLink="/why-sara-rose" routerLinkActive="active" (click)="closeMenu()">Why us</a>
-      <a routerLink="/vision-values" routerLinkActive="active" (click)="closeMenu()">Vision</a>
-      <a routerLink="/login" routerLinkActive="active" (click)="closeMenu()">Login</a>
-      <a routerLink="/dashboard" routerLinkActive="active" (click)="closeMenu()">Dashboard</a>
-      <a class="cta" routerLink="/contact" (click)="closeMenu()">Enquire</a>
+      @for (link of links(); track link.id) {
+        @if (isExternal(link.path)) {
+          <a
+            [href]="link.path"
+            [class.cta]="link.isCta"
+            target="_blank"
+            rel="noopener"
+            (click)="closeMenu()">{{ link.label }}</a>
+        } @else {
+          <a
+            [routerLink]="link.path"
+            routerLinkActive="active"
+            [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+            [class.cta]="link.isCta"
+            (click)="closeMenu()">{{ link.label }}</a>
+        }
+      }
     </nav>
   </div>
 </header>
