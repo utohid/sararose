@@ -28,6 +28,19 @@
 </div>
 
 <div class="detail-grid">
+  <a class="card choice" routerLink="/dashboard/slider/add">
+    <p class="kicker">Home slider</p>
+    <h3>Add a slide</h3>
+    <p class="body">Upload a new image for the public home page after you sign in.</p>
+  </a>
+  <a class="card choice" routerLink="/dashboard/slider/view">
+    <p class="kicker">Home slider</p>
+    <h3>View slides</h3>
+    <p class="body">Preview saved images, change their order, or remove one.</p>
+  </a>
+</div>
+
+<div class="detail-grid">
   <article class="card">
     <p class="kicker">Application name</p>
     <h3>{{ company()?.name || appName }}</h3>

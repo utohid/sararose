@@ -1,0 +1,42 @@
+<header class="board-head">
+  <p class="kicker">Home slider</p>
+  <h2>Add a slide</h2>
+  <p class="lede">
+    Choose an image and optional alt text. After you save, it is stored in MySQL and shown on the view page
+    @if (setdynamic) {
+      and on the public home page.
+    } @else {
+      . Turn on environment.setdynamic to show it on the public home page.
+    }
+  </p>
+</header>
+
+<p class="page-nav">
+  <a routerLink="/dashboard/slider">Slider home</a>
+  <a routerLink="/dashboard/slider/view">View slides</a>
+</p>
+
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+<form class="card upload" (ngSubmit)="save()">
+  <label>Alt text
+    <input [(ngModel)]="altText" name="alt" placeholder="Excavator at sunset">
+  </label>
+  <label class="file">
+    Image file
+    <input type="file" name="file" accept="image/jpeg,image/png,image/webp,image/gif" [disabled]="busy()" (change)="onFile($event)">
+  </label>
+  @if (previewUrl(); as src) {
+    <figure class="preview">
+      <img [src]="src" [alt]="altText || 'Selected slide preview'">
+      <figcaption>{{ file?.name }} · {{ file ? (file.size / 1024 / 1024 | number:'1.1-1') : '' }} MB</figcaption>
+    </figure>
+  }
+  <p class="hint">JPG, PNG, WEBP or GIF, max 8 MB. The new slide is added at the end of the sequence.</p>
+  <div class="row">
+    <button class="btn" type="submit" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save slide' }}</button>
+    <a class="btn ghost" routerLink="/dashboard/slider/view">Cancel</a>
+  </div>
+</form>

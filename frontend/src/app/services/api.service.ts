@@ -132,6 +132,10 @@ export class ApiService {
     return this.http.get<SliderSlide[]>(`${this.base}/slides`);
   }
 
+  getSlide(id: number): Observable<SliderSlide> {
+    return this.http.get<SliderSlide>(`${this.base}/slides/${id}`);
+  }
+
   uploadSlide(file: File, alt: string) {
     const body = new FormData();
     body.append('file', file);

@@ -10,6 +10,8 @@ import { LoginComponent } from './pages/login/login.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { AdminShellComponent } from './pages/admin-shell/admin-shell.component';
 import { SliderManagerComponent } from './pages/slider-manager/slider-manager.component';
+import { SliderAddComponent } from './pages/slider-add/slider-add.component';
+import { SliderViewComponent } from './pages/slider-view/slider-view.component';
 import { authGuard } from './auth.guard';
 
 export const routes: Routes = [
@@ -28,7 +30,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', component: DashboardComponent },
-      { path: 'slider', component: SliderManagerComponent, title: 'Slider — SARA ROSE' }
+      { path: 'slider/add', component: SliderAddComponent, title: 'Add slide — SARA ROSE' },
+      { path: 'slider/view', component: SliderViewComponent, title: 'View slides — SARA ROSE' },
+      { path: 'slider', component: SliderManagerComponent, title: 'Home slider — SARA ROSE' }
     ]
   },
   { path: '**', redirectTo: '' }

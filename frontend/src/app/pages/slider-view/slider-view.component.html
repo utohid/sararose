@@ -1,0 +1,55 @@
+<header class="board-head">
+  <p class="kicker">Home slider</p>
+  <h2>View slides</h2>
+  <p class="lede">
+    @if (setdynamic) {
+      These images are what the public home page shows, in this order.
+    } @else {
+      These images are stored for the home slider. The public page still uses built-in slides until setdynamic is true.
+    }
+  </p>
+</header>
+
+<p class="page-nav">
+  <a routerLink="/dashboard/slider">Slider home</a>
+  <a routerLink="/dashboard/slider/add">Add a slide</a>
+</p>
+
+@if (message(); as note) {
+  <p class="status">{{ note }}</p>
+}
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+@if (selected(); as slide) {
+  <article class="card viewer">
+    <img [src]="slide.url" [alt]="slide.alt">
+    <div class="viewer-copy">
+      <p class="kicker">Selected slide</p>
+      <h3>{{ slide.alt || 'Home slider image' }}</h3>
+      <p class="meta">Order {{ slide.sortOrder }} · Saved {{ slide.createdAtUtc | date:'medium' }}</p>
+      <div class="row">
+        <button class="btn ghost" type="button" (click)="move(slide, -1)">Move up</button>
+        <button class="btn ghost" type="button" (click)="move(slide, 1)">Move down</button>
+        <button class="btn ghost" type="button" (click)="remove(slide)">Delete</button>
+      </div>
+    </div>
+  </article>
+}
+
+<div class="grid">
+  @for (slide of slides(); track slide.id) {
+    <button
+      class="card slide"
+      type="button"
+      [class.on]="selected()?.id === slide.id"
+      (click)="select(slide)">
+      <img [src]="slide.url" [alt]="slide.alt">
+      <p>{{ slide.alt }}</p>
+      <p class="meta">Order {{ slide.sortOrder }}</p>
+    </button>
+  } @empty {
+    <p class="status">No slides yet. <a routerLink="/dashboard/slider/add">Add a slide</a> to show it here.</p>
+  }
+</div>

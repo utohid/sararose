@@ -37,6 +37,15 @@
   margin-bottom: 0.75rem;
 }
 
+.choice {
+  color: inherit;
+  transition: border-color 0.15s ease;
+}
+
+.choice:hover {
+  border-color: var(--amber);
+}
+
 .card h3 {
   margin: 0 0 1rem;
   text-transform: uppercase;

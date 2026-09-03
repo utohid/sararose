@@ -31,6 +31,18 @@ public class SlidesController(AppDbContext db, IWebHostEnvironment env) : Contro
         return Ok(rows.Select(ToDto));
     }
 
+    [HttpGet("{id:int}")]
+    public async Task<ActionResult<SliderSlideDto>> Get(int id, CancellationToken cancellationToken)
+    {
+        var slide = await db.SliderSlides.AsNoTracking().FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
+        if (slide is null)
+        {
+            return NotFound();
+        }
+
+        return Ok(ToDto(slide));
+    }
+
     [HttpPost]
     [RequestSizeLimit(8_000_000)]
     public async Task<ActionResult<SliderSlideDto>> Upload(
@@ -82,7 +94,7 @@ public class SlidesController(AppDbContext db, IWebHostEnvironment env) : Contro
 
         db.SliderSlides.Add(slide);
         await db.SaveChangesAsync(cancellationToken);
-        return CreatedAtAction(nameof(List), ToDto(slide));
+        return CreatedAtAction(nameof(Get), new { id = slide.Id }, ToDto(slide));
     }
 
     [HttpPut("{id:int}")]
