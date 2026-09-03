@@ -72,6 +72,9 @@ mysql --version
 
 ### Create the database
 
+The full script (create database, user, tables, and catalogue seed) is in
+`backend/sql/update-all-db.txt`. Run it as MySQL root, or paste it into MySQL Workbench.
+
 In MySQL Workbench or a MySQL command prompt (as root):
 
 ```sql

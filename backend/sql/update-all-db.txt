@@ -1,0 +1,240 @@
+-- =============================================================================
+-- SARA ROSE — full MySQL database script
+-- File: backend/sql/update-all-db.txt
+-- Database: sararose
+-- Matches Entity Framework models in backend/Data/AppDbContext.cs
+-- and seed data in backend/Data/DbSeeder.cs
+--
+-- How to run (as MySQL root, then as sararose):
+--   mysql -u root -p < update-all-db.txt
+-- Or paste into MySQL Workbench.
+--
+-- The ASP.NET API also creates these tables (EnsureCreated) and seeds
+-- categories/equipment if categories is empty. This file is the full
+-- standalone equivalent for setup, rebuild, or review.
+--
+-- Login / dashboard session is NOT stored in MySQL (browser storage).
+-- Company profile copy is NOT stored in MySQL (hardcoded in the API).
+-- =============================================================================
+
+-- -----------------------------------------------------------------------------
+-- 1) Database and app user (run as root)
+-- -----------------------------------------------------------------------------
+CREATE DATABASE IF NOT EXISTS sararose CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+CREATE USER IF NOT EXISTS 'sararose'@'localhost' IDENTIFIED BY 'SaraRose_Dev_2024';
+CREATE USER IF NOT EXISTS 'sararose'@'127.0.0.1' IDENTIFIED BY 'SaraRose_Dev_2024';
+GRANT ALL PRIVILEGES ON sararose.* TO 'sararose'@'localhost';
+GRANT ALL PRIVILEGES ON sararose.* TO 'sararose'@'127.0.0.1';
+FLUSH PRIVILEGES;
+
+USE sararose;
+
+-- -----------------------------------------------------------------------------
+-- 2) Drop existing tables (rebuild). Comment out this block to keep data.
+-- -----------------------------------------------------------------------------
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `enquiries`;
+DROP TABLE IF EXISTS `equipment`;
+DROP TABLE IF EXISTS `slider_slides`;
+DROP TABLE IF EXISTS `categories`;
+SET FOREIGN_KEY_CHECKS = 1;
+
+-- -----------------------------------------------------------------------------
+-- 3) Schema
+-- -----------------------------------------------------------------------------
+CREATE TABLE `categories` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `Slug` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Code` varchar(16) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Name` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ShortName` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Summary` varchar(800) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `SortOrder` int NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_categories_Slug` (`Slug`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `equipment` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `CategoryId` int NOT NULL,
+  `Slug` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Name` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `MachineType` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Summary` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `TypicalUse` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `AvailabilityNote` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `SortOrder` int NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_equipment_Slug` (`Slug`),
+  KEY `IX_equipment_CategoryId` (`CategoryId`),
+  CONSTRAINT `FK_equipment_categories_CategoryId`
+    FOREIGN KEY (`CategoryId`) REFERENCES `categories` (`Id`) ON DELETE RESTRICT
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `enquiries` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `FullName` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Company` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `Phone` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Email` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CategoryId` int NULL,
+  `MachineType` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `SiteLocation` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `Requirement` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Status` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CreatedAtUtc` datetime(6) NOT NULL,
+  PRIMARY KEY (`Id`),
+  KEY `IX_enquiries_CategoryId` (`CategoryId`),
+  CONSTRAINT `FK_enquiries_categories_CategoryId`
+    FOREIGN KEY (`CategoryId`) REFERENCES `categories` (`Id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `slider_slides` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `SortOrder` int NOT NULL,
+  `Alt` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `FileName` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `ContentType` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `CreatedAtUtc` datetime(6) NOT NULL,
+  PRIMARY KEY (`Id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------------------------------
+-- 4) Seed: five equipment categories
+-- -----------------------------------------------------------------------------
+INSERT INTO `categories` (`Id`, `Slug`, `Code`, `Name`, `ShortName`, `Summary`, `SortOrder`) VALUES
+(1, 'earthmoving', '01', 'Earthmoving equipment', 'Earthmoving',
+ 'Excavators, bulldozers and wheel loaders for sites that move, shape and build ground.', 1),
+(2, 'construction', '02', 'Construction equipment', 'Construction',
+ 'Backhoe loaders and motor graders for mixed site work, finishing and road formation.', 2),
+(3, 'material-handling', '03', 'Material handling equipment', 'Material handling',
+ 'Forklifts and related machinery for plants, yards and material movement.', 3),
+(4, 'road-compaction', '04', 'Road & compaction equipment', 'Road & compaction',
+ 'Compactors, rollers and skid-steer rollers for surfaces that must hold.', 4),
+(5, 'transport-lifting', '05', 'Heavy transport & lifting equipment', 'Transport & lifting',
+ 'Dump trucks and cranes for haulage and lifting on construction and industrial sites.', 5);
+
+-- -----------------------------------------------------------------------------
+-- 5) Seed: eleven machine types (same text as DbSeeder)
+-- -----------------------------------------------------------------------------
+INSERT INTO `equipment` (
+  `Id`, `CategoryId`, `Slug`, `Name`, `MachineType`, `Summary`, `Description`,
+  `TypicalUse`, `AvailabilityNote`, `SortOrder`
+) VALUES
+(1, 1, 'excavators', 'Excavators', 'Excavator',
+ 'Hydraulic excavators for digging, trenching, loading and demolition support.',
+ 'Excavators sit at the centre of earthmoving work: cut, trench, load and place material with a named operator and a clear duty cycle. SARA ROSE deals in this category as a trader — brands, models, bucket sizes and availability are confirmed at enquiry, against the ground and timeline in front of you.',
+ 'Foundation pits, drainage, bulk excavation, loading of dump trucks.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 1),
+(2, 1, 'bulldozers', 'Bulldozers', 'Bulldozer',
+ 'Crawler dozers for stripping, spreading, ripping and pushing material on rough ground.',
+ 'Bulldozers move ground at scale. They strip topsoil, spread fill, open access and hold a grade when the site is still raw. We advise on this category from the requirement first — the work, the ground, the timeline — not from a stock list.',
+ 'Site opening, bulk push, spreading fill, pioneering access.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 2),
+(3, 1, 'wheel-loaders', 'Wheel loaders', 'Wheel loader',
+ 'Wheel loaders for stockpile work, loading and yard handling of aggregates and spoil.',
+ 'Wheel loaders keep material moving between stockpile, truck and plant. They are a fit for yards, batching operations and sites that need fast load-out rather than deep excavation. Specification and availability are confirmed per enquiry.',
+ 'Loading dump trucks, stockyard work, plant feed.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 3),
+(4, 2, 'backhoe-loaders', 'Backhoe loaders', 'Backhoe loader',
+ 'Backhoe loaders for mixed utility work where one machine must dig and load.',
+ 'A backhoe loader is often the first machine a mixed site asks for: trench at the rear, load at the front, move between tasks without calling a second unit. We deal in this category for construction customers who need flexibility on a compact footprint.',
+ 'Utilities, small earthworks, loading, site support.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 4),
+(5, 2, 'motor-graders', 'Motor graders', 'Motor grader',
+ 'Motor graders for forming, finishing and maintaining roads and site grades.',
+ 'Motor graders finish what earthmoving starts: crown, ditch, camber and a running surface that drainage and compaction can hold. We trade this category for infrastructure and public-works customers whose sites live on the grade.',
+ 'Road formation, site roads, finishing grades, maintenance.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 5),
+(6, 3, 'forklifts', 'Forklifts', 'Forklift',
+ 'Forklifts for plants, warehouses and yards that move palletised and unit loads.',
+ 'Material handling is industrial work: plants, yards and stores that cannot wait on a delayed machine. Forklifts in this category are specified to the load, the aisle and the surface. Brands, capacities and availability are confirmed at enquiry.',
+ 'Warehouses, plants, container yards, stores.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 6),
+(7, 3, 'other-machinery', 'Other machinery', 'Other machinery',
+ 'Other heavy equipment and handling machinery beyond the listed groups.',
+ 'Beyond the five working categories, SARA ROSE NIGERIA LIMITED also deals in other heavy equipment and machinery. If the requirement sits outside the listed machine types, raise it directly with the named contact — commercial discussion stays on the actual job, not a catalogue page.',
+ 'Specialised plant, yard equipment, related industrial machines.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 7),
+(8, 4, 'compactors-rollers', 'Compactors / rollers', 'Compactor / roller',
+ 'Compactors and rollers for soils, sub-base and asphalt that must densify and hold.',
+ 'Compaction is what makes a surface last. Rollers and compactors close the earthworks cycle on roads, yards and platforms. We deal in this category for infrastructure and construction customers who need the ground to take traffic, not just look finished.',
+ 'Road construction, platforms, earthworks, asphalt.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 8),
+(9, 4, 'skid-steer-rollers', 'Skid-steer rollers', 'Skid-steer roller',
+ 'Compact skid-steer rollers for tight sites, shoulders and finishing work.',
+ 'Skid-steer rollers reach ground that a large roller cannot: shoulders, yards, patch work and compact platforms. They sit in the road and compaction group for customers who need density in a smaller envelope.',
+ 'Tight sites, shoulders, patching, compact platforms.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 9),
+(10, 5, 'dump-trucks', 'Dump trucks', 'Dump truck',
+ 'Dump trucks for hauling spoil, fill and aggregates between cut, fill and tip.',
+ 'Heavy transport keeps earthmoving productive. Dump trucks carry what excavators and loaders fill — spoil out, fill in, aggregates to the grade. We trade this category for construction and infrastructure customers whose sites are defined by haul distance as much as by digging.',
+ 'Bulk haul, quarry-to-site, cut-and-fill, spoil removal.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 10),
+(11, 5, 'cranes', 'Cranes', 'Crane',
+ 'Cranes for lifting structural, plant and materials on construction and industrial sites.',
+ 'Lifting is a category of its own: capacity, radius, ground bearing and the lift plan. Cranes in this group are confirmed at enquiry against the load and the site, not assumed from a brochure. Direct dealing with a named contact keeps that conversation accountable.',
+ 'Structural erection, plant installation, yard lifts.',
+ 'Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.',
+ 11);
+
+ALTER TABLE `categories` AUTO_INCREMENT = 6;
+ALTER TABLE `equipment` AUTO_INCREMENT = 12;
+
+-- slider_slides: no seed rows. Upload files from Dashboard → Slider images
+-- (files live under backend/wwwroot/uploads/slides/).
+--
+-- enquiries: no seed rows. Rows are created by POST /api/enquiries.
+
+-- -----------------------------------------------------------------------------
+-- 6) Useful queries (same data the API reads/writes)
+-- -----------------------------------------------------------------------------
+-- Categories with equipment counts (GET /api/categories)
+-- SELECT c.*, (SELECT COUNT(*) FROM equipment e WHERE e.CategoryId = c.Id) AS EquipmentCount
+-- FROM categories c ORDER BY c.SortOrder;
+
+-- Equipment in a category (GET /api/categories/{slug}/equipment)
+-- SELECT e.* FROM equipment e
+-- INNER JOIN categories c ON c.Id = e.CategoryId
+-- WHERE c.Slug = 'earthmoving'
+-- ORDER BY e.SortOrder;
+
+-- One machine type (GET /api/equipment/{slug})
+-- SELECT * FROM equipment WHERE Slug = 'excavators';
+
+-- Home slider (GET /api/slides) — url is /uploads/slides/{FileName}
+-- SELECT Id, SortOrder, Alt, FileName, ContentType, CreatedAtUtc
+-- FROM slider_slides ORDER BY SortOrder, Id;
+
+-- Insert a slide (POST /api/slides) after saving the file
+-- INSERT INTO slider_slides (SortOrder, Alt, FileName, ContentType, CreatedAtUtc)
+-- VALUES (1, 'Home slider image', 'example.jpg', 'image/jpeg', UTC_TIMESTAMP(6));
+
+-- Reorder two slides (PUT /api/slides/{id})
+-- UPDATE slider_slides SET SortOrder = 2 WHERE Id = 1;
+-- UPDATE slider_slides SET SortOrder = 1 WHERE Id = 2;
+
+-- Delete a slide (DELETE /api/slides/{id}) — also delete the file on disk
+-- DELETE FROM slider_slides WHERE Id = 1;
+
+-- New enquiry (POST /api/enquiries)
+-- INSERT INTO enquiries
+--   (FullName, Company, Phone, Email, CategoryId, MachineType, SiteLocation, Requirement, Status, CreatedAtUtc)
+-- VALUES
+--   ('Example Name', 'Example Co', '+2340000000000', 'user@example.com', 1, 'Excavator', 'Sagamu',
+--    'Need an excavator for foundation work.', 'New', UTC_TIMESTAMP(6));
+
+-- List enquiries (GET /api/enquiries)
+-- SELECT * FROM enquiries ORDER BY CreatedAtUtc DESC;
