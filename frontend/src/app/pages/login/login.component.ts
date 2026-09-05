@@ -2,7 +2,7 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
-import { notifyError, notifySaved } from '../../notify';
+import { notifyError, askContinueToDashboard } from '../../notify';
 import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 
@@ -66,8 +66,10 @@ export class LoginComponent {
       next: async (user) => {
         this.auth.signIn(user, value.remember);
         this.submitting.set(false);
-        await notifySaved('Signed in', `${user.fullName} · ${user.role} · ${user.userType}`);
-        void this.router.navigateByUrl('/dashboard');
+        const result = await askContinueToDashboard(user.fullName, user.role, user.userType);
+        if (result.isConfirmed) {
+          void this.router.navigateByUrl('/dashboard');
+        }
       },
       error: (err: HttpErrorResponse) => {
         this.submitting.set(false);

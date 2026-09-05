@@ -1,20 +1,114 @@
-.board-head h2 {
-  margin: 0 0 0.75rem;
-  font-size: clamp(2rem, 4vw, 3.2rem);
+.hero {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: end;
+  padding: 1.6rem 1.6rem 1.5rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(120deg, rgba(224, 161, 6, 0.18), transparent 42%),
+    linear-gradient(180deg, #1e2118, #12140f);
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  width: 18rem;
+  height: 18rem;
+  right: -4rem;
+  top: -6rem;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(224, 161, 6, 0.22), transparent 70%);
+  pointer-events: none;
+}
+
+.hero-copy,
+.hero-badge {
+  position: relative;
+  z-index: 1;
+}
+
+.hero h2 {
+  margin: 0 0 0.7rem;
+  font-size: clamp(2.1rem, 4.5vw, 3.4rem);
   text-transform: uppercase;
+  line-height: 0.95;
+}
+
+.hero .lede {
+  margin: 0;
+  max-width: 38rem;
+}
+
+.pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.pills span {
+  border: 1px solid rgba(224, 161, 6, 0.45);
+  background: rgba(18, 20, 16, 0.45);
+  color: var(--paper);
+  padding: 0.28rem 0.65rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.hero-badge {
+  width: 7.2rem;
+  height: 7.2rem;
+  border: 1px solid var(--amber);
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  background: #0c0d0a;
+}
+
+.hero-badge strong {
+  font-family: var(--display);
+  font-size: 2rem;
+  letter-spacing: 0.08em;
+}
+
+.hero-badge small {
+  color: var(--amber);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-size: 0.62rem;
 }
 
 .stats {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   gap: 0.75rem;
-  margin: 1.5rem 0;
+  margin: 0 0 1.6rem;
 }
 
 .stats article {
   background: var(--panel);
   border: 1px solid var(--line);
-  padding: 1rem 1.1rem;
+  padding: 1.05rem 1.1rem 0.95rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.stats article::before {
+  content: '';
+  position: absolute;
+  inset: 0 auto 0 0;
+  width: 3px;
+  background: var(--amber);
+}
+
+.stats article.accent {
+  background: linear-gradient(180deg, rgba(224, 161, 6, 0.16), var(--panel));
 }
 
 .stats small {
@@ -26,8 +120,79 @@
 }
 
 .stats strong {
+  display: block;
   font-family: var(--display);
-  font-size: 2rem;
+  font-size: 2.15rem;
+  margin: 0.25rem 0 0.1rem;
+}
+
+.stats em {
+  color: #8f8c82;
+  font-style: normal;
+  font-size: 0.78rem;
+}
+
+.section-label {
+  color: var(--amber);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  margin: 0 0 0.7rem;
+}
+
+.actions {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1.25rem;
+}
+
+.tile {
+  color: inherit;
+  border: 1px solid var(--line);
+  background: var(--panel);
+  padding: 1.15rem 1.15rem 1.05rem;
+  min-height: 8.2rem;
+  display: grid;
+  align-content: end;
+  gap: 0.2rem;
+  transition: transform 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+}
+
+.tile span {
+  color: var(--amber);
+  font-family: var(--display);
+  letter-spacing: 0.16em;
+  font-size: 0.85rem;
+}
+
+.tile h3 {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.35rem;
+}
+
+.tile p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.tile:hover {
+  border-color: var(--amber);
+  transform: translateY(-3px);
+  background: #21241b;
+}
+
+.tile.gold {
+  background: linear-gradient(160deg, #e0a106, #b37d04);
+  color: var(--ink);
+  border-color: #e0a106;
+}
+
+.tile.gold span,
+.tile.gold p {
+  color: rgba(18, 20, 16, 0.72);
 }
 
 .detail-grid {
@@ -37,13 +202,11 @@
   margin-bottom: 0.75rem;
 }
 
-.choice {
-  color: inherit;
-  transition: border-color 0.15s ease;
-}
-
-.choice:hover {
-  border-color: var(--amber);
+.profile,
+.story {
+  background:
+    linear-gradient(180deg, rgba(224, 161, 6, 0.06), transparent 28%),
+    var(--panel);
 }
 
 .card h3 {
@@ -111,15 +274,32 @@
   font-size: 0.85rem;
 }
 
-@media (max-width: 960px) {
+.empty {
+  color: var(--muted);
+  margin: 0;
+}
+
+@media (max-width: 1080px) {
   .stats,
-  .detail-grid {
+  .actions {
     grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 960px) {
+  .hero,
+  .detail-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-badge {
+    display: none;
   }
 }
 
 @media (max-width: 640px) {
   .stats,
+  .actions,
   .detail-grid {
     grid-template-columns: 1fr;
   }

@@ -1,8 +1,21 @@
-<header class="board-head">
-  <p class="kicker">Dashboard</p>
-  <h2>Application overview</h2>
-  <p class="lede">{{ company()?.about?.slice(0, 280) }}{{ company() ? '…' : '' }}</p>
-</header>
+<section class="hero">
+  <div class="hero-copy">
+    <p class="kicker">{{ today | date:'EEEE d MMMM y' }}</p>
+    <h2>{{ greeting() }}, {{ user()?.fullName || 'SARA ROSE' }}</h2>
+    <p class="lede">
+      {{ company()?.about?.slice(0, 220) || 'Command centre for the SARA ROSE site — slider, header links, registrations and enquiries.' }}{{ company() ? '…' : '' }}
+    </p>
+    <div class="pills">
+      <span>{{ user()?.role || 'User' }}</span>
+      <span>{{ user()?.userType || 'Internal' }}</span>
+      <span>{{ user()?.email }}</span>
+    </div>
+  </div>
+  <div class="hero-badge" aria-hidden="true">
+    <strong>{{ initials() }}</strong>
+    <small>Live panel</small>
+  </div>
+</section>
 
 @if (error(); as message) {
   <p class="status error">{{ message }}</p>
@@ -12,67 +25,67 @@
   <article>
     <small>Established</small>
     <strong>{{ company()?.yearEstablished || '2012' }}</strong>
+    <em>Sagamu, Ogun</em>
   </article>
   <article>
     <small>Categories</small>
     <strong>{{ categories().length }}</strong>
+    <em>Equipment groups</em>
   </article>
   <article>
-    <small>Machine types</small>
+    <small>Machines</small>
     <strong>{{ equipment().length }}</strong>
+    <em>Listed types</em>
   </article>
   <article>
     <small>Enquiries</small>
     <strong>{{ enquiries().length }}</strong>
+    <em>Stored in MySQL</em>
   </article>
-  <article>
+  <article class="accent">
     <small>Registrations</small>
     <strong>{{ registrations().length }}</strong>
+    <em>Database users</em>
   </article>
 </div>
 
-<div class="detail-grid">
-  <a class="card choice" routerLink="/dashboard/slider/add">
-    <p class="kicker">Home slider</p>
+<p class="section-label">Quick actions</p>
+<div class="actions">
+  <a class="tile gold" routerLink="/dashboard/slider/add">
+    <span>01</span>
     <h3>Add a slide</h3>
-    <p class="body">Upload a new image for the public home page after you sign in.</p>
+    <p>Upload a home-page image</p>
   </a>
-  <a class="card choice" routerLink="/dashboard/slider/view">
-    <p class="kicker">Home slider</p>
+  <a class="tile" routerLink="/dashboard/slider/view">
+    <span>02</span>
     <h3>View slides</h3>
-    <p class="body">Preview saved images, change their order, or remove one.</p>
+    <p>Reorder or remove images</p>
   </a>
-</div>
-
-<div class="detail-grid">
-  <a class="card choice" routerLink="/dashboard/header/add">
-    <p class="kicker">Header links</p>
+  <a class="tile" routerLink="/dashboard/header/add">
+    <span>03</span>
     <h3>Add a link</h3>
-    <p class="body">Add Home, About, Equipment and the other header hyperlinks.</p>
+    <p>New header hyperlink</p>
   </a>
-  <a class="card choice" routerLink="/dashboard/header/view">
-    <p class="kicker">Header links</p>
+  <a class="tile" routerLink="/dashboard/header/view">
+    <span>04</span>
     <h3>View links</h3>
-    <p class="body">See the live header items, edit a path, or hide one from the site.</p>
+    <p>Edit the public nav</p>
   </a>
-</div>
-
-<div class="detail-grid">
-  <a class="card choice" routerLink="/register">
-    <p class="kicker">Registration</p>
+  <a class="tile" routerLink="/dashboard/registrations">
+    <span>05</span>
+    <h3>Registrations</h3>
+    <p>People who signed up</p>
+  </a>
+  <a class="tile" routerLink="/register">
+    <span>06</span>
     <h3>Public form</h3>
-    <p class="body">Open the Registration page users fill from the site header.</p>
-  </a>
-  <a class="card choice" routerLink="/dashboard/registrations">
-    <p class="kicker">Registration</p>
-    <h3>View records</h3>
-    <p class="body">See every name, email, telephone and city saved from that form.</p>
+    <p>Open the register page</p>
   </a>
 </div>
 
 <div class="detail-grid">
-  <article class="card">
-    <p class="kicker">Application name</p>
+  <article class="card profile">
+    <p class="kicker">Application</p>
     <h3>{{ company()?.name || appName }}</h3>
     <dl>
       <div><dt>Business type</dt><dd>{{ company()?.businessType || 'Trader' }}</dd></div>
@@ -81,7 +94,7 @@
     </dl>
   </article>
 
-  <article class="card">
+  <article class="card profile">
     <p class="kicker">Named contact</p>
     <h3>{{ company()?.contactPerson || 'Mr. Akram Haider' }}</h3>
     <dl>
@@ -92,7 +105,7 @@
   </article>
 </div>
 
-<article class="card">
+<article class="card story">
   <p class="kicker">How the application works</p>
   <h3>Company details</h3>
   <p class="body">{{ company()?.howWeWork }}</p>
@@ -103,32 +116,38 @@
   </div>
 </article>
 
-@if (registrations().length) {
+<div class="detail-grid">
   <article class="card">
     <p class="kicker">Recent registrations</p>
-    <h3>Stored in MySQL</h3>
-    <ul class="enquiry-list">
-      @for (row of registrations().slice(0, 6); track row.id) {
-        <li>
-          <strong>{{ row.fullName }}</strong>
-          <span>{{ row.email }} · {{ row.phone }}</span>
-        </li>
-      }
-    </ul>
+    <h3>Users in MySQL</h3>
+    @if (registrations().length) {
+      <ul class="enquiry-list">
+        @for (row of registrations().slice(0, 5); track row.id) {
+          <li>
+            <strong>{{ row.fullName }}</strong>
+            <span>{{ row.role }} · {{ row.userType }}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="empty">No registrations yet.</p>
+    }
   </article>
-}
 
-@if (enquiries().length) {
   <article class="card">
     <p class="kicker">Recent enquiries</p>
-    <h3>Stored in MySQL</h3>
-    <ul class="enquiry-list">
-      @for (row of enquiries().slice(0, 6); track row.id) {
-        <li>
-          <strong>{{ row.fullName }}</strong>
-          <span>{{ row.machineType || row.categoryName || 'General' }} · {{ row.status }}</span>
-        </li>
-      }
-    </ul>
+    <h3>Customer requests</h3>
+    @if (enquiries().length) {
+      <ul class="enquiry-list">
+        @for (row of enquiries().slice(0, 5); track row.id) {
+          <li>
+            <strong>{{ row.fullName }}</strong>
+            <span>{{ row.machineType || row.categoryName || 'General' }} · {{ row.status }}</span>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="empty">No enquiries yet.</p>
+    }
   </article>
-}
+</div>
