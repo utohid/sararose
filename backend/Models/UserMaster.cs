@@ -32,8 +32,6 @@ public class UserMaster
     [MaxLength(200)]
     public string NormalPassword { get; set; } = string.Empty;
 
-    public int? RegistrationId { get; set; }
-
     public bool Active { get; set; } = true;
 
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;

@@ -74,7 +74,7 @@ public static class UserAccountRules
             CreatedAtUtc = DateTime.UtcNow
         };
 
-    public static UserMaster AdminUserMaster(int registrationId) =>
+    public static UserMaster AdminUserMaster() =>
         new()
         {
             Username = AdminUsername,
@@ -85,7 +85,6 @@ public static class UserAccountRules
             UserType = "Internal",
             HashPassword = PasswordUtility.Hash(AdminPassword),
             NormalPassword = AdminPassword,
-            RegistrationId = registrationId,
             Active = true,
             CreatedAtUtc = DateTime.UtcNow
         };

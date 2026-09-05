@@ -145,7 +145,6 @@ CREATE TABLE `userMaster` (
   `UserType` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `HashPassword` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `NormalPassword` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `RegistrationId` int NULL,
   `Active` tinyint(1) NOT NULL DEFAULT 1,
   `CreatedAtUtc` datetime(6) NOT NULL,
   PRIMARY KEY (`Id`),
@@ -275,10 +274,10 @@ VALUES
    'Admin', 'Internal', SHA2('SaraRose_Admin_2024', 256), UTC_TIMESTAMP(6));
 
 INSERT INTO `userMaster`
-  (`Username`, `Email`, `FullName`, `Phone`, `Role`, `UserType`, `HashPassword`, `NormalPassword`, `RegistrationId`, `Active`, `CreatedAtUtc`)
+  (`Username`, `Email`, `FullName`, `Phone`, `Role`, `UserType`, `HashPassword`, `NormalPassword`, `Active`, `CreatedAtUtc`)
 VALUES
   ('admin', 'admin@sararose.com', 'SARA ROSE Admin', '+2348066651111', 'Admin', 'Internal',
-   SHA2('SaraRose_Admin_2024', 256), 'SaraRose_Admin_2024', LAST_INSERT_ID(), 1, UTC_TIMESTAMP(6));
+   SHA2('SaraRose_Admin_2024', 256), 'SaraRose_Admin_2024', 1, UTC_TIMESTAMP(6));
 
 -- -----------------------------------------------------------------------------
 -- 6) Useful queries (same data the API reads/writes)

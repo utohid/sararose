@@ -63,7 +63,6 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
             UserType = row.UserType,
             HashPassword = hash,
             NormalPassword = request.Password,
-            RegistrationId = row.Id,
             Active = true,
             CreatedAtUtc = DateTime.UtcNow
         });
@@ -97,7 +96,7 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
         }
 
         var username = await db.UserMasters.AsNoTracking()
-            .Where(x => x.RegistrationId == row.Id || x.Email == row.Email)
+            .Where(x => x.Email == row.Email)
             .Select(x => x.Username)
             .FirstOrDefaultAsync(cancellationToken) ?? string.Empty;
 

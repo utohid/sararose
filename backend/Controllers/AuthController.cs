@@ -37,11 +37,8 @@ public class AuthController(AppDbContext db) : ControllerBase
             return Unauthorized(new { message = "Username or password is not in userMaster." });
         }
 
-        var registration = user.RegistrationId is int registrationId
-            ? await db.Registrations.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Id == registrationId, cancellationToken)
-            : await db.Registrations.AsNoTracking()
-                .FirstOrDefaultAsync(x => x.Email == user.Email, cancellationToken);
+        var registration = await db.Registrations.AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Email == user.Email, cancellationToken);
 
         return Ok(new AuthUserDto(
             user.Id,

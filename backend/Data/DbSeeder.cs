@@ -187,7 +187,7 @@ public static class DbSeeder
 
         if (!hasAdminMaster)
         {
-            db.UserMasters.Add(UserAccountRules.AdminUserMaster(admin.Id));
+            db.UserMasters.Add(UserAccountRules.AdminUserMaster());
             await db.SaveChangesAsync(cancellationToken);
         }
 
@@ -233,7 +233,6 @@ public static class DbSeeder
                 UserType = row.UserType,
                 HashPassword = row.PasswordHash,
                 NormalPassword = string.Empty,
-                RegistrationId = row.Id,
                 Active = true,
                 CreatedAtUtc = row.CreatedAtUtc
             });
