@@ -20,6 +20,7 @@ export class RegisterComponent {
   error = signal<string | null>(null);
 
   form = this.fb.nonNullable.group({
+    username: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(80), Validators.pattern(/^[a-zA-Z0-9._-]+$/)]],
     fullName: ['', [Validators.required, Validators.maxLength(120)]],
     email: ['', [Validators.required, Validators.email]],
     phone: ['', [Validators.required, Validators.maxLength(40)]],
@@ -34,7 +35,7 @@ export class RegisterComponent {
   submit(): void {
     this.form.markAllAsTouched();
     if (this.form.invalid) {
-      this.error.set('Complete the required fields. Password must be at least 8 characters.');
+      this.error.set('Complete the required fields. Username is at least 3 characters; password at least 8.');
       return;
     }
 
@@ -47,6 +48,7 @@ export class RegisterComponent {
     this.submitting.set(true);
     this.error.set(null);
     this.api.createRegistration({
+      username: value.username,
       fullName: value.fullName,
       email: value.email,
       phone: value.phone,
@@ -59,12 +61,12 @@ export class RegisterComponent {
       next: async () => {
         this.submitting.set(false);
         this.form.reset();
-        await notifySaved('Registration saved', 'You can now sign in on the Login page with this email and password.');
+        await notifySaved('Registration saved', 'You can now sign in on the Login page with this username and password.');
       },
       error: (err: HttpErrorResponse) => {
         this.submitting.set(false);
         const message = err.status === 409
-          ? 'That email is already registered.'
+          ? (typeof err.error?.message === 'string' ? err.error.message : 'That username or email is already registered.')
           : 'Could not save your details. Confirm the API and MySQL are running.';
         this.error.set(message);
         void notifyError(message);

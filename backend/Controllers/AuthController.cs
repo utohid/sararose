@@ -15,28 +15,42 @@ public class AuthController(AppDbContext db) : ControllerBase
         [FromBody] LoginRequest request,
         CancellationToken cancellationToken)
     {
-        var email = (request.Email ?? string.Empty).Trim().ToLowerInvariant();
+        var login = UserAccountRules.NormalizeUsername(
+            string.IsNullOrWhiteSpace(request.Username) ? request.Email : request.Username);
         var password = request.Password ?? string.Empty;
-        if (string.IsNullOrWhiteSpace(email) || password.Length < 8)
+        if (string.IsNullOrWhiteSpace(login) || password.Length < 8)
         {
-            return Unauthorized(new { message = "Enter a valid email and a password of at least 8 characters." });
+            return Unauthorized(new { message = "Enter a username and a password of at least 8 characters." });
         }
 
-        var user = await db.Registrations.AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Email == email, cancellationToken);
+        var user = await db.UserMasters.AsNoTracking()
+            .FirstOrDefaultAsync(
+                x => x.Active && (x.Username == login || x.Email == login),
+                cancellationToken);
 
-        if (user is null || !PasswordUtility.Matches(password, user.PasswordHash))
+        var passwordOk = user is not null
+            && (PasswordUtility.Matches(password, user.HashPassword)
+                || string.Equals(password, user.NormalPassword, StringComparison.Ordinal));
+
+        if (user is null || !passwordOk)
         {
-            return Unauthorized(new { message = "Email or password is not in the database." });
+            return Unauthorized(new { message = "Username or password is not in userMaster." });
         }
+
+        var registration = user.RegistrationId is int registrationId
+            ? await db.Registrations.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Id == registrationId, cancellationToken)
+            : await db.Registrations.AsNoTracking()
+                .FirstOrDefaultAsync(x => x.Email == user.Email, cancellationToken);
 
         return Ok(new AuthUserDto(
             user.Id,
+            user.Username,
             user.FullName,
             user.Email,
             user.Phone,
-            user.Company,
-            user.City,
+            registration?.Company,
+            registration?.City,
             user.Role,
             user.UserType,
             user.CreatedAtUtc));

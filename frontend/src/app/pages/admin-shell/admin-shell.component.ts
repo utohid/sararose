@@ -13,6 +13,7 @@ export class AdminShellComponent {
   private readonly router = inject(Router);
 
   readonly appName = 'SARA ROSE NIGERIA LIMITED';
+  username = this.auth.username;
   email = this.auth.email;
   role = this.auth.role;
   userType = this.auth.userType;

@@ -127,14 +127,15 @@ Then open:
 - API health: http://127.0.0.1:43124/api/health
 - Swagger: http://127.0.0.1:43124/swagger
 
-The API creates tables and seeds the equipment catalogue on first successful MySQL connection. It also seeds a login user:
+The API creates tables and seeds the equipment catalogue on first successful MySQL connection. Login is validated against the `userMaster` table (`Username` + `HashPassword` / `NormalPassword`). Seeded admin:
 
+- Username: `admin`
 - Email: `admin@sararose.com`
 - Password: `SaraRose_Admin_2024`
 - Role: `Admin`
 - User type: `Internal`
 
-Public registration stores further users (with `role` and `userType`) in the same `registrations` table. Login validates email and password against that table.
+Public registration stores a row in `registrations` and a matching login row in `userMaster`.
 
 ## WSL / macOS / Linux
 
@@ -161,8 +162,8 @@ Or: `bash scripts/dev.sh`
 | GET | `/api/equipment/{slug}` | One machine type |
 | POST | `/api/enquiries` | Store a customer enquiry |
 | GET | `/api/enquiries` | List stored enquiries |
-| POST | `/api/registrations` | Create a user (role, userType) |
+| POST | `/api/registrations` | Create a user and a `userMaster` login row |
 | GET | `/api/registrations` | List registered users |
-| POST | `/api/auth/login` | Validate email and password |
+| POST | `/api/auth/login` | Validate username and password from `userMaster` |
 
 This stack is intended to run as a .NET process plus MySQL. It is not a Vercel serverless app.

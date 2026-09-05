@@ -25,7 +25,7 @@ export class LoginComponent {
   right = signal(3);
 
   form = this.fb.nonNullable.group({
-    email: ['', [Validators.required, Validators.email]],
+    username: ['', [Validators.required, Validators.minLength(3)]],
     password: ['', [Validators.required, Validators.minLength(8)]],
     captcha: ['', [Validators.required]],
     remember: [false]
@@ -47,8 +47,8 @@ export class LoginComponent {
 
   submit(): void {
     this.form.markAllAsTouched();
-    if (this.form.controls.email.invalid || this.form.controls.password.invalid) {
-      this.error.set('Enter a valid email and a password of at least 8 characters.');
+    if (this.form.controls.username.invalid || this.form.controls.password.invalid) {
+      this.error.set('Enter a username and a password of at least 8 characters.');
       return;
     }
 
@@ -62,7 +62,7 @@ export class LoginComponent {
     this.submitting.set(true);
     this.error.set(null);
     const value = this.form.getRawValue();
-    this.api.login({ email: value.email, password: value.password }).subscribe({
+    this.api.login({ username: value.username, password: value.password }).subscribe({
       next: async (user) => {
         this.auth.signIn(user, value.remember);
         this.submitting.set(false);
@@ -75,7 +75,7 @@ export class LoginComponent {
         this.submitting.set(false);
         this.refreshCaptcha();
         const message = err.status === 401
-          ? 'Email or password was not found in the database. Register first, or use the seeded admin account.'
+          ? 'Username or password was not found in userMaster. Register first, or use username admin.'
           : 'Could not reach the login API. Confirm the API and MySQL are running.';
         this.error.set(message);
         void notifyError(message);

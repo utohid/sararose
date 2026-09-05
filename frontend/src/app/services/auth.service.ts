@@ -4,6 +4,7 @@ const STORAGE_KEY = 'sararose.admin.session';
 
 export interface AuthUser {
   id: number;
+  username: string;
   fullName: string;
   email: string;
   phone: string;
@@ -17,6 +18,7 @@ export interface AuthUser {
 @Injectable({ providedIn: 'root' })
 export class AuthService {
   readonly user = signal<AuthUser | null>(this.readUser());
+  readonly username = computed(() => this.user()?.username ?? null);
   readonly email = computed(() => this.user()?.email ?? null);
   readonly role = computed(() => this.user()?.role ?? null);
   readonly userType = computed(() => this.user()?.userType ?? null);
@@ -42,7 +44,7 @@ export class AuthService {
 
     try {
       const parsed = JSON.parse(raw) as AuthUser;
-      return parsed?.email ? parsed : null;
+      return parsed?.username || parsed?.email ? parsed : null;
     } catch {
       return null;
     }

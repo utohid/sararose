@@ -6,10 +6,10 @@
     <aside class="showcase">
       <p class="kicker">Account login</p>
       <h1>Sign in<br>to SARA ROSE.</h1>
-      <p class="lede">Login checks your email and password against the MySQL registrations table, including role and user type.</p>
+      <p class="lede">Login checks username and password against the MySQL userMaster table (HashPassword and NormalPassword).</p>
       <ul class="points">
-        <li><span>01</span> Register to create a database user</li>
-        <li><span>02</span> Sign in with that email and password</li>
+        <li><span>01</span> Register to create a userMaster login</li>
+        <li><span>02</span> Sign in with that username and password</li>
         <li><span>03</span> Admins open the dashboard after login</li>
       </ul>
       <p class="foot-note">Heavy equipment trading · Ogun State · Nigeria</p>
@@ -19,10 +19,10 @@
       <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
         <p class="kicker">Login</p>
         <h2>Enter your details</h2>
-        <p class="form-lede">Use a registered email and password. The seeded admin is admin&#64;sararose.com. Complete the number captcha to continue.</p>
+        <p class="form-lede">Use a registered username and password. The seeded admin username is admin. Complete the number captcha to continue.</p>
 
-        <label>Email
-          <input formControlName="email" type="email" autocomplete="username" placeholder="name@company.com">
+        <label>Username
+          <input formControlName="username" type="text" autocomplete="username" placeholder="admin">
         </label>
         <label>Password
           <span class="password-field">

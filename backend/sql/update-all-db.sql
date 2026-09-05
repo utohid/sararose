@@ -43,6 +43,7 @@ DROP TABLE IF EXISTS `enquiries`;
 DROP TABLE IF EXISTS `equipment`;
 DROP TABLE IF EXISTS `slider_slides`;
 DROP TABLE IF EXISTS `header_links`;
+DROP TABLE IF EXISTS `userMaster`;
 DROP TABLE IF EXISTS `registrations`;
 DROP TABLE IF EXISTS `categories`;
 SET FOREIGN_KEY_CHECKS = 1;
@@ -132,6 +133,23 @@ CREATE TABLE `registrations` (
   `CreatedAtUtc` datetime(6) NOT NULL,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `IX_registrations_Email` (`Email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+CREATE TABLE `userMaster` (
+  `Id` int NOT NULL AUTO_INCREMENT,
+  `Username` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Email` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `FullName` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Phone` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `Role` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `UserType` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `HashPassword` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `NormalPassword` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `RegistrationId` int NULL,
+  `Active` tinyint(1) NOT NULL DEFAULT 1,
+  `CreatedAtUtc` datetime(6) NOT NULL,
+  PRIMARY KEY (`Id`),
+  UNIQUE KEY `IX_userMaster_Username` (`Username`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------------------------------
@@ -244,7 +262,9 @@ ALTER TABLE `header_links` AUTO_INCREMENT = 10;
 --
 -- enquiries: no seed rows. Rows are created by POST /api/enquiries.
 --
--- registrations: public users plus a seeded admin for login
+-- registrations: public users plus a seeded admin
+-- userMaster: login table. Login checks Username (or Email) + HashPassword / NormalPassword
+--   Username: admin
 --   Email: admin@sararose.com
 --   Password: SaraRose_Admin_2024
 --   Role: Admin  UserType: Internal
@@ -253,6 +273,12 @@ INSERT INTO `registrations`
 VALUES
   ('SARA ROSE Admin', 'admin@sararose.com', '+2348066651111', 'SARA ROSE NIGERIA LIMITED', 'Sagamu',
    'Admin', 'Internal', SHA2('SaraRose_Admin_2024', 256), UTC_TIMESTAMP(6));
+
+INSERT INTO `userMaster`
+  (`Username`, `Email`, `FullName`, `Phone`, `Role`, `UserType`, `HashPassword`, `NormalPassword`, `RegistrationId`, `Active`, `CreatedAtUtc`)
+VALUES
+  ('admin', 'admin@sararose.com', 'SARA ROSE Admin', '+2348066651111', 'Admin', 'Internal',
+   SHA2('SaraRose_Admin_2024', 256), 'SaraRose_Admin_2024', LAST_INSERT_ID(), 1, UTC_TIMESTAMP(6));
 
 -- -----------------------------------------------------------------------------
 -- 6) Useful queries (same data the API reads/writes)
@@ -300,3 +326,6 @@ VALUES
 
 -- Registrations (GET /api/registrations)
 -- SELECT Id, FullName, Email, Phone, Company, City, Role, UserType, CreatedAtUtc FROM registrations ORDER BY CreatedAtUtc DESC;
+
+-- Login users (POST /api/auth/login reads userMaster)
+-- SELECT Id, Username, Email, Role, UserType, HashPassword, NormalPassword, Active FROM userMaster;

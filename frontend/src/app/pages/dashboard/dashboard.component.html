@@ -8,7 +8,7 @@
     <div class="pills">
       <span>{{ user()?.role || 'User' }}</span>
       <span>{{ user()?.userType || 'Internal' }}</span>
-      <span>{{ user()?.email }}</span>
+      <span>{{ user()?.username || user()?.email }}</span>
     </div>
   </div>
   <div class="hero-badge" aria-hidden="true">

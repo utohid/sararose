@@ -118,6 +118,7 @@ export interface HeaderLinkPayload {
 }
 
 export interface RegistrationPayload {
+  username: string;
   fullName: string;
   email: string;
   phone: string;
@@ -130,6 +131,7 @@ export interface RegistrationPayload {
 
 export interface Registration {
   id: number;
+  username: string;
   fullName: string;
   email: string;
   phone: string;
@@ -141,7 +143,7 @@ export interface Registration {
 }
 
 export interface LoginPayload {
-  email: string;
+  username: string;
   password: string;
 }
 

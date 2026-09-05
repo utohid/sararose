@@ -6,7 +6,7 @@
       <h1>{{ appName }}</h1>
     </div>
     <div class="who">
-      <p class="signed">{{ email() }}</p>
+      <p class="signed">{{ username() || email() }}</p>
       @if (role() || userType()) {
         <p class="tags"><span>{{ role() }}</span><span>{{ userType() }}</span></p>
       }

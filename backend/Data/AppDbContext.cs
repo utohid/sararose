@@ -11,6 +11,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<SliderSlide> SliderSlides => Set<SliderSlide>();
     public DbSet<HeaderLink> HeaderLinks => Set<HeaderLink>();
     public DbSet<UserRegistration> Registrations => Set<UserRegistration>();
+    public DbSet<UserMaster> UserMasters => Set<UserMaster>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -86,6 +87,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property(x => x.Role).HasMaxLength(40);
             entity.Property(x => x.UserType).HasMaxLength(40);
             entity.Property(x => x.PasswordHash).HasMaxLength(64);
+        });
+
+        modelBuilder.Entity<UserMaster>(entity =>
+        {
+            entity.ToTable("userMaster");
+            entity.HasIndex(x => x.Username).IsUnique();
+            entity.HasIndex(x => x.Email);
+            entity.Property(x => x.Username).HasMaxLength(80);
+            entity.Property(x => x.Email).HasMaxLength(160);
+            entity.Property(x => x.FullName).HasMaxLength(200);
+            entity.Property(x => x.Phone).HasMaxLength(40);
+            entity.Property(x => x.Role).HasMaxLength(32);
+            entity.Property(x => x.UserType).HasMaxLength(32);
+            entity.Property(x => x.HashPassword).HasMaxLength(128);
+            entity.Property(x => x.NormalPassword).HasMaxLength(200);
         });
     }
 }

@@ -170,12 +170,78 @@ public static class DbSeeder
 
     private static async Task SeedAdminUserAsync(AppDbContext db, CancellationToken cancellationToken)
     {
-        if (await db.Registrations.AnyAsync(x => x.Email == "admin@sararose.com", cancellationToken))
+        var admin = await db.Registrations.FirstOrDefaultAsync(
+            x => x.Email == UserAccountRules.AdminEmail,
+            cancellationToken);
+
+        if (admin is null)
         {
-            return;
+            admin = UserAccountRules.AdminSeed();
+            db.Registrations.Add(admin);
+            await db.SaveChangesAsync(cancellationToken);
         }
 
-        db.Registrations.Add(UserAccountRules.AdminSeed());
-        await db.SaveChangesAsync(cancellationToken);
+        var hasAdminMaster = await db.UserMasters.AnyAsync(
+            x => x.Username == UserAccountRules.AdminUsername || x.Email == UserAccountRules.AdminEmail,
+            cancellationToken);
+
+        if (!hasAdminMaster)
+        {
+            db.UserMasters.Add(UserAccountRules.AdminUserMaster(admin.Id));
+            await db.SaveChangesAsync(cancellationToken);
+        }
+
+        await BackfillUserMastersAsync(db, cancellationToken);
+    }
+
+    private static async Task BackfillUserMastersAsync(AppDbContext db, CancellationToken cancellationToken)
+    {
+        var linkedEmails = (await db.UserMasters
+            .Select(x => x.Email)
+            .ToListAsync(cancellationToken))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        var usedNames = (await db.UserMasters.Select(x => x.Username).ToListAsync(cancellationToken))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+        var orphans = (await db.Registrations.ToListAsync(cancellationToken))
+            .Where(x => !linkedEmails.Contains(x.Email))
+            .ToList();
+
+        foreach (var row in orphans)
+        {
+            var baseName = UserAccountRules.NormalizeUsername(row.Email.Split('@')[0]);
+            if (baseName.Length < 3)
+            {
+                baseName = $"user{row.Id}";
+            }
+
+            var username = baseName;
+            var suffix = 1;
+            while (usedNames.Contains(username))
+            {
+                username = $"{baseName}{suffix++}";
+            }
+
+            usedNames.Add(username);
+            db.UserMasters.Add(new UserMaster
+            {
+                Username = username,
+                Email = row.Email,
+                FullName = row.FullName,
+                Phone = row.Phone,
+                Role = row.Role,
+                UserType = row.UserType,
+                HashPassword = row.PasswordHash,
+                NormalPassword = string.Empty,
+                RegistrationId = row.Id,
+                Active = true,
+                CreatedAtUtc = row.CreatedAtUtc
+            });
+        }
+
+        if (orphans.Count > 0)
+        {
+            await db.SaveChangesAsync(cancellationToken);
+        }
     }
 }

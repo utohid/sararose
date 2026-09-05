@@ -126,6 +126,9 @@ public class HeaderLinkRequest
 
 public class CreateRegistrationRequest
 {
+    [Required, StringLength(80, MinimumLength = 3)]
+    public string Username { get; set; } = string.Empty;
+
     [Required, StringLength(120)]
     public string FullName { get; set; } = string.Empty;
 
@@ -153,6 +156,7 @@ public class CreateRegistrationRequest
 
 public record RegistrationDto(
     int Id,
+    string Username,
     string FullName,
     string Email,
     string Phone,
@@ -164,7 +168,10 @@ public record RegistrationDto(
 
 public class LoginRequest
 {
-    [Required, EmailAddress, StringLength(160)]
+    [StringLength(160)]
+    public string Username { get; set; } = string.Empty;
+
+    [StringLength(160)]
     public string Email { get; set; } = string.Empty;
 
     [Required, StringLength(120, MinimumLength = 8)]
@@ -173,6 +180,7 @@ public class LoginRequest
 
 public record AuthUserDto(
     int Id,
+    string Username,
     string FullName,
     string Email,
     string Phone,

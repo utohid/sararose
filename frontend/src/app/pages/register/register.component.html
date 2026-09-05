@@ -10,7 +10,7 @@
       <ul class="points">
         <li><span>01</span> Your record is stored in MySQL</li>
         <li><span>02</span> Role and user type are saved with it</li>
-        <li><span>03</span> Use the same email and password on Login</li>
+        <li><span>03</span> Use the same username and password on Login</li>
       </ul>
       <p class="foot-note">Heavy equipment trading · Ogun State · Nigeria</p>
     </aside>
@@ -19,8 +19,11 @@
       <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
         <p class="kicker">Registration</p>
         <h2>Fill your details</h2>
-        <p class="form-lede">Required fields are name, email, telephone, user type, role and a password of at least 8 characters.</p>
+        <p class="form-lede">Required fields are username, name, email, telephone, user type, role and a password of at least 8 characters.</p>
 
+        <label>Username
+          <input formControlName="username" autocomplete="username" placeholder="letters, numbers, . _ -">
+        </label>
         <label>Full name
           <input formControlName="fullName" autocomplete="name" placeholder="Your name">
         </label>

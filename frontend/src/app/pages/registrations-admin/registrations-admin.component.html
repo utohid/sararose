@@ -13,6 +13,7 @@
     <p class="kicker">Selected record</p>
     <h3>{{ row.fullName }}</h3>
     <dl>
+      <div><dt>Username</dt><dd>{{ row.username || '—' }}</dd></div>
       <div><dt>Email</dt><dd>{{ row.email }}</dd></div>
       <div><dt>Telephone</dt><dd>{{ row.phone }}</dd></div>
       <div><dt>Company</dt><dd>{{ row.company || '—' }}</dd></div>
@@ -33,7 +34,7 @@
       (click)="select(row)">
       <p class="kicker">Registration</p>
       <p>{{ row.fullName }}</p>
-      <p class="meta">{{ row.email }}</p>
+      <p class="meta">{{ row.username || 'no username' }} · {{ row.email }}</p>
       <p class="meta">{{ row.phone }} · {{ row.city || 'No city' }}</p>
       <p class="meta">{{ row.role }} · {{ row.userType }}</p>
     </button>

@@ -17,6 +17,7 @@ public static class DatabaseStartup
                     await EnsureHeaderLinksTableAsync(db);
                     await EnsureRegistrationsTableAsync(db);
                     await EnsureRegistrationColumnsAsync(db);
+                    await EnsureUserMasterTableAsync(db);
                     await DbSeeder.SeedAsync(db);
                     return;
                 }
@@ -81,6 +82,29 @@ public static class DatabaseStartup
             "ALTER TABLE `registrations` ADD COLUMN `Role` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'User'");
         await TryAddColumnAsync(db,
             "ALTER TABLE `registrations` ADD COLUMN `UserType` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Customer'");
+    }
+
+    private static async Task EnsureUserMasterTableAsync(AppDbContext db)
+    {
+        await db.Database.ExecuteSqlRawAsync(
+            """
+            CREATE TABLE IF NOT EXISTS `userMaster` (
+              `Id` int NOT NULL AUTO_INCREMENT,
+              `Username` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `Email` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `FullName` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `Phone` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `Role` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `UserType` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `HashPassword` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `NormalPassword` varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `RegistrationId` int NULL,
+              `Active` tinyint(1) NOT NULL DEFAULT 1,
+              `CreatedAtUtc` datetime(6) NOT NULL,
+              PRIMARY KEY (`Id`),
+              UNIQUE KEY `IX_userMaster_Username` (`Username`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+            """);
     }
 
     private static async Task TryAddColumnAsync(AppDbContext db, string sql)
