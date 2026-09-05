@@ -25,6 +25,8 @@ export class RegisterComponent {
     phone: ['', [Validators.required, Validators.maxLength(40)]],
     company: [''],
     city: [''],
+    userType: ['Customer', [Validators.required]],
+    role: ['User', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(8)]],
     confirm: ['', [Validators.required]]
   });
@@ -50,12 +52,14 @@ export class RegisterComponent {
       phone: value.phone,
       company: value.company || undefined,
       city: value.city || undefined,
+      userType: value.userType,
+      role: value.role,
       password: value.password
     }).subscribe({
       next: async () => {
         this.submitting.set(false);
         this.form.reset();
-        await notifySaved('Registration saved', 'Your details are stored. An administrator can see them after login.');
+        await notifySaved('Registration saved', 'You can now sign in on the Login page with this email and password.');
       },
       error: (err: HttpErrorResponse) => {
         this.submitting.set(false);

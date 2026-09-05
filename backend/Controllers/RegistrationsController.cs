@@ -1,10 +1,9 @@
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SaraRose.Api.Data;
 using SaraRose.Api.DTOs;
 using SaraRose.Api.Models;
+using SaraRose.Api.Security;
 
 namespace SaraRose.Api.Controllers;
 
@@ -31,7 +30,9 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
             Phone = request.Phone.Trim(),
             Company = string.IsNullOrWhiteSpace(request.Company) ? null : request.Company.Trim(),
             City = string.IsNullOrWhiteSpace(request.City) ? null : request.City.Trim(),
-            PasswordHash = HashPassword(request.Password),
+            Role = UserAccountRules.NormalizeRole(request.Role, allowAdmin: false),
+            UserType = UserAccountRules.NormalizeUserType(request.UserType),
+            PasswordHash = PasswordUtility.Hash(request.Password),
             CreatedAtUtc = DateTime.UtcNow
         };
 
@@ -59,11 +60,5 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
     }
 
     private static RegistrationDto ToDto(UserRegistration row) =>
-        new(row.Id, row.FullName, row.Email, row.Phone, row.Company, row.City, row.CreatedAtUtc);
-
-    private static string HashPassword(string password)
-    {
-        var bytes = SHA256.HashData(Encoding.UTF8.GetBytes(password));
-        return Convert.ToHexString(bytes);
-    }
+        new(row.Id, row.FullName, row.Email, row.Phone, row.Company, row.City, row.Role, row.UserType, row.CreatedAtUtc);
 }

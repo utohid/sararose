@@ -125,7 +125,8 @@
   color: var(--muted);
 }
 
-.login-form input {
+.login-form input,
+.login-form select {
   background: #10120e;
   border: 1px solid var(--line);
   color: var(--paper);

@@ -8,6 +8,8 @@ public class UserRegistration
     public string Phone { get; set; } = string.Empty;
     public string? Company { get; set; }
     public string? City { get; set; }
+    public string Role { get; set; } = "User";
+    public string UserType { get; set; } = "Customer";
     public string PasswordHash { get; set; } = string.Empty;
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 }

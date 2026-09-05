@@ -121,6 +121,8 @@ CREATE TABLE `registrations` (
   `Phone` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `Company` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `City` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `Role` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `UserType` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `PasswordHash` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `CreatedAtUtc` datetime(6) NOT NULL,
   PRIMARY KEY (`Id`),
@@ -237,7 +239,15 @@ ALTER TABLE `header_links` AUTO_INCREMENT = 10;
 --
 -- enquiries: no seed rows. Rows are created by POST /api/enquiries.
 --
--- registrations: no seed rows. Rows are created by POST /api/registrations.
+-- registrations: public users plus a seeded admin for login
+--   Email: admin@sararose.com
+--   Password: SaraRose_Admin_2024
+--   Role: Admin  UserType: Internal
+INSERT INTO `registrations`
+  (`FullName`, `Email`, `Phone`, `Company`, `City`, `Role`, `UserType`, `PasswordHash`, `CreatedAtUtc`)
+VALUES
+  ('SARA ROSE Admin', 'admin@sararose.com', '+2348066651111', 'SARA ROSE NIGERIA LIMITED', 'Sagamu',
+   'Admin', 'Internal', SHA2('SaraRose_Admin_2024', 256), UTC_TIMESTAMP(6));
 
 -- -----------------------------------------------------------------------------
 -- 6) Useful queries (same data the API reads/writes)
@@ -284,4 +294,4 @@ ALTER TABLE `header_links` AUTO_INCREMENT = 10;
 -- SELECT * FROM header_links ORDER BY SortOrder, Id;
 
 -- Registrations (GET /api/registrations)
--- SELECT Id, FullName, Email, Phone, Company, City, CreatedAtUtc FROM registrations ORDER BY CreatedAtUtc DESC;
+-- SELECT Id, FullName, Email, Phone, Company, City, Role, UserType, CreatedAtUtc FROM registrations ORDER BY CreatedAtUtc DESC;

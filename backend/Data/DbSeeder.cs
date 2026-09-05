@@ -9,6 +9,7 @@ public static class DbSeeder
     {
         await SeedHeaderLinksAsync(db, cancellationToken);
         await EnsureRegistrationHeaderLinkAsync(db, cancellationToken);
+        await SeedAdminUserAsync(db, cancellationToken);
 
         if (await db.Categories.AnyAsync(cancellationToken))
         {
@@ -164,6 +165,17 @@ public static class DbSeeder
         }
 
         db.HeaderLinks.Add(Link(order, "Registration", "/register", false, DateTime.UtcNow));
+        await db.SaveChangesAsync(cancellationToken);
+    }
+
+    private static async Task SeedAdminUserAsync(AppDbContext db, CancellationToken cancellationToken)
+    {
+        if (await db.Registrations.AnyAsync(x => x.Email == "admin@sararose.com", cancellationToken))
+        {
+            return;
+        }
+
+        db.Registrations.Add(UserAccountRules.AdminSeed());
         await db.SaveChangesAsync(cancellationToken);
     }
 }

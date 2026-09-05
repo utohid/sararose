@@ -1,6 +1,9 @@
+import { HttpErrorResponse } from '@angular/common/http';
 import { Component, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
+import { notifyError, notifySaved } from '../../notify';
+import { ApiService } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -11,6 +14,7 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent {
   private readonly fb = inject(FormBuilder);
+  private readonly api = inject(ApiService);
   private readonly auth = inject(AuthService);
   private readonly router = inject(Router);
 
@@ -58,7 +62,22 @@ export class LoginComponent {
     this.submitting.set(true);
     this.error.set(null);
     const value = this.form.getRawValue();
-    this.auth.signIn(value.email, value.remember);
-    void this.router.navigateByUrl('/dashboard');
+    this.api.login({ email: value.email, password: value.password }).subscribe({
+      next: async (user) => {
+        this.auth.signIn(user, value.remember);
+        this.submitting.set(false);
+        await notifySaved('Signed in', `${user.fullName} · ${user.role} · ${user.userType}`);
+        void this.router.navigateByUrl('/dashboard');
+      },
+      error: (err: HttpErrorResponse) => {
+        this.submitting.set(false);
+        this.refreshCaptcha();
+        const message = err.status === 401
+          ? 'Email or password was not found in the database. Register first, or use the seeded admin account.'
+          : 'Could not reach the login API. Confirm the API and MySQL are running.';
+        this.error.set(message);
+        void notifyError(message);
+      }
+    });
   }
 }

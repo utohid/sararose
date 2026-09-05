@@ -3,7 +3,12 @@
     <p class="kicker">Admin panel</p>
     <p class="rail-mark">SR</p>
     <h1>{{ appName }}</h1>
-    <p class="signed">Signed in as {{ email() }}</p>
+    <p class="signed">
+      Signed in as {{ email() }}
+      @if (role() || userType()) {
+        <span>{{ role() }} · {{ userType() }}</span>
+      }
+    </p>
     <nav>
       <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Overview</a>
       <a routerLink="/dashboard/slider" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home slider</a>

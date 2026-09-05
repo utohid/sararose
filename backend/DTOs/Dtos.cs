@@ -143,6 +143,12 @@ public class CreateRegistrationRequest
 
     [Required, StringLength(120, MinimumLength = 8)]
     public string Password { get; set; } = string.Empty;
+
+    [StringLength(40)]
+    public string? Role { get; set; }
+
+    [StringLength(40)]
+    public string? UserType { get; set; }
 }
 
 public record RegistrationDto(
@@ -152,4 +158,26 @@ public record RegistrationDto(
     string Phone,
     string? Company,
     string? City,
+    string Role,
+    string UserType,
+    DateTime CreatedAtUtc);
+
+public class LoginRequest
+{
+    [Required, EmailAddress, StringLength(160)]
+    public string Email { get; set; } = string.Empty;
+
+    [Required, StringLength(120, MinimumLength = 8)]
+    public string Password { get; set; } = string.Empty;
+}
+
+public record AuthUserDto(
+    int Id,
+    string FullName,
+    string Email,
+    string Phone,
+    string? Company,
+    string? City,
+    string Role,
+    string UserType,
     DateTime CreatedAtUtc);

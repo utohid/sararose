@@ -16,6 +16,7 @@ public static class DatabaseStartup
                     await db.Database.EnsureCreatedAsync();
                     await EnsureHeaderLinksTableAsync(db);
                     await EnsureRegistrationsTableAsync(db);
+                    await EnsureRegistrationColumnsAsync(db);
                     await DbSeeder.SeedAsync(db);
                     return;
                 }
@@ -64,11 +65,33 @@ public static class DatabaseStartup
               `Phone` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
               `Company` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
               `City` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+              `Role` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `UserType` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
               `PasswordHash` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
               `CreatedAtUtc` datetime(6) NOT NULL,
               PRIMARY KEY (`Id`),
               UNIQUE KEY `IX_registrations_Email` (`Email`)
             ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
             """);
+    }
+
+    private static async Task EnsureRegistrationColumnsAsync(AppDbContext db)
+    {
+        await TryAddColumnAsync(db,
+            "ALTER TABLE `registrations` ADD COLUMN `Role` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'User'");
+        await TryAddColumnAsync(db,
+            "ALTER TABLE `registrations` ADD COLUMN `UserType` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Customer'");
+    }
+
+    private static async Task TryAddColumnAsync(AppDbContext db, string sql)
+    {
+        try
+        {
+            await db.Database.ExecuteSqlRawAsync(sql);
+        }
+        catch (Exception)
+        {
+            // Column already exists on an existing database.
+        }
     }
 }

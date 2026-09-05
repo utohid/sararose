@@ -9,8 +9,8 @@
       <p class="lede">Leave your details so the named contact can reach you about equipment, site work and follow-up from Sagamu.</p>
       <ul class="points">
         <li><span>01</span> Your record is stored in MySQL</li>
-        <li><span>02</span> Admins see it after login</li>
-        <li><span>03</span> Open this page from the header Registration link</li>
+        <li><span>02</span> Role and user type are saved with it</li>
+        <li><span>03</span> Use the same email and password on Login</li>
       </ul>
       <p class="foot-note">Heavy equipment trading · Ogun State · Nigeria</p>
     </aside>
@@ -19,7 +19,7 @@
       <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
         <p class="kicker">Registration</p>
         <h2>Fill your details</h2>
-        <p class="form-lede">Required fields are name, email, telephone and a password of at least 8 characters.</p>
+        <p class="form-lede">Required fields are name, email, telephone, user type, role and a password of at least 8 characters.</p>
 
         <label>Full name
           <input formControlName="fullName" autocomplete="name" placeholder="Your name">
@@ -38,6 +38,22 @@
           </label>
           <label>City
             <input formControlName="city" autocomplete="address-level2" placeholder="e.g. Sagamu">
+          </label>
+        </div>
+        <div class="row">
+          <label>User type
+            <select formControlName="userType">
+              <option value="Customer">Customer</option>
+              <option value="Dealer">Dealer</option>
+              <option value="Contractor">Contractor</option>
+              <option value="Internal">Internal</option>
+            </select>
+          </label>
+          <label>Role
+            <select formControlName="role">
+              <option value="User">User</option>
+              <option value="Staff">Staff</option>
+            </select>
           </label>
         </div>
         <label>Password

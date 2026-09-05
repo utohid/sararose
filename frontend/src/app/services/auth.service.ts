@@ -1,28 +1,51 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, computed, signal } from '@angular/core';
 
 const STORAGE_KEY = 'sararose.admin.session';
 
+export interface AuthUser {
+  id: number;
+  fullName: string;
+  email: string;
+  phone: string;
+  company?: string | null;
+  city?: string | null;
+  role: string;
+  userType: string;
+  createdAtUtc: string;
+}
+
 @Injectable({ providedIn: 'root' })
 export class AuthService {
-  readonly email = signal<string | null>(this.readEmail());
-  readonly isSignedIn = signal(this.email() !== null);
+  readonly user = signal<AuthUser | null>(this.readUser());
+  readonly email = computed(() => this.user()?.email ?? null);
+  readonly role = computed(() => this.user()?.role ?? null);
+  readonly userType = computed(() => this.user()?.userType ?? null);
+  readonly isSignedIn = computed(() => this.user() !== null);
 
-  signIn(email: string, remember: boolean): void {
+  signIn(user: AuthUser, remember: boolean): void {
     const store = remember ? localStorage : sessionStorage;
     this.clearStores();
-    store.setItem(STORAGE_KEY, email);
-    this.email.set(email);
-    this.isSignedIn.set(true);
+    store.setItem(STORAGE_KEY, JSON.stringify(user));
+    this.user.set(user);
   }
 
   signOut(): void {
     this.clearStores();
-    this.email.set(null);
-    this.isSignedIn.set(false);
+    this.user.set(null);
   }
 
-  private readEmail(): string | null {
-    return sessionStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(STORAGE_KEY);
+  private readUser(): AuthUser | null {
+    const raw = sessionStorage.getItem(STORAGE_KEY) ?? localStorage.getItem(STORAGE_KEY);
+    if (!raw) {
+      return null;
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as AuthUser;
+      return parsed?.email ? parsed : null;
+    } catch {
+      return null;
+    }
   }
 
   private clearStores(): void {

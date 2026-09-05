@@ -17,6 +17,8 @@
       <div><dt>Telephone</dt><dd>{{ row.phone }}</dd></div>
       <div><dt>Company</dt><dd>{{ row.company || '—' }}</dd></div>
       <div><dt>City</dt><dd>{{ row.city || '—' }}</dd></div>
+      <div><dt>Role</dt><dd>{{ row.role }}</dd></div>
+      <div><dt>User type</dt><dd>{{ row.userType }}</dd></div>
       <div><dt>Registered</dt><dd>{{ row.createdAtUtc | date:'medium' }}</dd></div>
     </dl>
   </article>
@@ -33,6 +35,7 @@
       <p>{{ row.fullName }}</p>
       <p class="meta">{{ row.email }}</p>
       <p class="meta">{{ row.phone }} · {{ row.city || 'No city' }}</p>
+      <p class="meta">{{ row.role }} · {{ row.userType }}</p>
     </button>
   } @empty {
     <p class="status">No registrations yet. Public users add them from the header Registration link.</p>

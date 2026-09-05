@@ -1,6 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { AuthUser } from './auth.service';
 
 export interface Category {
   id: number;
@@ -123,6 +124,8 @@ export interface RegistrationPayload {
   company?: string;
   city?: string;
   password: string;
+  role?: string;
+  userType?: string;
 }
 
 export interface Registration {
@@ -132,7 +135,14 @@ export interface Registration {
   phone: string;
   company?: string | null;
   city?: string | null;
+  role: string;
+  userType: string;
   createdAtUtc: string;
+}
+
+export interface LoginPayload {
+  email: string;
+  password: string;
 }
 
 @Injectable({ providedIn: 'root' })
@@ -214,5 +224,9 @@ export class ApiService {
 
   getRegistration(id: number) {
     return this.http.get<Registration>(`${this.base}/registrations/${id}`);
+  }
+
+  login(payload: LoginPayload) {
+    return this.http.post<AuthUser>(`${this.base}/auth/login`, payload);
   }
 }

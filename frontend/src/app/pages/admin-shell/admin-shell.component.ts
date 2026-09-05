@@ -14,6 +14,8 @@ export class AdminShellComponent {
 
   readonly appName = 'SARA ROSE NIGERIA LIMITED';
   email = this.auth.email;
+  role = this.auth.role;
+  userType = this.auth.userType;
 
   signOut(): void {
     this.auth.signOut();
