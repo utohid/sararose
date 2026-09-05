@@ -17,6 +17,13 @@ Company application for **SARA ROSE NIGERIA LIMITED** — a heavy-equipment trad
 - Open a machine type and send an enquiry stored in MySQL
 - Inspect the same data from Swagger at `/swagger`
 
+## Client documentation and demo deck
+
+- Project documentation (what the site does, screens, login, demo script): `docs/SARA-ROSE-Project-Documentation.md`
+- PowerPoint for a live client demonstration (speaker notes on each slide): `docs/SARA-ROSE-Client-Demo.pptx`
+
+Regenerate the deck: `python3 docs/build-client-demo-pptx.py`
+
 Enquiries are handled commercially by **Mr. Akram Haider** (`+234 80 6665 1111`, `contact@sararose.com`). Brands, models and availability are confirmed at enquiry, as in the profile.
 
 ## Get the code (Windows)
