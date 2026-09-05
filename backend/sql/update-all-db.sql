@@ -7,9 +7,9 @@
 --
 -- How to run in MySQL Workbench:
 --   1. Open MySQL Workbench and connect as root (Local instance).
---   2. File → Open SQL Script… → choose update-all-db.sql (or this .txt file).
+--   2. File → Open SQL Script… → choose this file (update-all-db.sql).
 --   3. Click the lightning bolt (Execute) or press Ctrl+Shift+Enter.
---   4. Refresh SCHEMAS — you should see database sararose.
+--   4. Confirm schemas: refresh SCHEMAS and you should see database sararose.
 --
 -- Command line:
 --   mysql -u root -p < update-all-db.sql
