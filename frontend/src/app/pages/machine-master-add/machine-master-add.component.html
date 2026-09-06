@@ -1,0 +1,52 @@
+<header class="board-head">
+  <p class="kicker">Machine type master</p>
+  <h2>Add machine type</h2>
+  <p class="lede">
+    A machine type is one listing under an equipment group — excavators, dump trucks, forklifts.
+    The public site uses this name, summary and description.
+  </p>
+</header>
+
+<p class="page-nav">
+  <a routerLink="/dashboard/masters">Masters home</a>
+  <a routerLink="/dashboard/masters/machines">View machine types</a>
+  <a routerLink="/dashboard/masters/equipment/add">Add equipment group</a>
+</p>
+
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+@if (!groups().length) {
+  <p class="status">Create an equipment group before you add a machine type. <a routerLink="/dashboard/masters/equipment/add">Add a group</a>.</p>
+} @else {
+  <form class="card upload" (ngSubmit)="save()">
+    <label>Equipment group
+      <select [(ngModel)]="categoryId" name="categoryId" required>
+        @for (group of groups(); track group.id) {
+          <option [ngValue]="group.id">{{ group.name }}</option>
+        }
+      </select>
+    </label>
+    <label>Machine type name
+      <input [(ngModel)]="name" name="name" placeholder="Excavators" required>
+    </label>
+    <label>Short machine label
+      <input [(ngModel)]="machineType" name="machineType" placeholder="Excavator">
+    </label>
+    <label>Summary
+      <textarea [(ngModel)]="summary" name="summary" rows="3" placeholder="One or two sentences for the list card."></textarea>
+    </label>
+    <label>Typical use
+      <input [(ngModel)]="typicalUse" name="typicalUse" placeholder="Foundation pits, drainage, loading.">
+    </label>
+    <label>Description
+      <textarea [(ngModel)]="description" name="description" rows="5" placeholder="Longer copy for the machine detail page."></textarea>
+    </label>
+    <p class="hint">Leave the short label blank and it copies the name. Availability wording is filled automatically.</p>
+    <div class="row">
+      <button class="btn" type="submit" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save machine type' }}</button>
+      <a class="btn ghost" routerLink="/dashboard/masters/machines">Cancel</a>
+    </div>
+  </form>
+}

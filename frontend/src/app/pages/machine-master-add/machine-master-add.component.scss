@@ -1,0 +1,119 @@
+.board-head h2 {
+  margin: 0 0 0.75rem;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  text-transform: uppercase;
+}
+
+.page-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin: 0 0 1.25rem;
+}
+
+.page-nav a {
+  color: var(--amber);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.upload {
+  display: grid;
+  gap: 0.85rem;
+  max-width: 40rem;
+}
+
+.upload label,
+.editor label {
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.upload input,
+.upload textarea,
+.upload select,
+.editor input,
+.editor textarea,
+.editor select {
+  background: #10120e;
+  border: 1px solid var(--line);
+  color: var(--paper);
+  padding: 0.7rem 0.75rem;
+  font: inherit;
+}
+
+.split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.75rem;
+}
+
+.hint {
+  color: var(--muted);
+  font-size: 0.85rem;
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  align-items: center;
+}
+
+.viewer {
+  margin-bottom: 1rem;
+}
+
+.editor {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 40rem;
+}
+
+.editor h3 {
+  margin: 0;
+  text-transform: uppercase;
+  font-size: 1.6rem;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 0.85rem;
+}
+
+.slide {
+  text-align: left;
+  cursor: pointer;
+  color: inherit;
+}
+
+.slide.on {
+  border-color: var(--amber);
+}
+
+.slide p {
+  margin: 0 0 0.35rem;
+}
+
+.meta {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.status a {
+  color: var(--amber);
+}
+
+@media (max-width: 720px) {
+  .split {
+    grid-template-columns: 1fr;
+  }
+}

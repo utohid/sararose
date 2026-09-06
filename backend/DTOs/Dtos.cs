@@ -9,7 +9,8 @@ public record CategoryDto(
     string Name,
     string ShortName,
     string Summary,
-    int EquipmentCount);
+    int EquipmentCount,
+    int SortOrder);
 
 public record EquipmentSummaryDto(
     int Id,
@@ -18,7 +19,9 @@ public record EquipmentSummaryDto(
     string MachineType,
     string Summary,
     string CategorySlug,
-    string CategoryName);
+    string CategoryName,
+    int CategoryId,
+    int SortOrder);
 
 public record EquipmentDetailDto(
     int Id,
@@ -30,6 +33,53 @@ public record EquipmentDetailDto(
     string TypicalUse,
     string AvailabilityNote,
     CategoryDto Category);
+
+public class CategoryRequest
+{
+    [StringLength(160)]
+    public string Name { get; set; } = string.Empty;
+
+    [StringLength(16)]
+    public string? Code { get; set; }
+
+    [StringLength(80)]
+    public string? Slug { get; set; }
+
+    [StringLength(80)]
+    public string? ShortName { get; set; }
+
+    [StringLength(800)]
+    public string? Summary { get; set; }
+
+    public int? SortOrder { get; set; }
+}
+
+public class EquipmentRequest
+{
+    public int CategoryId { get; set; }
+
+    [StringLength(160)]
+    public string Name { get; set; } = string.Empty;
+
+    [StringLength(80)]
+    public string? MachineType { get; set; }
+
+    [StringLength(80)]
+    public string? Slug { get; set; }
+
+    [StringLength(400)]
+    public string? Summary { get; set; }
+
+    public string? Description { get; set; }
+
+    [StringLength(400)]
+    public string? TypicalUse { get; set; }
+
+    [StringLength(400)]
+    public string? AvailabilityNote { get; set; }
+
+    public int? SortOrder { get; set; }
+}
 
 public record CompanyDto(
     string Name,

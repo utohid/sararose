@@ -164,9 +164,13 @@ Or: `bash scripts/dev.sh`
 | --- | --- | --- |
 | GET | `/api/health` | Liveness |
 | GET | `/api/company` | Profile copy from the client document |
-| GET | `/api/categories` | Five equipment groups |
+| GET | `/api/categories` | Equipment groups |
+| GET | `/api/categories/{id}` | One equipment group |
+| POST / PUT / DELETE | `/api/categories` | Admin equipment master |
 | GET | `/api/equipment?category=earthmoving` | Machine types |
 | GET | `/api/equipment/{slug}` | One machine type |
+| GET | `/api/equipment/item/{id}` | One machine type by id |
+| POST / PUT / DELETE | `/api/equipment` | Admin machine type master |
 | POST | `/api/enquiries` | Store a customer enquiry |
 | GET | `/api/enquiries` | List stored enquiries |
 | POST | `/api/registrations` | Create a user and a `userMaster` login row |

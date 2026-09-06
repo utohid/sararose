@@ -84,7 +84,8 @@ The dashboard is behind login (`/dashboard`). After a successful sign-in the use
 1. **Overview** — date greeting, role and username, counts for categories, machines, enquiries and registrations, quick links.
 2. **Home slider** — upload images used on the public home page (`/dashboard/slider`, add, view).
 3. **Header links** — labels, paths, sort order, visibility, enquire-style call-to-action (`/dashboard/header`).
-4. **Registrations** — people who used the public Registration page (`/dashboard/registrations`).
+4. **Equipment & machine type masters** — add and edit catalogue groups and machine types (`/dashboard/masters`). Changes show on the public Equipment pages.
+5. **Registrations** — people who used the public Registration page (`/dashboard/registrations`).
 5. **Public site / equipment / enquiries** — jump back to the customer-facing pages or stored enquiries via the API.
 
 Passwords are never shown on the registrations list. Login checks the `userMaster` table.

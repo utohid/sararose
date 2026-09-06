@@ -1,0 +1,63 @@
+<header class="board-head">
+  <p class="kicker">Equipment master</p>
+  <h2>View equipment groups</h2>
+  <p class="lede">
+    These groups drive the public Equipment page. Select a card to edit it. A group with machine types cannot be deleted until those types are moved or removed.
+  </p>
+</header>
+
+<p class="page-nav">
+  <a routerLink="/dashboard/masters">Masters home</a>
+  <a routerLink="/dashboard/masters/equipment/add">Add equipment group</a>
+</p>
+
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+@if (selected(); as row) {
+  <article class="card viewer">
+    <form class="editor" (ngSubmit)="saveEdits()">
+      <p class="kicker">Selected group</p>
+      <h3>{{ row.name }}</h3>
+      <p class="meta">{{ row.equipmentCount }} machine type{{ row.equipmentCount === 1 ? '' : 's' }} · /equipment?category={{ row.slug }}</p>
+      <label>Group name
+        <input [(ngModel)]="name" name="name">
+      </label>
+      <div class="split">
+        <label>Short name
+          <input [(ngModel)]="shortName" name="shortName">
+        </label>
+        <label>Code
+          <input [(ngModel)]="code" name="code">
+        </label>
+      </div>
+      <label>Summary
+        <textarea [(ngModel)]="summary" name="summary" rows="3"></textarea>
+      </label>
+      <div class="row">
+        <button class="btn" type="submit">Save changes</button>
+        <button class="btn ghost" type="button" (click)="move(row, -1)">Move up</button>
+        <button class="btn ghost" type="button" (click)="move(row, 1)">Move down</button>
+        <button class="btn ghost" type="button" (click)="remove(row)">Delete</button>
+      </div>
+    </form>
+  </article>
+}
+
+<div class="grid">
+  @for (row of rows(); track row.id) {
+    <button
+      class="card slide"
+      type="button"
+      [class.on]="selected()?.id === row.id"
+      (click)="select(row)">
+      <p class="kicker">{{ row.code }}</p>
+      <p>{{ row.name }}</p>
+      <p class="meta">{{ row.shortName }}</p>
+      <p class="meta">{{ row.equipmentCount }} types · order {{ row.sortOrder }}</p>
+    </button>
+  } @empty {
+    <p class="status">No equipment groups yet. <a routerLink="/dashboard/masters/equipment/add">Add a group</a>.</p>
+  }
+</div>

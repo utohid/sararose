@@ -11,6 +11,7 @@ export interface Category {
   shortName: string;
   summary: string;
   equipmentCount: number;
+  sortOrder: number;
 }
 
 export interface EquipmentSummary {
@@ -21,6 +22,8 @@ export interface EquipmentSummary {
   summary: string;
   categorySlug: string;
   categoryName: string;
+  categoryId: number;
+  sortOrder: number;
 }
 
 export interface EquipmentDetail {
@@ -109,6 +112,27 @@ export interface HeaderLink {
   createdAtUtc: string;
 }
 
+export interface CategoryPayload {
+  name?: string;
+  code?: string;
+  slug?: string;
+  shortName?: string;
+  summary?: string;
+  sortOrder?: number;
+}
+
+export interface EquipmentPayload {
+  categoryId: number;
+  name: string;
+  machineType?: string;
+  slug?: string;
+  summary?: string;
+  description?: string;
+  typicalUse?: string;
+  availabilityNote?: string;
+  sortOrder?: number;
+}
+
 export interface HeaderLinkPayload {
   label?: string;
   path?: string;
@@ -160,6 +184,22 @@ export class ApiService {
     return this.http.get<Category[]>(`${this.base}/categories`);
   }
 
+  getCategory(id: number) {
+    return this.http.get<Category>(`${this.base}/categories/${id}`);
+  }
+
+  createCategory(payload: CategoryPayload) {
+    return this.http.post<Category>(`${this.base}/categories`, payload);
+  }
+
+  updateCategory(id: number, payload: CategoryPayload) {
+    return this.http.put<Category>(`${this.base}/categories/${id}`, payload);
+  }
+
+  deleteCategory(id: number) {
+    return this.http.delete(`${this.base}/categories/${id}`);
+  }
+
   getEquipment(category?: string | null): Observable<EquipmentSummary[]> {
     const params = category ? `?category=${encodeURIComponent(category)}` : '';
     return this.http.get<EquipmentSummary[]>(`${this.base}/equipment${params}`);
@@ -167,6 +207,22 @@ export class ApiService {
 
   getEquipmentBySlug(slug: string): Observable<EquipmentDetail> {
     return this.http.get<EquipmentDetail>(`${this.base}/equipment/${encodeURIComponent(slug)}`);
+  }
+
+  getEquipmentItem(id: number) {
+    return this.http.get<EquipmentDetail>(`${this.base}/equipment/item/${id}`);
+  }
+
+  createEquipmentItem(payload: EquipmentPayload) {
+    return this.http.post<EquipmentDetail>(`${this.base}/equipment`, payload);
+  }
+
+  updateEquipmentItem(id: number, payload: EquipmentPayload) {
+    return this.http.put<EquipmentDetail>(`${this.base}/equipment/${id}`, payload);
+  }
+
+  deleteEquipmentItem(id: number) {
+    return this.http.delete(`${this.base}/equipment/${id}`);
   }
 
   createEnquiry(payload: EnquiryPayload) {

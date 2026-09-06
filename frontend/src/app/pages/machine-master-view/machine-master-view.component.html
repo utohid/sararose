@@ -1,0 +1,72 @@
+<header class="board-head">
+  <p class="kicker">Machine type master</p>
+  <h2>View machine types</h2>
+  <p class="lede">
+    These listings appear under their equipment group on the public site. Select a card to edit the copy or move the type to another group.
+  </p>
+</header>
+
+<p class="page-nav">
+  <a routerLink="/dashboard/masters">Masters home</a>
+  <a routerLink="/dashboard/masters/machines/add">Add machine type</a>
+  <a routerLink="/dashboard/masters/equipment">Equipment groups</a>
+</p>
+
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+@if (selected(); as row) {
+  <article class="card viewer">
+    <form class="editor" (ngSubmit)="saveEdits()">
+      <p class="kicker">Selected type</p>
+      <h3>{{ row.name }}</h3>
+      <p class="meta">{{ row.category.name }} · /equipment/{{ row.slug }}</p>
+      <label>Equipment group
+        <select [(ngModel)]="categoryId" name="categoryId">
+          @for (group of groups(); track group.id) {
+            <option [ngValue]="group.id">{{ group.name }}</option>
+          }
+        </select>
+      </label>
+      <label>Machine type name
+        <input [(ngModel)]="name" name="name">
+      </label>
+      <label>Short machine label
+        <input [(ngModel)]="machineType" name="machineType">
+      </label>
+      <label>Summary
+        <textarea [(ngModel)]="summary" name="summary" rows="3"></textarea>
+      </label>
+      <label>Typical use
+        <input [(ngModel)]="typicalUse" name="typicalUse">
+      </label>
+      <label>Description
+        <textarea [(ngModel)]="description" name="description" rows="5"></textarea>
+      </label>
+      <div class="row">
+        <button class="btn" type="submit">Save changes</button>
+        <button class="btn ghost" type="button" [disabled]="!summaryOf(row)" (click)="summaryOf(row) && move(summaryOf(row)!, -1)">Move up</button>
+        <button class="btn ghost" type="button" [disabled]="!summaryOf(row)" (click)="summaryOf(row) && move(summaryOf(row)!, 1)">Move down</button>
+        <button class="btn ghost" type="button" (click)="remove(row)">Delete</button>
+      </div>
+    </form>
+  </article>
+}
+
+<div class="grid">
+  @for (row of rows(); track row.id) {
+    <button
+      class="card slide"
+      type="button"
+      [class.on]="selected()?.id === row.id"
+      (click)="choose(row)">
+      <p class="kicker">{{ row.categoryName }}</p>
+      <p>{{ row.name }}</p>
+      <p class="meta">{{ row.machineType }}</p>
+      <p class="meta">{{ row.summary }}</p>
+    </button>
+  } @empty {
+    <p class="status">No machine types yet. <a routerLink="/dashboard/masters/machines/add">Add a machine type</a>.</p>
+  }
+</div>

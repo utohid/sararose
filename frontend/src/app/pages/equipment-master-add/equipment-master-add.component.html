@@ -1,0 +1,39 @@
+<header class="board-head">
+  <p class="kicker">Equipment master</p>
+  <h2>Add equipment group</h2>
+  <p class="lede">
+    An equipment group is a heading on the public portfolio — for example Earthmoving or Road &amp; compaction.
+    Machine types are added separately under a group.
+  </p>
+</header>
+
+<p class="page-nav">
+  <a routerLink="/dashboard/masters">Masters home</a>
+  <a routerLink="/dashboard/masters/equipment">View equipment groups</a>
+</p>
+
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+<form class="card upload" (ngSubmit)="save()">
+  <label>Group name
+    <input [(ngModel)]="name" name="name" placeholder="Earthmoving equipment" required>
+  </label>
+  <div class="split">
+    <label>Short name
+      <input [(ngModel)]="shortName" name="shortName" placeholder="Earthmoving">
+    </label>
+    <label>Code
+      <input [(ngModel)]="code" name="code" placeholder="01">
+    </label>
+  </div>
+  <label>Summary
+    <textarea [(ngModel)]="summary" name="summary" rows="4" placeholder="What this group covers on site."></textarea>
+  </label>
+  <p class="hint">Leave short name or code blank and they are filled from the group name and order.</p>
+  <div class="row">
+    <button class="btn" type="submit" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save equipment group' }}</button>
+    <a class="btn ghost" routerLink="/dashboard/masters/equipment">Cancel</a>
+  </div>
+</form>
