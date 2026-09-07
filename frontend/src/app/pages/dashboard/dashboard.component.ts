@@ -51,8 +51,8 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     forkJoin({
       company: this.api.getCompany().pipe(catchError(() => of(null))),
-      categories: this.api.getCategories().pipe(catchError(() => of([] as Category[]))),
-      equipment: this.api.getEquipment().pipe(catchError(() => of([] as EquipmentSummary[]))),
+      categories: this.api.getCategories(true).pipe(catchError(() => of([] as Category[]))),
+      equipment: this.api.getEquipment(null, true).pipe(catchError(() => of([] as EquipmentSummary[]))),
       enquiries: this.api.getEnquiries().pipe(catchError(() => of([] as Enquiry[]))),
       registrations: this.api.getRegistrations().pipe(catchError(() => of([] as Registration[])))
     }).subscribe({

@@ -22,10 +22,12 @@ export class MachineMasterViewComponent implements OnInit {
   summary = '';
   typicalUse = '';
   description = '';
+  active = true;
+  statusFilter = signal<'all' | 'active' | 'inactive'>('all');
   error = signal<string | null>(null);
 
   ngOnInit(): void {
-    this.api.getCategories().subscribe({
+    this.api.getCategories(true).subscribe({
       next: (rows) => this.groups.set(rows),
       error: () => this.error.set('Could not load equipment groups.')
     });
@@ -33,7 +35,7 @@ export class MachineMasterViewComponent implements OnInit {
   }
 
   reload(): void {
-    this.api.getEquipment().subscribe({
+    this.api.getEquipment(null, true).subscribe({
       next: (rows) => {
         this.rows.set(rows);
         const current = this.selected();
@@ -66,7 +68,8 @@ export class MachineMasterViewComponent implements OnInit {
       machineType: this.machineType,
       summary: this.summary,
       typicalUse: this.typicalUse,
-      description: this.description
+      description: this.description,
+      active: this.active
     }).subscribe({
       next: async (saved) => {
         await notifySaved('Machine type updated', `${saved.name} is saved for the public Equipment page.`);
@@ -92,6 +95,17 @@ export class MachineMasterViewComponent implements OnInit {
 
   summaryOf(detail: EquipmentDetail): EquipmentSummary | undefined {
     return this.rows().find((row) => row.id === detail.id);
+  }
+
+  visibleRows(): EquipmentSummary[] {
+    const rows = this.rows();
+    if (this.statusFilter() === 'active') {
+      return rows.filter((row) => row.active);
+    }
+    if (this.statusFilter() === 'inactive') {
+      return rows.filter((row) => !row.active);
+    }
+    return rows;
   }
 
   async remove(row: EquipmentSummary | EquipmentDetail): Promise<void> {
@@ -123,6 +137,7 @@ export class MachineMasterViewComponent implements OnInit {
         this.summary = row.summary;
         this.typicalUse = row.typicalUse;
         this.description = row.description;
+        this.active = row.active;
       },
       error: () => this.error.set('Could not load that machine type.')
     });

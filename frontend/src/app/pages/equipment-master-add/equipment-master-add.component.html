@@ -31,7 +31,13 @@
   <label>Summary
     <textarea [(ngModel)]="summary" name="summary" rows="4" placeholder="What this group covers on site."></textarea>
   </label>
-  <p class="hint">Leave short name or code blank and they are filled from the group name and order.</p>
+  <label>Status
+    <select [(ngModel)]="active" name="active">
+      <option [ngValue]="true">Active</option>
+      <option [ngValue]="false">Inactive</option>
+    </select>
+  </label>
+  <p class="hint">Leave short name or code blank and they are filled from the group name and order. Inactive groups stay in the master and are hidden on the public site.</p>
   <div class="row">
     <button class="btn" type="submit" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save equipment group' }}</button>
     <a class="btn ghost" routerLink="/dashboard/masters/equipment">Cancel</a>

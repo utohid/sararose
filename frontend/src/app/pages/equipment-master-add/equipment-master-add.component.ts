@@ -19,6 +19,7 @@ export class EquipmentMasterAddComponent {
   shortName = '';
   code = '';
   summary = '';
+  active = true;
   busy = signal(false);
   error = signal<string | null>(null);
 
@@ -34,7 +35,8 @@ export class EquipmentMasterAddComponent {
       name: this.name,
       shortName: this.shortName || undefined,
       code: this.code || undefined,
-      summary: this.summary || undefined
+      summary: this.summary || undefined,
+      active: this.active
     }).subscribe({
       next: async (row) => {
         this.busy.set(false);

@@ -59,6 +59,7 @@ CREATE TABLE `categories` (
   `ShortName` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `Summary` varchar(800) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `SortOrder` int NOT NULL,
+  `Active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `IX_categories_Slug` (`Slug`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -74,6 +75,7 @@ CREATE TABLE `equipment` (
   `TypicalUse` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `AvailabilityNote` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `SortOrder` int NOT NULL,
+  `Active` tinyint(1) NOT NULL DEFAULT 1,
   PRIMARY KEY (`Id`),
   UNIQUE KEY `IX_equipment_Slug` (`Slug`),
   KEY `IX_equipment_CategoryId` (`CategoryId`),

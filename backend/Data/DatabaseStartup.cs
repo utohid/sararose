@@ -19,6 +19,7 @@ public static class DatabaseStartup
                     await EnsureRegistrationColumnsAsync(db);
                     await EnsureUserMasterTableAsync(db);
                     await DropUserMasterRegistrationIdAsync(db);
+                    await EnsureCatalogActiveColumnsAsync(db);
                     await DbSeeder.SeedAsync(db);
                     return;
                 }
@@ -110,6 +111,14 @@ public static class DatabaseStartup
     private static async Task DropUserMasterRegistrationIdAsync(AppDbContext db)
     {
         await TryAddColumnAsync(db, "ALTER TABLE `userMaster` DROP COLUMN `RegistrationId`");
+    }
+
+    private static async Task EnsureCatalogActiveColumnsAsync(AppDbContext db)
+    {
+        await TryAddColumnAsync(db,
+            "ALTER TABLE `categories` ADD COLUMN `Active` tinyint(1) NOT NULL DEFAULT 1");
+        await TryAddColumnAsync(db,
+            "ALTER TABLE `equipment` ADD COLUMN `Active` tinyint(1) NOT NULL DEFAULT 1");
     }
 
     private static async Task TryAddColumnAsync(AppDbContext db, string sql)

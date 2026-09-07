@@ -91,7 +91,8 @@ public static class DbSeeder
             Name = name,
             ShortName = shortName,
             Summary = summary,
-            SortOrder = sortOrder
+            SortOrder = sortOrder,
+            Active = true
         };
 
     private static EquipmentItem Item(
@@ -113,7 +114,8 @@ public static class DbSeeder
             Description = description,
             TypicalUse = typicalUse,
             AvailabilityNote = "Brands, models, technical specifications, capacities and availability are confirmed on a per-enquiry basis.",
-            SortOrder = order
+            SortOrder = order,
+            Active = true
         };
 
     private static async Task SeedHeaderLinksAsync(AppDbContext db, CancellationToken cancellationToken)

@@ -2,7 +2,7 @@
   <p class="kicker">Equipment master</p>
   <h2>View equipment groups</h2>
   <p class="lede">
-    These groups drive the public Equipment page. Select a card to edit it. A group with machine types cannot be deleted until those types are moved or removed.
+    These groups drive the public Equipment page. The master lists Active and Inactive. Only Active groups appear on the public site.
   </p>
 </header>
 
@@ -14,6 +14,12 @@
 @if (error(); as note) {
   <p class="status error">{{ note }}</p>
 }
+
+<p class="filter-row">
+  <button type="button" [class.on]="statusFilter() === 'all'" (click)="statusFilter.set('all')">All</button>
+  <button type="button" [class.on]="statusFilter() === 'active'" (click)="statusFilter.set('active')">Active</button>
+  <button type="button" [class.on]="statusFilter() === 'inactive'" (click)="statusFilter.set('inactive')">Inactive</button>
+</p>
 
 @if (selected(); as row) {
   <article class="card viewer">
@@ -35,6 +41,12 @@
       <label>Summary
         <textarea [(ngModel)]="summary" name="summary" rows="3"></textarea>
       </label>
+      <label>Status
+        <select [(ngModel)]="active" name="active">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </label>
       <div class="row">
         <button class="btn" type="submit">Save changes</button>
         <button class="btn ghost" type="button" (click)="move(row, -1)">Move up</button>
@@ -46,13 +58,13 @@
 }
 
 <div class="grid">
-  @for (row of rows(); track row.id) {
+  @for (row of visibleRows(); track row.id) {
     <button
       class="card slide"
       type="button"
       [class.on]="selected()?.id === row.id"
       (click)="select(row)">
-      <p class="kicker">{{ row.code }}</p>
+      <p class="kicker">{{ row.code }} · {{ row.active ? 'Active' : 'Inactive' }}</p>
       <p>{{ row.name }}</p>
       <p class="meta">{{ row.shortName }}</p>
       <p class="meta">{{ row.equipmentCount }} types · order {{ row.sortOrder }}</p>

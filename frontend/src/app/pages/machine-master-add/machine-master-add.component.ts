@@ -22,11 +22,12 @@ export class MachineMasterAddComponent implements OnInit {
   summary = '';
   typicalUse = '';
   description = '';
+  active = true;
   busy = signal(false);
   error = signal<string | null>(null);
 
   ngOnInit(): void {
-    this.api.getCategories().subscribe({
+    this.api.getCategories(true).subscribe({
       next: (rows) => {
         this.groups.set(rows);
         if (rows[0] && !this.categoryId) {
@@ -55,7 +56,8 @@ export class MachineMasterAddComponent implements OnInit {
       machineType: this.machineType || this.name,
       summary: this.summary || undefined,
       typicalUse: this.typicalUse || undefined,
-      description: this.description || undefined
+      description: this.description || undefined,
+      active: this.active
     }).subscribe({
       next: async (row) => {
         this.busy.set(false);

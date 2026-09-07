@@ -10,7 +10,8 @@ public record CategoryDto(
     string ShortName,
     string Summary,
     int EquipmentCount,
-    int SortOrder);
+    int SortOrder,
+    bool Active);
 
 public record EquipmentSummaryDto(
     int Id,
@@ -21,7 +22,8 @@ public record EquipmentSummaryDto(
     string CategorySlug,
     string CategoryName,
     int CategoryId,
-    int SortOrder);
+    int SortOrder,
+    bool Active);
 
 public record EquipmentDetailDto(
     int Id,
@@ -32,6 +34,7 @@ public record EquipmentDetailDto(
     string Description,
     string TypicalUse,
     string AvailabilityNote,
+    bool Active,
     CategoryDto Category);
 
 public class CategoryRequest
@@ -52,6 +55,8 @@ public class CategoryRequest
     public string? Summary { get; set; }
 
     public int? SortOrder { get; set; }
+
+    public bool? Active { get; set; }
 }
 
 public class EquipmentRequest
@@ -79,6 +84,8 @@ public class EquipmentRequest
     public string? AvailabilityNote { get; set; }
 
     public int? SortOrder { get; set; }
+
+    public bool? Active { get; set; }
 }
 
 public record CompanyDto(

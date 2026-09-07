@@ -43,7 +43,13 @@
     <label>Description
       <textarea [(ngModel)]="description" name="description" rows="5" placeholder="Longer copy for the machine detail page."></textarea>
     </label>
-    <p class="hint">Leave the short label blank and it copies the name. Availability wording is filled automatically.</p>
+    <label>Status
+      <select [(ngModel)]="active" name="active">
+        <option [ngValue]="true">Active</option>
+        <option [ngValue]="false">Inactive</option>
+      </select>
+    </label>
+    <p class="hint">Leave the short label blank and it copies the name. Inactive types stay in the master and are hidden on the public site.</p>
     <div class="row">
       <button class="btn" type="submit" [disabled]="busy()">{{ busy() ? 'Saving…' : 'Save machine type' }}</button>
       <a class="btn ghost" routerLink="/dashboard/masters/machines">Cancel</a>

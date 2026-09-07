@@ -11,10 +11,17 @@ namespace SaraRose.Api.Controllers;
 public class EquipmentController(AppDbContext db) : ControllerBase
 {
     [HttpGet("categories")]
-    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(CancellationToken cancellationToken)
+    public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories(
+        [FromQuery] bool includeInactive = false,
+        CancellationToken cancellationToken = default)
     {
-        var items = await db.Categories
-            .AsNoTracking()
+        var query = db.Categories.AsNoTracking().AsQueryable();
+        if (!includeInactive)
+        {
+            query = query.Where(c => c.Active);
+        }
+
+        var items = await query
             .OrderBy(c => c.SortOrder)
             .Select(c => new CategoryDto(
                 c.Id,
@@ -23,8 +30,9 @@ public class EquipmentController(AppDbContext db) : ControllerBase
                 c.Name,
                 c.ShortName,
                 c.Summary,
-                c.Equipment.Count,
-                c.SortOrder))
+                includeInactive ? c.Equipment.Count : c.Equipment.Count(e => e.Active),
+                c.SortOrder,
+                c.Active))
             .ToListAsync(cancellationToken);
 
         return Ok(items);
@@ -62,7 +70,8 @@ public class EquipmentController(AppDbContext db) : ControllerBase
             Slug = slug,
             Code = CatalogText.Code(request.Code, sortOrder),
             Summary = CatalogText.Required(request.Summary, 800, name),
-            SortOrder = sortOrder
+            SortOrder = sortOrder,
+            Active = request.Active ?? true
         };
 
         db.Categories.Add(row);
@@ -107,6 +116,11 @@ public class EquipmentController(AppDbContext db) : ControllerBase
             row.SortOrder = order;
         }
 
+        if (request.Active is bool active)
+        {
+            row.Active = active;
+        }
+
         if (request.Slug is not null || !string.IsNullOrWhiteSpace(request.Name))
         {
             row.Slug = await UniqueCategorySlug(request.Slug, row.Name, row.Id, cancellationToken);
@@ -138,13 +152,19 @@ public class EquipmentController(AppDbContext db) : ControllerBase
     [HttpGet("equipment")]
     public async Task<ActionResult<IEnumerable<EquipmentSummaryDto>>> GetEquipment(
         [FromQuery] string? category,
-        CancellationToken cancellationToken)
+        [FromQuery] bool includeInactive = false,
+        CancellationToken cancellationToken = default)
     {
         var query = db.Equipment.AsNoTracking().Include(e => e.Category).AsQueryable();
 
         if (!string.IsNullOrWhiteSpace(category))
         {
             query = query.Where(e => e.Category!.Slug == category);
+        }
+
+        if (!includeInactive)
+        {
+            query = query.Where(e => e.Active && e.Category!.Active);
         }
 
         var items = await query
@@ -158,7 +178,8 @@ public class EquipmentController(AppDbContext db) : ControllerBase
                 e.Category!.Slug,
                 e.Category.Name,
                 e.CategoryId,
-                e.SortOrder))
+                e.SortOrder,
+                e.Active))
             .ToListAsync(cancellationToken);
 
         return Ok(items);
@@ -182,7 +203,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
             .Include(e => e.Category)
             .FirstOrDefaultAsync(e => e.Slug == slug, cancellationToken);
 
-        if (item is null || item.Category is null)
+        if (item is null || item.Category is null || !item.Active || !item.Category.Active)
         {
             return NotFound();
         }
@@ -220,7 +241,8 @@ public class EquipmentController(AppDbContext db) : ControllerBase
             Description = string.IsNullOrWhiteSpace(request.Description) ? name : request.Description.Trim(),
             TypicalUse = CatalogText.Required(request.TypicalUse, 400),
             AvailabilityNote = CatalogText.Required(request.AvailabilityNote, 400, CatalogText.DefaultAvailability),
-            SortOrder = sortOrder
+            SortOrder = sortOrder,
+            Active = request.Active ?? true
         };
 
         db.Equipment.Add(row);
@@ -288,6 +310,11 @@ public class EquipmentController(AppDbContext db) : ControllerBase
             row.SortOrder = order;
         }
 
+        if (request.Active is bool active)
+        {
+            row.Active = active;
+        }
+
         if (request.Slug is not null || !string.IsNullOrWhiteSpace(request.Name))
         {
             row.Slug = await UniqueEquipmentSlug(request.Slug, row.Name, row.Id, cancellationToken);
@@ -343,7 +370,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
     }
 
     private static CategoryDto ToCategoryDto(EquipmentCategory row, int count) =>
-        new(row.Id, row.Slug, row.Code, row.Name, row.ShortName, row.Summary, count, row.SortOrder);
+        new(row.Id, row.Slug, row.Code, row.Name, row.ShortName, row.Summary, count, row.SortOrder, row.Active);
 
     private static EquipmentDetailDto ToDetail(EquipmentItem item)
     {
@@ -357,6 +384,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
             item.Description,
             item.TypicalUse,
             item.AvailabilityNote,
+            item.Active,
             new CategoryDto(
                 category.Id,
                 category.Slug,
@@ -365,6 +393,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
                 category.ShortName,
                 category.Summary,
                 0,
-                category.SortOrder));
+                category.SortOrder,
+                category.Active));
     }
 }

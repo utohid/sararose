@@ -9,6 +9,7 @@ public class EquipmentCategory
     public string ShortName { get; set; } = string.Empty;
     public string Summary { get; set; } = string.Empty;
     public int SortOrder { get; set; }
+    public bool Active { get; set; } = true;
 
     public ICollection<EquipmentItem> Equipment { get; set; } = new List<EquipmentItem>();
 }

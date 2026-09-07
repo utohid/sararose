@@ -12,6 +12,7 @@ export interface Category {
   summary: string;
   equipmentCount: number;
   sortOrder: number;
+  active: boolean;
 }
 
 export interface EquipmentSummary {
@@ -24,6 +25,7 @@ export interface EquipmentSummary {
   categoryName: string;
   categoryId: number;
   sortOrder: number;
+  active: boolean;
 }
 
 export interface EquipmentDetail {
@@ -35,6 +37,7 @@ export interface EquipmentDetail {
   description: string;
   typicalUse: string;
   availabilityNote: string;
+  active: boolean;
   category: Category;
 }
 
@@ -119,6 +122,7 @@ export interface CategoryPayload {
   shortName?: string;
   summary?: string;
   sortOrder?: number;
+  active?: boolean;
 }
 
 export interface EquipmentPayload {
@@ -131,6 +135,7 @@ export interface EquipmentPayload {
   typicalUse?: string;
   availabilityNote?: string;
   sortOrder?: number;
+  active?: boolean;
 }
 
 export interface HeaderLinkPayload {
@@ -180,8 +185,9 @@ export class ApiService {
     return this.http.get<Company>(`${this.base}/company`);
   }
 
-  getCategories(): Observable<Category[]> {
-    return this.http.get<Category[]>(`${this.base}/categories`);
+  getCategories(includeInactive = false): Observable<Category[]> {
+    const params = includeInactive ? '?includeInactive=true' : '';
+    return this.http.get<Category[]>(`${this.base}/categories${params}`);
   }
 
   getCategory(id: number) {
@@ -200,8 +206,15 @@ export class ApiService {
     return this.http.delete(`${this.base}/categories/${id}`);
   }
 
-  getEquipment(category?: string | null): Observable<EquipmentSummary[]> {
-    const params = category ? `?category=${encodeURIComponent(category)}` : '';
+  getEquipment(category?: string | null, includeInactive = false): Observable<EquipmentSummary[]> {
+    const query = new URLSearchParams();
+    if (category) {
+      query.set('category', category);
+    }
+    if (includeInactive) {
+      query.set('includeInactive', 'true');
+    }
+    const params = query.toString() ? `?${query.toString()}` : '';
     return this.http.get<EquipmentSummary[]>(`${this.base}/equipment${params}`);
   }
 

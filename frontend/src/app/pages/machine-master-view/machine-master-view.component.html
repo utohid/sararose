@@ -2,7 +2,7 @@
   <p class="kicker">Machine type master</p>
   <h2>View machine types</h2>
   <p class="lede">
-    These listings appear under their equipment group on the public site. Select a card to edit the copy or move the type to another group.
+    These listings appear under their equipment group on the public site when Active. The master lists Active and Inactive.
   </p>
 </header>
 
@@ -15,6 +15,12 @@
 @if (error(); as note) {
   <p class="status error">{{ note }}</p>
 }
+
+<p class="filter-row">
+  <button type="button" [class.on]="statusFilter() === 'all'" (click)="statusFilter.set('all')">All</button>
+  <button type="button" [class.on]="statusFilter() === 'active'" (click)="statusFilter.set('active')">Active</button>
+  <button type="button" [class.on]="statusFilter() === 'inactive'" (click)="statusFilter.set('inactive')">Inactive</button>
+</p>
 
 @if (selected(); as row) {
   <article class="card viewer">
@@ -44,6 +50,12 @@
       <label>Description
         <textarea [(ngModel)]="description" name="description" rows="5"></textarea>
       </label>
+      <label>Status
+        <select [(ngModel)]="active" name="active">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </label>
       <div class="row">
         <button class="btn" type="submit">Save changes</button>
         <button class="btn ghost" type="button" [disabled]="!summaryOf(row)" (click)="summaryOf(row) && move(summaryOf(row)!, -1)">Move up</button>
@@ -55,13 +67,13 @@
 }
 
 <div class="grid">
-  @for (row of rows(); track row.id) {
+  @for (row of visibleRows(); track row.id) {
     <button
       class="card slide"
       type="button"
       [class.on]="selected()?.id === row.id"
       (click)="choose(row)">
-      <p class="kicker">{{ row.categoryName }}</p>
+      <p class="kicker">{{ row.categoryName }} · {{ row.active ? 'Active' : 'Inactive' }}</p>
       <p>{{ row.name }}</p>
       <p class="meta">{{ row.machineType }}</p>
       <p class="meta">{{ row.summary }}</p>

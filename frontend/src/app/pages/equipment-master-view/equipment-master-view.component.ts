@@ -20,6 +20,8 @@ export class EquipmentMasterViewComponent implements OnInit {
   shortName = '';
   code = '';
   summary = '';
+  active = true;
+  statusFilter = signal<'all' | 'active' | 'inactive'>('all');
   error = signal<string | null>(null);
 
   ngOnInit(): void {
@@ -32,10 +34,22 @@ export class EquipmentMasterViewComponent implements OnInit {
     this.shortName = row?.shortName ?? '';
     this.code = row?.code ?? '';
     this.summary = row?.summary ?? '';
+    this.active = row?.active ?? true;
+  }
+
+  visibleRows(): Category[] {
+    const rows = this.rows();
+    if (this.statusFilter() === 'active') {
+      return rows.filter((row) => row.active);
+    }
+    if (this.statusFilter() === 'inactive') {
+      return rows.filter((row) => !row.active);
+    }
+    return rows;
   }
 
   reload(): void {
-    this.api.getCategories().subscribe({
+    this.api.getCategories(true).subscribe({
       next: (rows) => {
         this.rows.set(rows);
         const current = this.selected();
@@ -57,7 +71,8 @@ export class EquipmentMasterViewComponent implements OnInit {
       name: this.name,
       shortName: this.shortName,
       code: this.code,
-      summary: this.summary
+      summary: this.summary,
+      active: this.active
     }).subscribe({
       next: async (saved) => {
         await notifySaved('Equipment group updated', `${saved.name} is saved for the public Equipment page.`);
