@@ -16,14 +16,24 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
         [FromBody] CreateRegistrationRequest request,
         CancellationToken cancellationToken)
     {
-        var usernameError = UserAccountRules.ValidateUsername(request.Username);
-        if (usernameError is not null)
+        var email = request.Email.Trim().ToLowerInvariant();
+        var requested = (request.Username ?? string.Empty).Trim();
+        string username;
+        if (requested.Length > 0)
         {
-            return BadRequest(new { message = usernameError });
+            var usernameError = UserAccountRules.ValidateUsername(requested);
+            if (usernameError is not null)
+            {
+                return BadRequest(new { message = usernameError });
+            }
+
+            username = UserAccountRules.NormalizeUsername(requested);
+        }
+        else
+        {
+            username = UserAccountRules.UsernameFromEmail(email);
         }
 
-        var username = UserAccountRules.NormalizeUsername(request.Username);
-        var email = request.Email.Trim().ToLowerInvariant();
         var takenEmail = await db.Registrations.AnyAsync(x => x.Email == email, cancellationToken);
         if (takenEmail)
         {
@@ -33,7 +43,13 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
         var takenUsername = await db.UserMasters.AnyAsync(x => x.Username == username, cancellationToken);
         if (takenUsername)
         {
-            return Conflict(new { message = "That username is already taken." });
+            var stem = username;
+            var n = 2;
+            do
+            {
+                username = $"{stem}{n++}";
+            }
+            while (await db.UserMasters.AnyAsync(x => x.Username == username, cancellationToken));
         }
 
         var hash = PasswordUtility.Hash(request.Password);

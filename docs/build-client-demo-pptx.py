@@ -125,8 +125,8 @@ def build():
     set_run(p.add_run(), "A live website for a heavy-equipment trader in Sagamu —\ncompany story, equipment portfolio, enquiry desk, and an administration panel.", 22, False, MUTED)
     card(s, 0.5, 3.3, 3.9, 2.4, "The business", "Trader in construction and industrial machinery since 2012. One industry. Direct dealing.")
     card(s, 4.7, 3.3, 3.9, 2.4, "The product", "Public website plus a signed-in dashboard the company can operate after the demo.")
-    card(s, 8.9, 3.3, 3.9, 2.4, "The contact", "Mr. Akram Haider\n+234 80 6665 1111\ncontact@sararose.com")
-    add_notes(s, "Open with the company name and the purpose of the meeting: this is the working website, not a brochure mock-up. Mention Sagamu / Ogun State and that the named contact remains Mr. Akram Haider.")
+    card(s, 8.9, 3.3, 3.9, 2.4, "The contact", "+234 80 6665 1111\ncontact@sararose.com")
+    add_notes(s, "Open with the company name and the purpose of the meeting: this is the working website, not a brochure mock-up. Mention Sagamu / Ogun State and the telephone and email on the site.")
 
     # 2 Agenda
     s = prs.slides.add_slide(blank)
@@ -154,7 +154,7 @@ def build():
         "Business type: Trader. Industry: heavy / construction and industrial equipment.",
         "The work starts with the requirement — ground, timeline, duty — then the machine category.",
         "Brands, models and availability are confirmed at enquiry, not from a stock list on the site.",
-        "Every commercial conversation has a named person: Mr. Akram Haider.",
+        "Enquiries go by phone or email. The conversation stays accountable from first contact onward.",
     ])
     add_notes(s, "This language matches the company profile. Stress accountability and specialisation.")
 
@@ -223,7 +223,7 @@ def build():
         "Page: Enquire (/contact).",
         "Fill name, telephone, email, a machine type, and a short requirement (at least a sentence).",
         "Submit. The record is stored in MySQL for follow-up.",
-        "Commercially, the conversation still belongs to Mr. Akram Haider.",
+        "Commercially, the conversation is followed up by telephone and email.",
         "Later, from the dashboard or API, staff can see the same row — nothing is lost in a personal inbox.",
     ])
     add_notes(s, "Use a realistic example: excavator for a foundation pit in Sagamu. Keep it short.")
@@ -322,7 +322,7 @@ def build():
     box = s.shapes.add_textbox(Inches(0.5), Inches(5.1), Inches(12.2), Inches(1.2))
     tf = box.text_frame
     p = tf.paragraphs[0]
-    set_run(p.add_run(), "Mr. Akram Haider  ·  +234 80 6665 1111  ·  contact@sararose.com", 16, True, GOLD)
+    set_run(p.add_run(), "+234 80 6665 1111  ·  contact@sararose.com", 16, True, GOLD)
     p = tf.add_paragraph()
     set_run(p.add_run(), "Km 12, Sagamu–Benin Express Way, Ogun State, Nigeria", 14, False, MUTED)
     add_notes(s, "Stop talking. Take questions. Offer the documentation PDF/Markdown in docs/.")

@@ -39,6 +39,18 @@ public static class UserAccountRules
 
     public static string NormalizeUsername(string? username) => (username ?? string.Empty).Trim().ToLowerInvariant();
 
+    public static string UsernameFromEmail(string email)
+    {
+        var local = (email ?? string.Empty).Split('@')[0];
+        var candidate = NormalizeUsername(Regex.Replace(local, @"[^a-zA-Z0-9._-]", ""));
+        if (candidate.Length < 3)
+        {
+            return "user";
+        }
+
+        return candidate.Length > 80 ? candidate[..80] : candidate;
+    }
+
     public static string? ValidateUsername(string? username)
     {
         var value = (username ?? string.Empty).Trim();

@@ -176,7 +176,7 @@ public class HeaderLinkRequest
 
 public class CreateRegistrationRequest
 {
-    [Required, StringLength(80, MinimumLength = 3)]
+    [StringLength(80)]
     public string Username { get; set; } = string.Empty;
 
     [Required, StringLength(120)]

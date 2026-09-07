@@ -24,7 +24,7 @@ Company application for **SARA ROSE NIGERIA LIMITED** — a heavy-equipment trad
 
 Regenerate the deck: `python3 docs/build-client-demo-pptx.py`
 
-Enquiries are handled commercially by **Mr. Akram Haider** (`+234 80 6665 1111`, `contact@sararose.com`). Brands, models and availability are confirmed at enquiry, as in the profile.
+Enquiries are handled commercially by telephone (`+234 80 6665 1111`) and email (`contact@sararose.com`). Brands, models and availability are confirmed at enquiry, as in the profile.
 
 ## Get the code (Windows)
 

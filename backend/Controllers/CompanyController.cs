@@ -17,7 +17,7 @@ public class CompanyController : ControllerBase
             Industry: "Heavy equipment / construction & industrial equipment",
             HeadOffice: "Km 12, Sagamu–Benin Express Way, Opposite Navy Merchant, Ogun State, Nigeria",
             OperatingLocation: "Sagamu, Ogun State, Nigeria",
-            ContactPerson: "Mr. Akram Haider",
+            ContactPerson: "",
             Telephone: "+234 80 6665 1111",
             Email: "contact@sararose.com",
             WebsiteNote: "To be advised",
@@ -38,7 +38,7 @@ public class CompanyController : ControllerBase
                 new ReasonDto("One industry, full focus", "Heavy equipment and machinery is our only line of business. We are not generalists who also happen to sell machines — this sector is the whole of our attention."),
                 new ReasonDto("A broad equipment portfolio", "From excavators and bulldozers to forklifts, rollers, dump trucks and cranes, our portfolio spans five categories — so a customer with several machine requirements can raise them all in one conversation."),
                 new ReasonDto("Local presence in Ogun State", "A physical head office on the Sagamu–Benin Expressway means customers, suppliers and partners always know where to find us."),
-                new ReasonDto("A named point of contact", "Enquiries go to Mr. Akram Haider directly, by phone or email. One person, accountable for the conversation from first enquiry onward.")
+                new ReasonDto("A named point of contact", "Enquiries go directly by phone or email. One conversation, accountable from first enquiry onward.")
             ],
             Values:
             [

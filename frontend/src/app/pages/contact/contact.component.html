@@ -8,7 +8,9 @@
       @if (company(); as c) {
         <h2>{{ c.name }}</h2>
         <p>{{ c.headOffice }}</p>
-        <p><strong>Contact</strong> {{ c.contactPerson }}</p>
+        @if (c.contactPerson) {
+          <p><strong>Contact</strong> {{ c.contactPerson }}</p>
+        }
         <p><strong>Telephone</strong> <a href="tel:+2348066651111">{{ c.telephone }}</a></p>
         <p><strong>Email</strong> <a [href]="'mailto:' + c.email">{{ c.email }}</a></p>
         <p class="hint">Website: {{ c.websiteNote }}</p>
@@ -20,7 +22,7 @@
     @if (submitted()) {
       <div class="card success">
         <h2>Enquiry received</h2>
-        <p>Thank you. The requirement has been stored for Mr. Akram Haider. You can also call +234 80 6665 1111 if the site cannot wait.</p>
+        <p>Thank you. The requirement has been stored. You can also call +234 80 6665 1111 if the site cannot wait.</p>
         <button class="btn ghost" type="button" (click)="submitted.set(false)">Send another enquiry</button>
       </div>
     } @else {
@@ -49,7 +51,12 @@
             </select>
           </label>
           <label>Machine type
-            <input formControlName="machineType" placeholder="e.g. Excavator">
+            <select formControlName="machineType">
+              <option value="">Select a machine type</option>
+              @for (item of machineOptions(); track item.id) {
+                <option [value]="item.machineType">{{ item.name }}</option>
+              }
+            </select>
           </label>
         </div>
         <label>Site / location

@@ -142,7 +142,7 @@ export interface HeaderLinkPayload {
 }
 
 export interface RegistrationPayload {
-  username: string;
+  username?: string;
   fullName: string;
   email: string;
   phone: string;

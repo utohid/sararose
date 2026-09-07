@@ -5,7 +5,7 @@
 **Established:** 2012  
 **Location:** Km 12, Sagamu–Benin Express Way, Opposite Navy Merchant, Ogun State, Nigeria  
 **Business:** Trader in heavy equipment and construction / industrial machinery  
-**Named contact:** Mr. Akram Haider · +234 80 6665 1111 · contact@sararose.com
+**Named contact:** +234 80 6665 1111 · contact@sararose.com
 
 This document describes what the application does, how it is built, how to run a live demonstration, and how the main screens fit together.
 
@@ -31,8 +31,8 @@ Brands, models, capacities and availability are **not** listed as a stock catalo
 | --- | --- |
 | Public site | Home slider, company story, vision and values, reasons to work with SARA ROSE |
 | Equipment | Five groups and eleven machine types, each with a path to enquire |
-| Enquire | Form stored in MySQL, directed commercially to Mr. Akram Haider |
-| Registration | Public form that creates a login (username + password) |
+| Enquire | Form stored in MySQL for follow-up by telephone and email |
+| Registration | Public form that creates a login (email + password) |
 | Login | Username and password checked against the `userMaster` table |
 | Dashboard | Overview tiles, recent registrations, company facts |
 | Slider admin | Add, view, reorder and delete home slider images |
@@ -203,9 +203,9 @@ If tables are empty, the API seeds categories, equipment, header links and the a
 1. **Home** — slider, Sagamu, “See the portfolio” / “Start an enquiry”.
 2. **About** — trader since 2012, named contact, not a general merchant.
 3. **Equipment** — open Earthmoving, then Excavators; point out that specification is confirmed at enquiry.
-4. **Enquire** — fill a short requirement; explain it is stored for Mr. Akram Haider.
+4. **Enquire** — fill a short requirement; explain it is stored for follow-up.
 5. **Why us / Vision** — five reasons and six values.
-6. **Register** (optional) — create a username, then **Login** with it.
+6. **Register** (optional) — create an account, then **Login** with the email and password.
 7. **Login as admin** — username `admin`, password `SaraRose_Admin_2024`, solve the captcha, continue to dashboard.
 8. **Dashboard** — tiles and recent registrations.
 9. **Slider / Header** — show that the client can change the public home images and menu without editing code.

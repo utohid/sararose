@@ -1,7 +1,7 @@
 import { Component, OnInit, inject, signal } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ApiService, Category, Company } from '../../services/api.service';
+import { ApiService, Category, Company, EquipmentSummary } from '../../services/api.service';
 
 @Component({
   selector: 'app-contact',
@@ -16,6 +16,7 @@ export class ContactComponent implements OnInit {
 
   company = signal<Company | null>(null);
   categories = signal<Category[]>([]);
+  equipment = signal<EquipmentSummary[]>([]);
   submitting = signal(false);
   submitted = signal(false);
   error = signal<string | null>(null);
@@ -39,6 +40,17 @@ export class ContactComponent implements OnInit {
     this.api.getCategories().subscribe({
       next: (rows) => this.categories.set(rows)
     });
+    this.api.getEquipment().subscribe({
+      next: (rows) => this.equipment.set(rows)
+    });
+
+    this.form.controls.categoryId.valueChanges.subscribe(() => {
+      const allowed = this.machineOptions().map((item) => item.machineType);
+      const current = this.form.controls.machineType.value;
+      if (current && !allowed.includes(current)) {
+        this.form.patchValue({ machineType: '' });
+      }
+    });
 
     this.route.queryParamMap.subscribe((params) => {
       const machine = params.get('machine');
@@ -50,6 +62,17 @@ export class ContactComponent implements OnInit {
         this.form.patchValue({ categoryId: category });
       }
     });
+  }
+
+  machineOptions(): EquipmentSummary[] {
+    const categoryId = this.form.controls.categoryId.value;
+    const rows = this.equipment();
+    if (!categoryId) {
+      return rows;
+    }
+
+    const id = Number(categoryId);
+    return rows.filter((item) => item.categoryId === id);
   }
 
   submit(): void {
