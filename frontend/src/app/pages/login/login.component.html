@@ -6,9 +6,9 @@
     <aside class="showcase">
       <p class="kicker">Account login</p>
       <h1>Sign in<br>to SARA ROSE.</h1>
-      <p class="lede">Login checks username and password against the MySQL userMaster table (HashPassword and NormalPassword).</p>
+      <p class="lede">Login checks username and password against the MySQL UserMaster table (HashPassword and NormalPassword). Public Registration does not create this login.</p>
       <ul class="points">
-        <li><span>01</span> Register to create a userMaster login</li>
+        <li><span>01</span> An administrator creates the UserMaster account</li>
         <li><span>02</span> Sign in with that username and password</li>
         <li><span>03</span> Admins open the dashboard after login</li>
       </ul>
@@ -19,7 +19,7 @@
       <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
         <p class="kicker">Login</p>
         <h2>Enter your details</h2>
-        <p class="form-lede">Use a registered username and password. The seeded admin username is admin. Complete the number captcha to continue.</p>
+        <p class="form-lede">Use a UserMaster username and password. The seeded admin username is admin. Complete the number captcha to continue.</p>
 
         <label>Username
           <input formControlName="username" type="text" autocomplete="username" placeholder="admin">
@@ -60,7 +60,7 @@
         <button class="btn submit" type="submit" [disabled]="submitting()">
           {{ submitting() ? 'Signing in…' : 'Login' }}
         </button>
-        <p class="alt">Need an account? <a routerLink="/register">Registration</a> · Need a machine? <a routerLink="/contact">Start an enquiry</a></p>
+        <p class="alt">Need a public registration record? <a routerLink="/register">Registration</a> · Need a machine? <a routerLink="/contact">Start an enquiry</a></p>
       </form>
     </div>
   </div>

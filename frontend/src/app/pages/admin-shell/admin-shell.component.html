@@ -27,6 +27,8 @@
       <a routerLink="/dashboard/masters/machines" routerLinkActive="active">Machine types</a>
       <p>People</p>
       <a routerLink="/dashboard/registrations" routerLinkActive="active">Registrations</a>
+      <a routerLink="/dashboard/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">UserMaster</a>
+      <a routerLink="/dashboard/users/add" routerLinkActive="active">Add user details</a>
       <p>Site</p>
       <a routerLink="/equipment">Equipment</a>
       <a routerLink="/contact">Enquiries</a>

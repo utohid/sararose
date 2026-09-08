@@ -75,7 +75,7 @@ export class LoginComponent {
         this.submitting.set(false);
         this.refreshCaptcha();
         const message = err.status === 401
-          ? 'Username or password was not found in userMaster. Register first, or use username admin.'
+          ? 'Username or password was not found in UserMaster. Ask an administrator to create your login, or use username admin.'
           : 'Could not reach the login API. Confirm the API and MySQL are running.';
         this.error.set(message);
         void notifyError(message);

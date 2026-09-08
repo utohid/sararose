@@ -131,6 +131,8 @@ CREATE TABLE `registrations` (
   `City` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `Role` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `UserType` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+  `EquipmentType` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+  `MachineType` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
   `PasswordHash` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
   `CreatedAtUtc` datetime(6) NOT NULL,
   PRIMARY KEY (`Id`),
@@ -263,17 +265,17 @@ ALTER TABLE `header_links` AUTO_INCREMENT = 10;
 --
 -- enquiries: no seed rows. Rows are created by POST /api/enquiries.
 --
--- registrations: public users plus a seeded admin
+-- registrations: public interest records (not login)
 -- userMaster: login table. Login checks Username (or Email) + HashPassword / NormalPassword
 --   Username: admin
 --   Email: admin@sararose.com
 --   Password: SaraRose_Admin_2024
 --   Role: Admin  UserType: Internal
 INSERT INTO `registrations`
-  (`FullName`, `Email`, `Phone`, `Company`, `City`, `Role`, `UserType`, `PasswordHash`, `CreatedAtUtc`)
+  (`FullName`, `Email`, `Phone`, `Company`, `City`, `Role`, `UserType`, `EquipmentType`, `MachineType`, `PasswordHash`, `CreatedAtUtc`)
 VALUES
   ('SARA ROSE Admin', 'admin@sararose.com', '+2348066651111', 'SARA ROSE NIGERIA LIMITED', 'Sagamu',
-   'Admin', 'Internal', SHA2('SaraRose_Admin_2024', 256), UTC_TIMESTAMP(6));
+   'Admin', 'Internal', 'Earthmoving equipment', 'Excavator', SHA2('SaraRose_Admin_2024', 256), UTC_TIMESTAMP(6));
 
 INSERT INTO `userMaster`
   (`Username`, `Email`, `FullName`, `Phone`, `Role`, `UserType`, `HashPassword`, `NormalPassword`, `Active`, `CreatedAtUtc`)
@@ -326,7 +328,10 @@ VALUES
 -- SELECT * FROM header_links ORDER BY SortOrder, Id;
 
 -- Registrations (GET /api/registrations)
--- SELECT Id, FullName, Email, Phone, Company, City, Role, UserType, CreatedAtUtc FROM registrations ORDER BY CreatedAtUtc DESC;
+-- SELECT Id, FullName, Email, Phone, Company, City, Role, UserType, EquipmentType, MachineType, CreatedAtUtc FROM registrations ORDER BY CreatedAtUtc DESC;
+
+-- UserMaster (GET /api/user-masters)
+-- SELECT Id, Username, Email, FullName, Phone, Role, UserType, Active, CreatedAtUtc FROM userMaster ORDER BY CreatedAtUtc DESC;
 
 -- Login users (POST /api/auth/login reads userMaster)
 -- SELECT Id, Username, Email, Role, UserType, HashPassword, NormalPassword, Active FROM userMaster;

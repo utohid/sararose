@@ -17,39 +17,17 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
         CancellationToken cancellationToken)
     {
         var email = request.Email.Trim().ToLowerInvariant();
-        var requested = (request.Username ?? string.Empty).Trim();
-        string username;
-        if (requested.Length > 0)
+        var equipmentType = request.EquipmentType.Trim();
+        var machineType = request.MachineType.Trim();
+        if (equipmentType.Length == 0 || machineType.Length == 0)
         {
-            var usernameError = UserAccountRules.ValidateUsername(requested);
-            if (usernameError is not null)
-            {
-                return BadRequest(new { message = usernameError });
-            }
-
-            username = UserAccountRules.NormalizeUsername(requested);
-        }
-        else
-        {
-            username = UserAccountRules.UsernameFromEmail(email);
+            return BadRequest(new { message = "Select an equipment type and a machine type." });
         }
 
         var takenEmail = await db.Registrations.AnyAsync(x => x.Email == email, cancellationToken);
         if (takenEmail)
         {
             return Conflict(new { message = "That email is already registered." });
-        }
-
-        var takenUsername = await db.UserMasters.AnyAsync(x => x.Username == username, cancellationToken);
-        if (takenUsername)
-        {
-            var stem = username;
-            var n = 2;
-            do
-            {
-                username = $"{stem}{n++}";
-            }
-            while (await db.UserMasters.AnyAsync(x => x.Username == username, cancellationToken));
         }
 
         var hash = PasswordUtility.Hash(request.Password);
@@ -62,6 +40,8 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
             City = string.IsNullOrWhiteSpace(request.City) ? null : request.City.Trim(),
             Role = UserAccountRules.NormalizeRole(request.Role, allowAdmin: false),
             UserType = UserAccountRules.NormalizeUserType(request.UserType),
+            EquipmentType = equipmentType,
+            MachineType = machineType,
             PasswordHash = hash,
             CreatedAtUtc = DateTime.UtcNow
         };
@@ -69,22 +49,7 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
         db.Registrations.Add(row);
         await db.SaveChangesAsync(cancellationToken);
 
-        db.UserMasters.Add(new UserMaster
-        {
-            Username = username,
-            Email = email,
-            FullName = row.FullName,
-            Phone = row.Phone,
-            Role = row.Role,
-            UserType = row.UserType,
-            HashPassword = hash,
-            NormalPassword = request.Password,
-            Active = true,
-            CreatedAtUtc = DateTime.UtcNow
-        });
-        await db.SaveChangesAsync(cancellationToken);
-
-        return CreatedAtAction(nameof(GetById), new { id = row.Id }, ToDto(row, username));
+        return CreatedAtAction(nameof(GetById), new { id = row.Id }, ToDto(row));
     }
 
     [HttpGet]
@@ -94,12 +59,8 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
             .AsNoTracking()
             .OrderByDescending(x => x.CreatedAtUtc)
             .ToListAsync(cancellationToken);
-        var masters = await db.UserMasters.AsNoTracking().ToListAsync(cancellationToken);
-        var usernames = masters
-            .GroupBy(x => x.Email, StringComparer.OrdinalIgnoreCase)
-            .ToDictionary(g => g.Key, g => g.First().Username, StringComparer.OrdinalIgnoreCase);
 
-        return Ok(rows.Select(row => ToDto(row, usernames.GetValueOrDefault(row.Email, string.Empty))));
+        return Ok(rows.Select(ToDto));
     }
 
     [HttpGet("{id:int}")]
@@ -111,14 +72,20 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
             return NotFound();
         }
 
-        var username = await db.UserMasters.AsNoTracking()
-            .Where(x => x.Email == row.Email)
-            .Select(x => x.Username)
-            .FirstOrDefaultAsync(cancellationToken) ?? string.Empty;
-
-        return Ok(ToDto(row, username));
+        return Ok(ToDto(row));
     }
 
-    private static RegistrationDto ToDto(UserRegistration row, string username) =>
-        new(row.Id, username, row.FullName, row.Email, row.Phone, row.Company, row.City, row.Role, row.UserType, row.CreatedAtUtc);
+    private static RegistrationDto ToDto(UserRegistration row) =>
+        new(
+            row.Id,
+            row.FullName,
+            row.Email,
+            row.Phone,
+            row.Company,
+            row.City,
+            row.Role,
+            row.UserType,
+            row.EquipmentType,
+            row.MachineType,
+            row.CreatedAtUtc);
 }

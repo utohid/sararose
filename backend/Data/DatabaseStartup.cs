@@ -70,6 +70,8 @@ public static class DatabaseStartup
               `City` varchar(120) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
               `Role` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
               `UserType` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
+              `EquipmentType` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
+              `MachineType` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL,
               `PasswordHash` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
               `CreatedAtUtc` datetime(6) NOT NULL,
               PRIMARY KEY (`Id`),
@@ -84,6 +86,10 @@ public static class DatabaseStartup
             "ALTER TABLE `registrations` ADD COLUMN `Role` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'User'");
         await TryAddColumnAsync(db,
             "ALTER TABLE `registrations` ADD COLUMN `UserType` varchar(40) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL DEFAULT 'Customer'");
+        await TryAddColumnAsync(db,
+            "ALTER TABLE `registrations` ADD COLUMN `EquipmentType` varchar(160) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL");
+        await TryAddColumnAsync(db,
+            "ALTER TABLE `registrations` ADD COLUMN `MachineType` varchar(80) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL");
     }
 
     private static async Task EnsureUserMasterTableAsync(AppDbContext db)

@@ -17,6 +17,8 @@ import { HeaderAddComponent } from './pages/header-add/header-add.component';
 import { HeaderViewComponent } from './pages/header-view/header-view.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { RegistrationsAdminComponent } from './pages/registrations-admin/registrations-admin.component';
+import { UserMasterAddComponent } from './pages/user-master-add/user-master-add.component';
+import { UserMasterViewComponent } from './pages/user-master-view/user-master-view.component';
 import { CatalogMasterComponent } from './pages/catalog-master/catalog-master.component';
 import { EquipmentMasterAddComponent } from './pages/equipment-master-add/equipment-master-add.component';
 import { EquipmentMasterViewComponent } from './pages/equipment-master-view/equipment-master-view.component';
@@ -52,7 +54,9 @@ export const routes: Routes = [
       { path: 'masters/machines/add', component: MachineMasterAddComponent, title: 'Add machine type — SARA ROSE' },
       { path: 'masters/machines', component: MachineMasterViewComponent, title: 'Machine type master — SARA ROSE' },
       { path: 'masters', component: CatalogMasterComponent, title: 'Catalogue masters — SARA ROSE' },
-      { path: 'registrations', component: RegistrationsAdminComponent, title: 'Registrations — SARA ROSE' }
+      { path: 'registrations', component: RegistrationsAdminComponent, title: 'Registrations — SARA ROSE' },
+      { path: 'users/add', component: UserMasterAddComponent, title: 'Add UserMaster — SARA ROSE' },
+      { path: 'users', component: UserMasterViewComponent, title: 'UserMaster — SARA ROSE' }
     ]
   },
   { path: '**', redirectTo: '' }

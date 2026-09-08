@@ -45,7 +45,12 @@
   <article class="accent">
     <small>Registrations</small>
     <strong>{{ registrations().length }}</strong>
-    <em>Database users</em>
+    <em>Public records</em>
+  </article>
+  <article>
+    <small>UserMaster</small>
+    <strong>{{ userMasters().length }}</strong>
+    <em>Login accounts</em>
   </article>
 </div>
 
@@ -91,6 +96,16 @@
     <h3>Machine type</h3>
     <p>Add excavators, rollers…</p>
   </a>
+  <a class="tile" routerLink="/dashboard/users/add">
+    <span>09</span>
+    <h3>Add UserMaster</h3>
+    <p>Create a login account</p>
+  </a>
+  <a class="tile" routerLink="/dashboard/users">
+    <span>10</span>
+    <h3>UserMaster</h3>
+    <p>View login accounts</p>
+  </a>
 </div>
 
 <div class="detail-grid">
@@ -129,7 +144,7 @@
 <div class="detail-grid">
   <article class="card">
     <p class="kicker">Recent registrations</p>
-    <h3>Users in MySQL</h3>
+    <h3>Public Registration table</h3>
     @if (registrations().length) {
       <ul class="enquiry-list">
         @for (row of registrations().slice(0, 5); track row.id) {

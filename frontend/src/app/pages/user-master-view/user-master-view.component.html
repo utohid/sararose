@@ -1,0 +1,95 @@
+<header class="board-head">
+  <p class="kicker">UserMaster</p>
+  <h2>View user details</h2>
+  <p class="lede">
+    These accounts are stored on the UserMaster table and are used for Login. Public Registration records stay on the Registration table.
+  </p>
+</header>
+
+<p class="page-nav">
+  <a routerLink="/dashboard/users/add">Add user details</a>
+  <a routerLink="/dashboard/registrations">Public registrations</a>
+</p>
+
+@if (error(); as note) {
+  <p class="status error">{{ note }}</p>
+}
+
+<p class="filter-row">
+  <button type="button" [class.on]="statusFilter() === 'all'" (click)="statusFilter.set('all')">All</button>
+  <button type="button" [class.on]="statusFilter() === 'active'" (click)="statusFilter.set('active')">Active</button>
+  <button type="button" [class.on]="statusFilter() === 'inactive'" (click)="statusFilter.set('inactive')">Inactive</button>
+</p>
+
+@if (selected(); as row) {
+  <article class="card viewer">
+    <form class="editor" (ngSubmit)="saveEdits()">
+      <p class="kicker">Selected user</p>
+      <h3>{{ row.username }}</h3>
+      <p class="meta">{{ row.role }} · {{ row.userType }} · {{ row.active ? 'Active' : 'Inactive' }}</p>
+      <div class="split">
+        <label>Username
+          <input [(ngModel)]="username" name="username">
+        </label>
+        <label>Full name
+          <input [(ngModel)]="fullName" name="fullName">
+        </label>
+      </div>
+      <div class="split">
+        <label>Email
+          <input [(ngModel)]="email" name="email" type="email">
+        </label>
+        <label>Telephone
+          <input [(ngModel)]="phone" name="phone">
+        </label>
+      </div>
+      <label>New password (leave blank to keep current)
+        <input [(ngModel)]="password" name="password" type="password" autocomplete="new-password" placeholder="Optional">
+      </label>
+      <div class="split">
+        <label>Role
+          <select [(ngModel)]="role" name="role">
+            <option value="User">User</option>
+            <option value="Staff">Staff</option>
+            <option value="Admin">Admin</option>
+          </select>
+        </label>
+        <label>User type
+          <select [(ngModel)]="userType" name="userType">
+            <option value="Customer">Customer</option>
+            <option value="Dealer">Dealer</option>
+            <option value="Contractor">Contractor</option>
+            <option value="Internal">Internal</option>
+          </select>
+        </label>
+      </div>
+      <label>Status
+        <select [(ngModel)]="active" name="active">
+          <option [ngValue]="true">Active</option>
+          <option [ngValue]="false">Inactive</option>
+        </select>
+      </label>
+      <div class="row">
+        <button class="btn" type="submit">Save changes</button>
+        <button class="btn ghost" type="button" (click)="remove(row)">Delete</button>
+      </div>
+    </form>
+  </article>
+}
+
+<div class="grid">
+  @for (row of visibleRows(); track row.id) {
+    <button
+      class="card slide"
+      type="button"
+      [class.on]="selected()?.id === row.id"
+      (click)="select(row)">
+      <p class="kicker">{{ row.role }} · {{ row.active ? 'Active' : 'Inactive' }}</p>
+      <p>{{ row.fullName }}</p>
+      <p class="meta">{{ row.username }}</p>
+      <p class="meta">{{ row.email }}</p>
+    </button>
+  } @empty {
+    <p class="status">No UserMaster rows yet. <a routerLink="/dashboard/users/add">Add user details</a>.</p>
+  }
+</div>

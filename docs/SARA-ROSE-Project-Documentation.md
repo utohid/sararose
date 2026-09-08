@@ -18,8 +18,8 @@ SARA ROSE trades in heavy equipment. The application puts that business on a pro
 - understand who the company is and how it works
 - browse the five equipment categories the company deals in
 - send an enquiry that is stored for follow-up
-- register and sign in
-- (for staff) manage home images, header links, registrations and enquiries from a dashboard
+- register interest (equipment type and machine type)
+- (for staff) create UserMaster logins and manage home images, header links, registrations and enquiries from a dashboard
 
 Brands, models, capacities and availability are **not** listed as a stock catalogue. They are confirmed when the customer enquires, which matches the commercial model in the company profile.
 
@@ -32,12 +32,13 @@ Brands, models, capacities and availability are **not** listed as a stock catalo
 | Public site | Home slider, company story, vision and values, reasons to work with SARA ROSE |
 | Equipment | Five groups and eleven machine types, each with a path to enquire |
 | Enquire | Form stored in MySQL for follow-up by telephone and email |
-| Registration | Public form that creates a login (email + password) |
+| Registration | Public form saved only to the `registrations` table, including equipment type and machine type |
 | Login | Username and password checked against the `userMaster` table |
 | Dashboard | Overview tiles, recent registrations, company facts |
 | Slider admin | Add, view, reorder and delete home slider images |
 | Header admin | Add, hide, reorder and delete navigation links |
 | Registrations admin | List of people who registered on the public form |
+| UserMaster admin | Create and edit login accounts stored on the `userMaster` table |
 
 **Live URLs (local demonstration):**
 
@@ -58,7 +59,7 @@ Brands, models, capacities and availability are **not** listed as a stock catalo
 | `/why-sara-rose` | Why us | Five commercial reasons (longevity, focus, portfolio, local office, named contact) |
 | `/vision-values` | Vision, mission, values | Reliability, integrity, customer focus, professionalism, quality, long-term partnerships |
 | `/contact` | Enquire | Customer requirement captured in the database |
-| `/register` | Registration | Username, name, email, telephone, user type, role, password |
+| `/register` | Registration | Name, email, telephone, equipment type, machine type, user type, role, password |
 | `/login` | Login | Username, password, number captcha |
 
 Header navigation can be driven from the database when the site is in dynamic mode, so the client can change labels and order without a developer.
@@ -85,10 +86,11 @@ The dashboard is behind login (`/dashboard`). After a successful sign-in the use
 2. **Home slider** — upload images used on the public home page (`/dashboard/slider`, add, view).
 3. **Header links** — labels, paths, sort order, visibility, enquire-style call-to-action (`/dashboard/header`).
 4. **Equipment & machine type masters** — add and edit catalogue groups and machine types (`/dashboard/masters`). Changes show on the public Equipment pages.
-5. **Registrations** — people who used the public Registration page (`/dashboard/registrations`).
-5. **Public site / equipment / enquiries** — jump back to the customer-facing pages or stored enquiries via the API.
+5. **Registrations** — people who used the public Registration page (`/dashboard/registrations`). Rows stay on the Registration table and include equipment type and machine type.
+6. **UserMaster** — administrator-created login accounts (`/dashboard/users`, add). These rows are saved only on the UserMaster table.
+7. **Public site / equipment / enquiries** — jump back to the customer-facing pages or stored enquiries via the API.
 
-Passwords are never shown on the registrations list. Login checks the `userMaster` table.
+Passwords are never shown on the registrations or UserMaster lists. Login checks the `userMaster` table.
 
 ---
 
@@ -110,13 +112,13 @@ Copy on each page is written as a trader’s advice, not as a manufacturer broch
 
 ## 6. How login works
 
-1. A person registers on `/register` **or** an administrator is seeded.
-2. The application stores a profile in `registrations` and a login row in `userMaster`.
+1. A person leaves details on `/register`. That record is stored **only** in `registrations`, including equipment type and machine type. It does **not** create a login.
+2. An administrator creates a login on Dashboard → UserMaster. That record is stored **only** in `userMaster`. A seeded administrator (`admin`) is also present.
 3. On `/login` they enter **username** and **password** (and a simple maths captcha).
 4. The API looks up `userMaster` by username (email typed in the username field is also accepted).
 5. The password must match **HashPassword** (SHA-256) or **NormalPassword**.
 6. There is **no** `RegistrationId` column on `userMaster`. Company and city on the session are taken from the matching `registrations` email, when present.
-7. The session is kept in the browser (not in MySQL). `NormalPassword` is never returned by the login API.
+7. The session is kept in the browser (not in MySQL). `NormalPassword` is never returned by the login or UserMaster APIs.
 
 Roles used in the product: Admin, Staff, User.  
 User types: Internal, Customer, Dealer, Contractor.  
@@ -156,7 +158,7 @@ Company profile text (about, vision, mission, values, reasons) is supplied by th
 | `enquiries` | Customer requirements from `/contact` |
 | `slider_slides` | Home slider files and captions |
 | `header_links` | Navigation labels and paths |
-| `registrations` | Public registration profiles |
+| `registrations` | Public registration profiles, including equipment type and machine type |
 | `userMaster` | Login: Username, Email, FullName, Phone, Role, UserType, HashPassword, NormalPassword, Active, CreatedAtUtc |
 
 Full rebuild script (Workbench): `backend/sql/update-all-db.sql` (copy also at `backend/sql/update-all-db.txt`).

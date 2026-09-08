@@ -192,57 +192,5 @@ public static class DbSeeder
             db.UserMasters.Add(UserAccountRules.AdminUserMaster());
             await db.SaveChangesAsync(cancellationToken);
         }
-
-        await BackfillUserMastersAsync(db, cancellationToken);
-    }
-
-    private static async Task BackfillUserMastersAsync(AppDbContext db, CancellationToken cancellationToken)
-    {
-        var linkedEmails = (await db.UserMasters
-            .Select(x => x.Email)
-            .ToListAsync(cancellationToken))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-        var usedNames = (await db.UserMasters.Select(x => x.Username).ToListAsync(cancellationToken))
-            .ToHashSet(StringComparer.OrdinalIgnoreCase);
-
-        var orphans = (await db.Registrations.ToListAsync(cancellationToken))
-            .Where(x => !linkedEmails.Contains(x.Email))
-            .ToList();
-
-        foreach (var row in orphans)
-        {
-            var baseName = UserAccountRules.NormalizeUsername(row.Email.Split('@')[0]);
-            if (baseName.Length < 3)
-            {
-                baseName = $"user{row.Id}";
-            }
-
-            var username = baseName;
-            var suffix = 1;
-            while (usedNames.Contains(username))
-            {
-                username = $"{baseName}{suffix++}";
-            }
-
-            usedNames.Add(username);
-            db.UserMasters.Add(new UserMaster
-            {
-                Username = username,
-                Email = row.Email,
-                FullName = row.FullName,
-                Phone = row.Phone,
-                Role = row.Role,
-                UserType = row.UserType,
-                HashPassword = row.PasswordHash,
-                NormalPassword = string.Empty,
-                Active = true,
-                CreatedAtUtc = row.CreatedAtUtc
-            });
-        }
-
-        if (orphans.Count > 0)
-        {
-            await db.SaveChangesAsync(cancellationToken);
-        }
     }
 }

@@ -142,7 +142,7 @@ The API creates tables and seeds the equipment catalogue on first successful MyS
 - Role: `Admin`
 - User type: `Internal`
 
-Public registration stores a row in `registrations` and a matching login row in `userMaster`.
+Public registration stores a row only in `registrations` (including equipment type and machine type). Login accounts are created by an administrator in `userMaster`.
 
 ## WSL / macOS / Linux
 
@@ -173,8 +173,9 @@ Or: `bash scripts/dev.sh`
 | POST / PUT / DELETE | `/api/equipment` | Admin machine type master |
 | POST | `/api/enquiries` | Store a customer enquiry |
 | GET | `/api/enquiries` | List stored enquiries |
-| POST | `/api/registrations` | Create a user and a `userMaster` login row |
-| GET | `/api/registrations` | List registered users |
+| POST | `/api/registrations` | Public registration (Registration table only) |
+| GET | `/api/registrations` | List public registrations |
+| GET / POST / PUT / DELETE | `/api/user-masters` | Admin UserMaster login accounts |
 | POST | `/api/auth/login` | Validate username and password from `userMaster` |
 
 This stack is intended to run as a .NET process plus MySQL. It is not a Vercel serverless app.

@@ -147,7 +147,6 @@ export interface HeaderLinkPayload {
 }
 
 export interface RegistrationPayload {
-  username?: string;
   fullName: string;
   email: string;
   phone: string;
@@ -156,11 +155,12 @@ export interface RegistrationPayload {
   password: string;
   role?: string;
   userType?: string;
+  equipmentType: string;
+  machineType: string;
 }
 
 export interface Registration {
   id: number;
-  username: string;
   fullName: string;
   email: string;
   phone: string;
@@ -168,6 +168,31 @@ export interface Registration {
   city?: string | null;
   role: string;
   userType: string;
+  equipmentType?: string | null;
+  machineType?: string | null;
+  createdAtUtc: string;
+}
+
+export interface UserMasterPayload {
+  username: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  password?: string;
+  role?: string;
+  userType?: string;
+  active?: boolean;
+}
+
+export interface UserMaster {
+  id: number;
+  username: string;
+  fullName: string;
+  email: string;
+  phone: string;
+  role: string;
+  userType: string;
+  active: boolean;
   createdAtUtc: string;
 }
 
@@ -295,6 +320,26 @@ export class ApiService {
 
   getRegistration(id: number) {
     return this.http.get<Registration>(`${this.base}/registrations/${id}`);
+  }
+
+  getUserMasters() {
+    return this.http.get<UserMaster[]>(`${this.base}/user-masters`);
+  }
+
+  getUserMaster(id: number) {
+    return this.http.get<UserMaster>(`${this.base}/user-masters/${id}`);
+  }
+
+  createUserMaster(payload: UserMasterPayload) {
+    return this.http.post<UserMaster>(`${this.base}/user-masters`, payload);
+  }
+
+  updateUserMaster(id: number, payload: UserMasterPayload) {
+    return this.http.put<UserMaster>(`${this.base}/user-masters/${id}`, payload);
+  }
+
+  deleteUserMaster(id: number) {
+    return this.http.delete(`${this.base}/user-masters/${id}`);
   }
 
   login(payload: LoginPayload) {

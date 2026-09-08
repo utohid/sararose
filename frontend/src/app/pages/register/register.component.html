@@ -4,13 +4,13 @@
 
   <div class="login-shell">
     <aside class="showcase">
-      <p class="kicker">New account</p>
+      <p class="kicker">Public registration</p>
       <h1>Register<br>with SARA ROSE.</h1>
-      <p class="lede">Leave your details so the named contact can reach you about equipment, site work and follow-up from Sagamu.</p>
+      <p class="lede">Leave your details and the equipment you work with. This record is stored only on the Registration table.</p>
       <ul class="points">
-        <li><span>01</span> Your record is stored in MySQL</li>
-        <li><span>02</span> Role and user type are saved with it</li>
-        <li><span>03</span> Use the same email and password on Login</li>
+        <li><span>01</span> Saved to MySQL registrations</li>
+        <li><span>02</span> Equipment type and machine type are required</li>
+        <li><span>03</span> Login accounts are created by an administrator in UserMaster</li>
       </ul>
       <p class="foot-note">Heavy equipment trading · Ogun State · Nigeria</p>
     </aside>
@@ -19,7 +19,7 @@
       <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
         <p class="kicker">Registration</p>
         <h2>Fill your details</h2>
-        <p class="form-lede">Required fields are name, email, telephone, user type, role and a password of at least 8 characters.</p>
+        <p class="form-lede">Required fields include name, email, telephone, equipment type, machine type, user type, role and a password of at least 8 characters.</p>
 
         <label>Full name
           <input formControlName="fullName" autocomplete="name" placeholder="Your name">
@@ -38,6 +38,24 @@
           </label>
           <label>City
             <input formControlName="city" autocomplete="address-level2" placeholder="e.g. Sagamu">
+          </label>
+        </div>
+        <div class="row">
+          <label>Equipment type
+            <select formControlName="categoryId">
+              <option value="">Select equipment type</option>
+              @for (cat of categories(); track cat.id) {
+                <option [value]="cat.id">{{ cat.name }}</option>
+              }
+            </select>
+          </label>
+          <label>Machine type
+            <select formControlName="machineType">
+              <option value="">Select machine type</option>
+              @for (item of machineOptions(); track item.id) {
+                <option [value]="item.machineType">{{ item.name }}</option>
+              }
+            </select>
           </label>
         </div>
         <div class="row">
@@ -79,7 +97,7 @@
         <button class="btn submit" type="submit" [disabled]="submitting()">
           {{ submitting() ? 'Saving…' : 'Register' }}
         </button>
-        <p class="alt">Already registered? <a routerLink="/login">Login</a></p>
+        <p class="alt">Already have a UserMaster login? <a routerLink="/login">Login</a></p>
       </form>
     </div>
   </div>

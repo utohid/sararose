@@ -3,7 +3,7 @@ import { Component, OnInit, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { forkJoin, of } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { ApiService, Category, Company, Enquiry, EquipmentSummary, Registration } from '../../services/api.service';
+import { ApiService, Category, Company, Enquiry, EquipmentSummary, Registration, UserMaster } from '../../services/api.service';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
@@ -24,6 +24,7 @@ export class DashboardComponent implements OnInit {
   equipment = signal<EquipmentSummary[]>([]);
   enquiries = signal<Enquiry[]>([]);
   registrations = signal<Registration[]>([]);
+  userMasters = signal<UserMaster[]>([]);
   error = signal<string | null>(null);
 
   greeting(): string {
@@ -54,14 +55,16 @@ export class DashboardComponent implements OnInit {
       categories: this.api.getCategories(true).pipe(catchError(() => of([] as Category[]))),
       equipment: this.api.getEquipment(null, true).pipe(catchError(() => of([] as EquipmentSummary[]))),
       enquiries: this.api.getEnquiries().pipe(catchError(() => of([] as Enquiry[]))),
-      registrations: this.api.getRegistrations().pipe(catchError(() => of([] as Registration[])))
+      registrations: this.api.getRegistrations().pipe(catchError(() => of([] as Registration[]))),
+      userMasters: this.api.getUserMasters().pipe(catchError(() => of([] as UserMaster[])))
     }).subscribe({
-      next: ({ company, categories, equipment, enquiries, registrations }) => {
+      next: ({ company, categories, equipment, enquiries, registrations, userMasters }) => {
         this.company.set(company);
         this.categories.set(categories);
         this.equipment.set(equipment);
         this.enquiries.set(enquiries);
         this.registrations.set(registrations);
+        this.userMasters.set(userMasters);
         if (!company) {
           this.error.set('Company details could not be loaded. The dashboard still shows the application name.');
         }

@@ -183,9 +183,6 @@ public class HeaderLinkRequest
 
 public class CreateRegistrationRequest
 {
-    [StringLength(80)]
-    public string Username { get; set; } = string.Empty;
-
     [Required, StringLength(120)]
     public string FullName { get; set; } = string.Empty;
 
@@ -209,11 +206,16 @@ public class CreateRegistrationRequest
 
     [StringLength(40)]
     public string? UserType { get; set; }
+
+    [Required, StringLength(160)]
+    public string EquipmentType { get; set; } = string.Empty;
+
+    [Required, StringLength(80)]
+    public string MachineType { get; set; } = string.Empty;
 }
 
 public record RegistrationDto(
     int Id,
-    string Username,
     string FullName,
     string Email,
     string Phone,
@@ -221,6 +223,71 @@ public record RegistrationDto(
     string? City,
     string Role,
     string UserType,
+    string? EquipmentType,
+    string? MachineType,
+    DateTime CreatedAtUtc);
+
+public class CreateUserMasterRequest
+{
+    [Required, StringLength(80)]
+    public string Username { get; set; } = string.Empty;
+
+    [Required, StringLength(200)]
+    public string FullName { get; set; } = string.Empty;
+
+    [Required, EmailAddress, StringLength(160)]
+    public string Email { get; set; } = string.Empty;
+
+    [Required, StringLength(40)]
+    public string Phone { get; set; } = string.Empty;
+
+    [Required, StringLength(120, MinimumLength = 8)]
+    public string Password { get; set; } = string.Empty;
+
+    [StringLength(40)]
+    public string? Role { get; set; }
+
+    [StringLength(40)]
+    public string? UserType { get; set; }
+
+    public bool Active { get; set; } = true;
+}
+
+public class UpdateUserMasterRequest
+{
+    [StringLength(80)]
+    public string? Username { get; set; }
+
+    [StringLength(200)]
+    public string? FullName { get; set; }
+
+    [EmailAddress, StringLength(160)]
+    public string? Email { get; set; }
+
+    [StringLength(40)]
+    public string? Phone { get; set; }
+
+    [StringLength(120)]
+    public string? Password { get; set; }
+
+    [StringLength(40)]
+    public string? Role { get; set; }
+
+    [StringLength(40)]
+    public string? UserType { get; set; }
+
+    public bool? Active { get; set; }
+}
+
+public record UserMasterDto(
+    int Id,
+    string Username,
+    string FullName,
+    string Email,
+    string Phone,
+    string Role,
+    string UserType,
+    bool Active,
     DateTime CreatedAtUtc);
 
 public class LoginRequest
