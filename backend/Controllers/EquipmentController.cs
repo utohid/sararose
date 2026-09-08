@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SaraRose.Api.Data;
@@ -16,7 +17,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
         CancellationToken cancellationToken = default)
     {
         var query = db.Categories.AsNoTracking().AsQueryable();
-        if (!includeInactive)
+        if (!includeInactive || !User.IsInRole("Admin") && !User.IsInRole("Staff"))
         {
             query = query.Where(c => c.Active);
         }
@@ -48,6 +49,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
         return row is null ? NotFound() : Ok(ToCategoryDto(row, row.Equipment.Count));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpPost("categories")]
     public async Task<ActionResult<CategoryDto>> CreateCategory(
         [FromBody] CategoryRequest request,
@@ -79,6 +81,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
         return CreatedAtAction(nameof(GetCategory), new { id = row.Id }, ToCategoryDto(row, 0));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpPut("categories/{id:int}")]
     public async Task<ActionResult<CategoryDto>> UpdateCategory(
         int id,
@@ -130,6 +133,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
         return Ok(ToCategoryDto(row, row.Equipment.Count));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpDelete("categories/{id:int}")]
     public async Task<IActionResult> DeleteCategory(int id, CancellationToken cancellationToken)
     {
@@ -162,7 +166,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
             query = query.Where(e => e.Category!.Slug == category);
         }
 
-        if (!includeInactive)
+        if (!includeInactive || !User.IsInRole("Admin") && !User.IsInRole("Staff"))
         {
             query = query.Where(e => e.Active && e.Category!.Active);
         }
@@ -211,6 +215,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
         return Ok(ToDetail(item));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpPost("equipment")]
     public async Task<ActionResult<EquipmentDetailDto>> CreateEquipment(
         [FromBody] EquipmentRequest request,
@@ -251,6 +256,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = row.Id }, ToDetail(row));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpPut("equipment/{id:int}")]
     public async Task<ActionResult<EquipmentDetailDto>> UpdateEquipment(
         int id,
@@ -329,6 +335,7 @@ public class EquipmentController(AppDbContext db) : ControllerBase
         return Ok(ToDetail(row));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpDelete("equipment/{id:int}")]
     public async Task<IActionResult> DeleteEquipment(int id, CancellationToken cancellationToken)
     {

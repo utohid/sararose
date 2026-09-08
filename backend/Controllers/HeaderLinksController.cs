@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SaraRose.Api.Data;
@@ -22,6 +23,7 @@ public class HeaderLinksController(AppDbContext db) : ControllerBase
         return Ok(rows.Select(ToDto));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<HeaderLinkDto>> Get(int id, CancellationToken cancellationToken)
     {
@@ -29,6 +31,7 @@ public class HeaderLinksController(AppDbContext db) : ControllerBase
         return row is null ? NotFound() : Ok(ToDto(row));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpPost]
     public async Task<ActionResult<HeaderLinkDto>> Create(
         [FromBody] HeaderLinkRequest request,
@@ -57,6 +60,7 @@ public class HeaderLinksController(AppDbContext db) : ControllerBase
         return CreatedAtAction(nameof(Get), new { id = row.Id }, ToDto(row));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpPut("{id:int}")]
     public async Task<ActionResult<HeaderLinkDto>> Update(
         int id,
@@ -101,6 +105,7 @@ public class HeaderLinksController(AppDbContext db) : ControllerBase
         return Ok(ToDto(row));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {

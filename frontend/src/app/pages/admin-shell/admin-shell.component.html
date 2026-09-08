@@ -14,19 +14,25 @@
     <nav>
       <p>Workspace</p>
       <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Overview</a>
-      <p>Content</p>
-      <a routerLink="/dashboard/slider" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home slider</a>
-      <a routerLink="/dashboard/slider/view" routerLinkActive="active">View slides</a>
-      <a routerLink="/dashboard/slider/add" routerLinkActive="active">Add slide</a>
-      <a routerLink="/dashboard/header" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Header links</a>
-      <a routerLink="/dashboard/header/view" routerLinkActive="active">View links</a>
-      <a routerLink="/dashboard/header/add" routerLinkActive="active">Add link</a>
-      <p>Masters</p>
-      <a routerLink="/dashboard/masters" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Equipment &amp; machines</a>
-      <a routerLink="/dashboard/masters/equipment" routerLinkActive="active">Equipment groups</a>
-      <a routerLink="/dashboard/masters/machines" routerLinkActive="active">Machine types</a>
-      <p>People</p>
-      <a routerLink="/dashboard/registrations" routerLinkActive="active">Registrations</a>
+      @if (isStaff()) {
+        <p>Content</p>
+        <a routerLink="/dashboard/slider" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home slider</a>
+        <a routerLink="/dashboard/slider/view" routerLinkActive="active">View slides</a>
+        <a routerLink="/dashboard/slider/add" routerLinkActive="active">Add slide</a>
+        <a routerLink="/dashboard/header" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Header links</a>
+        <a routerLink="/dashboard/header/view" routerLinkActive="active">View links</a>
+        <a routerLink="/dashboard/header/add" routerLinkActive="active">Add link</a>
+        <p>Masters</p>
+        <a routerLink="/dashboard/masters" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Equipment &amp; machines</a>
+        <a routerLink="/dashboard/masters/equipment" routerLinkActive="active">Equipment groups</a>
+        <a routerLink="/dashboard/masters/machines" routerLinkActive="active">Machine types</a>
+        <p>People</p>
+        <a routerLink="/dashboard/registrations" routerLinkActive="active">Registrations</a>
+      }
+      @if (isAdmin()) {
+        <a routerLink="/dashboard/users" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">UserMaster</a>
+        <a routerLink="/dashboard/users/add" routerLinkActive="active">Add user details</a>
+      }
       <p>Site</p>
       <a routerLink="/equipment">Equipment</a>
       <a routerLink="/contact">Enquiries</a>

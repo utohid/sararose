@@ -86,6 +86,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             entity.Property(x => x.City).HasMaxLength(120);
             entity.Property(x => x.Role).HasMaxLength(40);
             entity.Property(x => x.UserType).HasMaxLength(40);
+            entity.Property(x => x.EquipmentType).HasMaxLength(160);
+            entity.Property(x => x.MachineType).HasMaxLength(80);
             entity.Property(x => x.PasswordHash).HasMaxLength(64);
         });
 

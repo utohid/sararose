@@ -9,6 +9,7 @@
       <span>{{ user()?.role || 'User' }}</span>
       <span>{{ user()?.userType || 'Internal' }}</span>
       <span>{{ user()?.username || user()?.email }}</span>
+      <span>JWT</span>
     </div>
   </div>
   <div class="hero-badge" aria-hidden="true">
@@ -16,6 +17,10 @@
     <small>Live panel</small>
   </div>
 </section>
+
+@if (denied()) {
+  <p class="status error">That page is limited to a higher role. Your JWT role is {{ user()?.role }}.</p>
+}
 
 @if (error(); as message) {
   <p class="status error">{{ message }}</p>
@@ -45,52 +50,85 @@
   <article class="accent">
     <small>Registrations</small>
     <strong>{{ registrations().length }}</strong>
-    <em>Database users</em>
+    <em>Public records</em>
   </article>
+  @if (isAdmin()) {
+    <article>
+      <small>UserMaster</small>
+      <strong>{{ userMasters().length }}</strong>
+      <em>Login accounts</em>
+    </article>
+  }
 </div>
 
 <p class="section-label">Quick actions</p>
 <div class="actions">
-  <a class="tile gold" routerLink="/dashboard/slider/add">
-    <span>01</span>
-    <h3>Add a slide</h3>
-    <p>Upload a home-page image</p>
-  </a>
-  <a class="tile" routerLink="/dashboard/slider/view">
-    <span>02</span>
-    <h3>View slides</h3>
-    <p>Reorder or remove images</p>
-  </a>
-  <a class="tile" routerLink="/dashboard/header/add">
-    <span>03</span>
-    <h3>Add a link</h3>
-    <p>New header hyperlink</p>
-  </a>
-  <a class="tile" routerLink="/dashboard/header/view">
-    <span>04</span>
-    <h3>View links</h3>
-    <p>Edit the public nav</p>
-  </a>
-  <a class="tile" routerLink="/dashboard/registrations">
-    <span>05</span>
-    <h3>Registrations</h3>
-    <p>People who signed up</p>
-  </a>
-  <a class="tile" routerLink="/dashboard/masters">
-    <span>06</span>
-    <h3>Catalogue master</h3>
-    <p>Equipment and machine types</p>
-  </a>
-  <a class="tile" routerLink="/dashboard/masters/equipment/add">
-    <span>07</span>
-    <h3>Equipment group</h3>
-    <p>Add a catalogue heading</p>
-  </a>
-  <a class="tile" routerLink="/dashboard/masters/machines/add">
-    <span>08</span>
-    <h3>Machine type</h3>
-    <p>Add excavators, rollers…</p>
-  </a>
+  @if (isStaff()) {
+    <a class="tile gold" routerLink="/dashboard/slider/add">
+      <span>01</span>
+      <h3>Add a slide</h3>
+      <p>Upload a home-page image</p>
+    </a>
+    <a class="tile" routerLink="/dashboard/slider/view">
+      <span>02</span>
+      <h3>View slides</h3>
+      <p>Reorder or remove images</p>
+    </a>
+    <a class="tile" routerLink="/dashboard/header/add">
+      <span>03</span>
+      <h3>Add a link</h3>
+      <p>New header hyperlink</p>
+    </a>
+    <a class="tile" routerLink="/dashboard/header/view">
+      <span>04</span>
+      <h3>View links</h3>
+      <p>Edit the public nav</p>
+    </a>
+    <a class="tile" routerLink="/dashboard/registrations">
+      <span>05</span>
+      <h3>Registrations</h3>
+      <p>People who signed up</p>
+    </a>
+    <a class="tile" routerLink="/dashboard/masters">
+      <span>06</span>
+      <h3>Catalogue master</h3>
+      <p>Equipment and machine types</p>
+    </a>
+    <a class="tile" routerLink="/dashboard/masters/equipment/add">
+      <span>07</span>
+      <h3>Equipment group</h3>
+      <p>Add a catalogue heading</p>
+    </a>
+    <a class="tile" routerLink="/dashboard/masters/machines/add">
+      <span>08</span>
+      <h3>Machine type</h3>
+      <p>Add excavators, rollers…</p>
+    </a>
+  }
+  @if (isAdmin()) {
+    <a class="tile" routerLink="/dashboard/users/add">
+      <span>09</span>
+      <h3>Add UserMaster</h3>
+      <p>Create a login account</p>
+    </a>
+    <a class="tile" routerLink="/dashboard/users">
+      <span>10</span>
+      <h3>UserMaster</h3>
+      <p>View login accounts</p>
+    </a>
+  }
+  @if (!isStaff()) {
+    <a class="tile gold" routerLink="/equipment">
+      <span>01</span>
+      <h3>Equipment</h3>
+      <p>Public catalogue</p>
+    </a>
+    <a class="tile" routerLink="/contact">
+      <span>02</span>
+      <h3>Enquire</h3>
+      <p>Send a site requirement</p>
+    </a>
+  }
 </div>
 
 <div class="detail-grid">
@@ -127,37 +165,39 @@
 </article>
 
 <div class="detail-grid">
-  <article class="card">
-    <p class="kicker">Recent registrations</p>
-    <h3>Users in MySQL</h3>
-    @if (registrations().length) {
-      <ul class="enquiry-list">
-        @for (row of registrations().slice(0, 5); track row.id) {
-          <li>
-            <strong>{{ row.fullName }}</strong>
-            <span>{{ row.role }} · {{ row.userType }}</span>
-          </li>
-        }
-      </ul>
-    } @else {
-      <p class="empty">No registrations yet.</p>
-    }
-  </article>
+  @if (isStaff()) {
+    <article class="card">
+      <p class="kicker">Recent registrations</p>
+      <h3>Public Registration table</h3>
+      @if (registrations().length) {
+        <ul class="enquiry-list">
+          @for (row of registrations().slice(0, 5); track row.id) {
+            <li>
+              <strong>{{ row.fullName }}</strong>
+              <span>{{ row.role }} · {{ row.userType }}</span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="empty">No registrations yet.</p>
+      }
+    </article>
 
-  <article class="card">
-    <p class="kicker">Recent enquiries</p>
-    <h3>Customer requests</h3>
-    @if (enquiries().length) {
-      <ul class="enquiry-list">
-        @for (row of enquiries().slice(0, 5); track row.id) {
-          <li>
-            <strong>{{ row.fullName }}</strong>
-            <span>{{ row.machineType || row.categoryName || 'General' }} · {{ row.status }}</span>
-          </li>
-        }
-      </ul>
-    } @else {
-      <p class="empty">No enquiries yet.</p>
-    }
-  </article>
+    <article class="card">
+      <p class="kicker">Recent enquiries</p>
+      <h3>Customer requests</h3>
+      @if (enquiries().length) {
+        <ul class="enquiry-list">
+          @for (row of enquiries().slice(0, 5); track row.id) {
+            <li>
+              <strong>{{ row.fullName }}</strong>
+              <span>{{ row.machineType || row.categoryName || 'General' }} · {{ row.status }}</span>
+            </li>
+          }
+        </ul>
+      } @else {
+        <p class="empty">No enquiries yet.</p>
+      }
+    </article>
+  }
 </div>

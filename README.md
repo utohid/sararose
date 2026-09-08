@@ -134,7 +134,7 @@ Then open:
 - API health: http://127.0.0.1:43124/api/health
 - Swagger: http://127.0.0.1:43124/swagger
 
-The API creates tables and seeds the equipment catalogue on first successful MySQL connection. Login is validated against the `userMaster` table (`Username` + `HashPassword` / `NormalPassword`). Seeded admin:
+The API creates tables and seeds the equipment catalogue on first successful MySQL connection. Login issues a JWT from `userMaster` (`Username` + `HashPassword` / `NormalPassword`). Claims include user id, username, full name, email, phone, role and user type. Seeded admin:
 
 - Username: `admin`
 - Email: `admin@sararose.com`
@@ -142,7 +142,7 @@ The API creates tables and seeds the equipment catalogue on first successful MyS
 - Role: `Admin`
 - User type: `Internal`
 
-Public registration stores a row in `registrations` and a matching login row in `userMaster`.
+Public registration stores a row only in `registrations` (including equipment type and machine type). Login accounts are created by an administrator in `userMaster`.
 
 ## WSL / macOS / Linux
 
@@ -173,8 +173,10 @@ Or: `bash scripts/dev.sh`
 | POST / PUT / DELETE | `/api/equipment` | Admin machine type master |
 | POST | `/api/enquiries` | Store a customer enquiry |
 | GET | `/api/enquiries` | List stored enquiries |
-| POST | `/api/registrations` | Create a user and a `userMaster` login row |
-| GET | `/api/registrations` | List registered users |
-| POST | `/api/auth/login` | Validate username and password from `userMaster` |
+| POST | `/api/registrations` | Public registration (Registration table only) |
+| GET | `/api/registrations` | List public registrations |
+| GET / POST / PUT / DELETE | `/api/user-masters` | Admin-only UserMaster login accounts (JWT) |
+| POST | `/api/auth/login` | Issue JWT and user claims from `userMaster` |
+| GET | `/api/auth/me` | Current user from JWT claims |
 
 This stack is intended to run as a .NET process plus MySQL. It is not a Vercel serverless app.

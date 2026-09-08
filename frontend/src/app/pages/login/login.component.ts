@@ -63,9 +63,10 @@ export class LoginComponent {
     this.error.set(null);
     const value = this.form.getRawValue();
     this.api.login({ username: value.username, password: value.password }).subscribe({
-      next: async (user) => {
-        this.auth.signIn(user, value.remember);
+      next: async (session) => {
+        this.auth.signIn(session, value.remember);
         this.submitting.set(false);
+        const user = session.user;
         const result = await askContinueToDashboard(user.fullName, user.role, user.userType);
         if (result.isConfirmed) {
           void this.router.navigateByUrl('/dashboard');
@@ -75,7 +76,7 @@ export class LoginComponent {
         this.submitting.set(false);
         this.refreshCaptcha();
         const message = err.status === 401
-          ? 'Username or password was not found in userMaster. Register first, or use username admin.'
+          ? 'Username or password was not found in UserMaster. Ask an administrator to create your login, or use username admin.'
           : 'Could not reach the login API. Confirm the API and MySQL are running.';
         this.error.set(message);
         void notifyError(message);

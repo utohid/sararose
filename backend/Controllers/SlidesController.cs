@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SaraRose.Api.Data;
@@ -31,6 +32,7 @@ public class SlidesController(AppDbContext db, IWebHostEnvironment env) : Contro
         return Ok(rows.Select(ToDto));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<SliderSlideDto>> Get(int id, CancellationToken cancellationToken)
     {
@@ -43,6 +45,7 @@ public class SlidesController(AppDbContext db, IWebHostEnvironment env) : Contro
         return Ok(ToDto(slide));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpPost]
     [RequestSizeLimit(8_000_000)]
     public async Task<ActionResult<SliderSlideDto>> Upload(
@@ -97,6 +100,7 @@ public class SlidesController(AppDbContext db, IWebHostEnvironment env) : Contro
         return CreatedAtAction(nameof(Get), new { id = slide.Id }, ToDto(slide));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpPut("{id:int}")]
     public async Task<ActionResult<SliderSlideDto>> Update(
         int id,
@@ -123,6 +127,7 @@ public class SlidesController(AppDbContext db, IWebHostEnvironment env) : Contro
         return Ok(ToDto(slide));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpDelete("{id:int}")]
     public async Task<IActionResult> Delete(int id, CancellationToken cancellationToken)
     {

@@ -1,7 +1,7 @@
 <header class="board-head">
   <p class="kicker">Admin panel</p>
   <h2>Registrations</h2>
-  <p class="lede">People who filled the public Registration page. Passwords are stored hashed and are not shown here.</p>
+  <p class="lede">People who filled the public Registration page. These rows live only on the Registration table. Login accounts are created separately under UserMaster.</p>
 </header>
 
 @if (error(); as note) {
@@ -13,11 +13,12 @@
     <p class="kicker">Selected record</p>
     <h3>{{ row.fullName }}</h3>
     <dl>
-      <div><dt>Username</dt><dd>{{ row.username || '—' }}</dd></div>
       <div><dt>Email</dt><dd>{{ row.email }}</dd></div>
       <div><dt>Telephone</dt><dd>{{ row.phone }}</dd></div>
       <div><dt>Company</dt><dd>{{ row.company || '—' }}</dd></div>
       <div><dt>City</dt><dd>{{ row.city || '—' }}</dd></div>
+      <div><dt>Equipment type</dt><dd>{{ row.equipmentType || '—' }}</dd></div>
+      <div><dt>Machine type</dt><dd>{{ row.machineType || '—' }}</dd></div>
       <div><dt>Role</dt><dd>{{ row.role }}</dd></div>
       <div><dt>User type</dt><dd>{{ row.userType }}</dd></div>
       <div><dt>Registered</dt><dd>{{ row.createdAtUtc | date:'medium' }}</dd></div>
@@ -34,8 +35,8 @@
       (click)="select(row)">
       <p class="kicker">Registration</p>
       <p>{{ row.fullName }}</p>
-      <p class="meta">{{ row.username || 'no username' }} · {{ row.email }}</p>
-      <p class="meta">{{ row.phone }} · {{ row.city || 'No city' }}</p>
+      <p class="meta">{{ row.email }}</p>
+      <p class="meta">{{ row.equipmentType || 'No equipment' }} · {{ row.machineType || 'No machine' }}</p>
       <p class="meta">{{ row.role }} · {{ row.userType }}</p>
     </button>
   } @empty {

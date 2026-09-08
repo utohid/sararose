@@ -10,6 +10,8 @@ public class UserRegistration
     public string? City { get; set; }
     public string Role { get; set; } = "User";
     public string UserType { get; set; } = "Customer";
+    public string? EquipmentType { get; set; }
+    public string? MachineType { get; set; }
     public string PasswordHash { get; set; } = string.Empty;
     public DateTime CreatedAtUtc { get; set; } = DateTime.UtcNow;
 }
