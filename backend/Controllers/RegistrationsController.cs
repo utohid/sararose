@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SaraRose.Api.Data;
@@ -11,6 +12,7 @@ namespace SaraRose.Api.Controllers;
 [Route("api/registrations")]
 public class RegistrationsController(AppDbContext db) : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult<RegistrationDto>> Create(
         [FromBody] CreateRegistrationRequest request,
@@ -52,6 +54,7 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = row.Id }, ToDto(row));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<RegistrationDto>>> List(CancellationToken cancellationToken)
     {
@@ -63,6 +66,7 @@ public class RegistrationsController(AppDbContext db) : ControllerBase
         return Ok(rows.Select(ToDto));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<RegistrationDto>> GetById(int id, CancellationToken cancellationToken)
     {

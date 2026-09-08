@@ -201,6 +201,12 @@ export interface LoginPayload {
   password: string;
 }
 
+export interface LoginResponse {
+  token: string;
+  expiresAtUtc: string;
+  user: AuthUser;
+}
+
 @Injectable({ providedIn: 'root' })
 export class ApiService {
   private readonly http = inject(HttpClient);
@@ -343,6 +349,10 @@ export class ApiService {
   }
 
   login(payload: LoginPayload) {
-    return this.http.post<AuthUser>(`${this.base}/auth/login`, payload);
+    return this.http.post<LoginResponse>(`${this.base}/auth/login`, payload);
+  }
+
+  me() {
+    return this.http.get<AuthUser>(`${this.base}/auth/me`);
   }
 }

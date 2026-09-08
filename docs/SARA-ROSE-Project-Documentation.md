@@ -117,8 +117,10 @@ Copy on each page is written as a trader’s advice, not as a manufacturer broch
 3. On `/login` they enter **username** and **password** (and a simple maths captcha).
 4. The API looks up `userMaster` by username (email typed in the username field is also accepted).
 5. The password must match **HashPassword** (SHA-256) or **NormalPassword**.
-6. There is **no** `RegistrationId` column on `userMaster`. Company and city on the session are taken from the matching `registrations` email, when present.
-7. The session is kept in the browser (not in MySQL). `NormalPassword` is never returned by the login or UserMaster APIs.
+6. A **JWT** is returned. Claims hold user id, username, full name, email, phone, role and user type. The dashboard reads those claims after login.
+7. **Role-based access:** Admin manages UserMaster and all dashboard modules. Staff manages content, catalogue and registrations. User can open the overview only.
+8. There is **no** `RegistrationId` column on `userMaster`. Company and city on the session are taken from the matching `registrations` email, when present.
+9. The session token is kept in the browser (not in MySQL). `NormalPassword` is never returned by the login or UserMaster APIs.
 
 Roles used in the product: Admin, Staff, User.  
 User types: Internal, Customer, Dealer, Contractor.  
@@ -182,8 +184,9 @@ Default API connection:
 | GET | `/api/enquiries` | List enquiries |
 | GET / POST / PUT / DELETE | `/api/slides` | Home slider |
 | GET / POST / PUT / DELETE | `/api/header-links` | Header navigation |
-| POST | `/api/registrations` | Register (also writes `userMaster`) |
+| POST | `/api/registrations` | Public registration (Registration table only) |
 | GET | `/api/registrations` | List registrations |
+| GET / POST / PUT / DELETE | `/api/user-masters` | Admin UserMaster login accounts |
 | POST | `/api/auth/login` | Username + password against `userMaster` |
 
 ---

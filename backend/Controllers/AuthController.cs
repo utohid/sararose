@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SaraRose.Api.Data;
@@ -8,10 +9,11 @@ namespace SaraRose.Api.Controllers;
 
 [ApiController]
 [Route("api/auth")]
-public class AuthController(AppDbContext db) : ControllerBase
+public class AuthController(AppDbContext db, JwtTokenService tokens) : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost("login")]
-    public async Task<ActionResult<AuthUserDto>> Login(
+    public async Task<ActionResult<LoginResponseDto>> Login(
         [FromBody] LoginRequest request,
         CancellationToken cancellationToken)
     {
@@ -40,7 +42,7 @@ public class AuthController(AppDbContext db) : ControllerBase
         var registration = await db.Registrations.AsNoTracking()
             .FirstOrDefaultAsync(x => x.Email == user.Email, cancellationToken);
 
-        return Ok(new AuthUserDto(
+        var profile = new AuthUserDto(
             user.Id,
             user.Username,
             user.FullName,
@@ -50,6 +52,13 @@ public class AuthController(AppDbContext db) : ControllerBase
             registration?.City,
             user.Role,
             user.UserType,
-            user.CreatedAtUtc));
+            user.CreatedAtUtc);
+
+        var (token, expires) = tokens.Create(profile);
+        return Ok(new LoginResponseDto(token, expires, profile));
     }
+
+    [Authorize]
+    [HttpGet("me")]
+    public ActionResult<AuthUserDto> Me() => Ok(JwtTokenService.FromPrincipal(User));
 }

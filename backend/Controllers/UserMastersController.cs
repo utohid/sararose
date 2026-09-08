@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SaraRose.Api.Data;
@@ -8,6 +9,7 @@ using SaraRose.Api.Security;
 namespace SaraRose.Api.Controllers;
 
 [ApiController]
+[Authorize(Roles = "Admin")]
 [Route("api/user-masters")]
 public class UserMastersController(AppDbContext db) : ControllerBase
 {

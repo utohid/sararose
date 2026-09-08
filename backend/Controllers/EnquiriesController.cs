@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using SaraRose.Api.Data;
@@ -10,6 +11,7 @@ namespace SaraRose.Api.Controllers;
 [Route("api/enquiries")]
 public class EnquiriesController(AppDbContext db) : ControllerBase
 {
+    [AllowAnonymous]
     [HttpPost]
     public async Task<ActionResult<EnquiryDto>> Create(
         [FromBody] CreateEnquiryRequest request,
@@ -49,6 +51,7 @@ public class EnquiriesController(AppDbContext db) : ControllerBase
         return CreatedAtAction(nameof(GetById), new { id = enquiry.Id }, dto);
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpGet]
     public async Task<ActionResult<IEnumerable<EnquiryDto>>> List(CancellationToken cancellationToken)
     {
@@ -61,6 +64,7 @@ public class EnquiriesController(AppDbContext db) : ControllerBase
         return Ok(items.Select(e => ToDto(e, e.Category?.Name)));
     }
 
+    [Authorize(Roles = "Admin,Staff")]
     [HttpGet("{id:int}")]
     public async Task<ActionResult<EnquiryDto>> GetById(int id, CancellationToken cancellationToken)
     {

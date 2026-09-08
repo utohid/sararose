@@ -24,7 +24,7 @@ import { EquipmentMasterAddComponent } from './pages/equipment-master-add/equipm
 import { EquipmentMasterViewComponent } from './pages/equipment-master-view/equipment-master-view.component';
 import { MachineMasterAddComponent } from './pages/machine-master-add/machine-master-add.component';
 import { MachineMasterViewComponent } from './pages/machine-master-view/machine-master-view.component';
-import { authGuard } from './auth.guard';
+import { authGuard, roleGuard } from './auth.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, title: 'SARA ROSE Nigeria Limited' },
@@ -43,20 +43,20 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       { path: '', component: DashboardComponent },
-      { path: 'slider/add', component: SliderAddComponent, title: 'Add slide — SARA ROSE' },
-      { path: 'slider/view', component: SliderViewComponent, title: 'View slides — SARA ROSE' },
-      { path: 'slider', component: SliderManagerComponent, title: 'Home slider — SARA ROSE' },
-      { path: 'header/add', component: HeaderAddComponent, title: 'Add header link — SARA ROSE' },
-      { path: 'header/view', component: HeaderViewComponent, title: 'View header links — SARA ROSE' },
-      { path: 'header', component: HeaderManagerComponent, title: 'Header links — SARA ROSE' },
-      { path: 'masters/equipment/add', component: EquipmentMasterAddComponent, title: 'Add equipment group — SARA ROSE' },
-      { path: 'masters/equipment', component: EquipmentMasterViewComponent, title: 'Equipment master — SARA ROSE' },
-      { path: 'masters/machines/add', component: MachineMasterAddComponent, title: 'Add machine type — SARA ROSE' },
-      { path: 'masters/machines', component: MachineMasterViewComponent, title: 'Machine type master — SARA ROSE' },
-      { path: 'masters', component: CatalogMasterComponent, title: 'Catalogue masters — SARA ROSE' },
-      { path: 'registrations', component: RegistrationsAdminComponent, title: 'Registrations — SARA ROSE' },
-      { path: 'users/add', component: UserMasterAddComponent, title: 'Add UserMaster — SARA ROSE' },
-      { path: 'users', component: UserMasterViewComponent, title: 'UserMaster — SARA ROSE' }
+      { path: 'slider/add', component: SliderAddComponent, title: 'Add slide — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'slider/view', component: SliderViewComponent, title: 'View slides — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'slider', component: SliderManagerComponent, title: 'Home slider — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'header/add', component: HeaderAddComponent, title: 'Add header link — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'header/view', component: HeaderViewComponent, title: 'View header links — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'header', component: HeaderManagerComponent, title: 'Header links — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'masters/equipment/add', component: EquipmentMasterAddComponent, title: 'Add equipment group — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'masters/equipment', component: EquipmentMasterViewComponent, title: 'Equipment master — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'masters/machines/add', component: MachineMasterAddComponent, title: 'Add machine type — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'masters/machines', component: MachineMasterViewComponent, title: 'Machine type master — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'masters', component: CatalogMasterComponent, title: 'Catalogue masters — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'registrations', component: RegistrationsAdminComponent, title: 'Registrations — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin', 'Staff'] } },
+      { path: 'users/add', component: UserMasterAddComponent, title: 'Add UserMaster — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin'] } },
+      { path: 'users', component: UserMasterViewComponent, title: 'UserMaster — SARA ROSE', canActivate: [roleGuard], data: { roles: ['Admin'] } }
     ]
   },
   { path: '**', redirectTo: '' }

@@ -63,9 +63,10 @@ export class LoginComponent {
     this.error.set(null);
     const value = this.form.getRawValue();
     this.api.login({ username: value.username, password: value.password }).subscribe({
-      next: async (user) => {
-        this.auth.signIn(user, value.remember);
+      next: async (session) => {
+        this.auth.signIn(session, value.remember);
         this.submitting.set(false);
+        const user = session.user;
         const result = await askContinueToDashboard(user.fullName, user.role, user.userType);
         if (result.isConfirmed) {
           void this.router.navigateByUrl('/dashboard');

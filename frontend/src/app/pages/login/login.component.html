@@ -1,25 +1,40 @@
 <section class="login-stage">
+  <div class="sky"></div>
+  <div class="grid-floor"></div>
   <div class="glow glow-a"></div>
   <div class="glow glow-b"></div>
+  <div class="glow glow-c"></div>
 
   <div class="login-shell">
     <aside class="showcase">
-      <p class="kicker">Account login</p>
-      <h1>Sign in<br>to SARA ROSE.</h1>
-      <p class="lede">Login checks username and password against the MySQL UserMaster table (HashPassword and NormalPassword). Public Registration does not create this login.</p>
+      <div class="mark-row">
+        <span class="hex">SR</span>
+        <span class="mark-copy">
+          <small>Est. 2012 · Sagamu</small>
+          <strong>SARA ROSE</strong>
+        </span>
+      </div>
+      <p class="kicker">Secure staff access</p>
+      <h1>Sign in<br>to the yard.</h1>
+      <p class="lede">A JWT session is issued from UserMaster. Role, name and contact go into the token claims so the dashboard opens with your details already set.</p>
       <ul class="points">
-        <li><span>01</span> An administrator creates the UserMaster account</li>
-        <li><span>02</span> Sign in with that username and password</li>
-        <li><span>03</span> Admins open the dashboard after login</li>
+        <li><span>01</span> Admin · Staff · User roles</li>
+        <li><span>02</span> Claims carry username, email and role</li>
+        <li><span>03</span> Screens open only for the roles you hold</li>
       </ul>
-      <p class="foot-note">Heavy equipment trading · Ogun State · Nigeria</p>
+      <div class="stat-row">
+        <div><em>Since</em><strong>2012</strong></div>
+        <div><em>Office</em><strong>Ogun</strong></div>
+        <div><em>Access</em><strong>JWT</strong></div>
+      </div>
+      <p class="foot-note">Heavy equipment trading · Nigeria</p>
     </aside>
 
     <div class="panel">
       <form class="login-form" [formGroup]="form" (ngSubmit)="submit()">
         <p class="kicker">Login</p>
-        <h2>Enter your details</h2>
-        <p class="form-lede">Use a UserMaster username and password. The seeded admin username is admin. Complete the number captcha to continue.</p>
+        <h2>Welcome back</h2>
+        <p class="form-lede">Use the UserMaster username created by an administrator. Complete the number check, then continue to the panel.</p>
 
         <label>Username
           <input formControlName="username" type="text" autocomplete="username" placeholder="admin">
@@ -39,7 +54,7 @@
 
         <div class="captcha">
           <div class="captcha-sum" aria-live="polite">
-            <span class="captcha-label">Captcha</span>
+            <span class="captcha-label">Human check</span>
             <strong>{{ captchaPrompt() }} = ?</strong>
             <button class="refresh" type="button" (click)="refreshCaptcha()">New sum</button>
           </div>
@@ -50,7 +65,7 @@
 
         <label class="remember">
           <input formControlName="remember" type="checkbox">
-          Keep me signed in on this machine
+          Keep this JWT on this machine
         </label>
 
         @if (error(); as message) {
@@ -58,9 +73,9 @@
         }
 
         <button class="btn submit" type="submit" [disabled]="submitting()">
-          {{ submitting() ? 'Signing in…' : 'Login' }}
+          {{ submitting() ? 'Signing in…' : 'Enter dashboard' }}
         </button>
-        <p class="alt">Need a public registration record? <a routerLink="/register">Registration</a> · Need a machine? <a routerLink="/contact">Start an enquiry</a></p>
+        <p class="alt">Need a public record? <a routerLink="/register">Registration</a> · Need a machine? <a routerLink="/contact">Start an enquiry</a></p>
       </form>
     </div>
   </div>

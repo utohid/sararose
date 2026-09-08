@@ -17,6 +17,8 @@ export class AdminShellComponent {
   email = this.auth.email;
   role = this.auth.role;
   userType = this.auth.userType;
+  isAdmin = this.auth.isAdmin;
+  isStaff = this.auth.isStaff;
 
   signOut(): void {
     this.auth.signOut();

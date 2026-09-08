@@ -313,3 +313,8 @@ public record AuthUserDto(
     string Role,
     string UserType,
     DateTime CreatedAtUtc);
+
+public record LoginResponseDto(
+    string Token,
+    DateTime ExpiresAtUtc,
+    AuthUserDto User);
